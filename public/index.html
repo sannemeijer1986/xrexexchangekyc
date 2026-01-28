@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iOS Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
@@ -18,43 +21,207 @@
             </div>
         </div>
 
+        <header class="app-header">
+            <img class="app-header__logo" src="assets/icon_navbar_logo.svg" alt="XREX" />
+            <div class="app-header__actions">
+                <button class="app-header__icon" type="button" aria-label="Menu">
+                    <img src="assets/icon_navbar_all.svg" alt="" />
+                </button>
+                <button class="app-header__avatar" type="button" aria-label="Profile">
+                    <img src="assets/icon_navbar_user.png" alt="User profile" />
+                </button>
+            </div>
+        </header>
+
         <!-- Scrollable content area -->
         <div class="content">
             <div class="content-inner safe-area-bottom">
-                <!-- Your prototype content goes here -->
-                <h1>iOS Prototype</h1>
-                <p>This is a 360x800px iOS prototype container.</p>
-                <p>The content area is scrollable vertically.</p>
-                
-                <div class="placeholder-box">
-                    <p>Add your prototype content here</p>
-                </div>
+                <section class="asset-card">
+                    <div class="asset-card__label">
+                        <span>Net assets ≈</span>
+                        <img src="assets/icon_navbar_all.svg" alt="" class="asset-card__eye" />
+                    </div>
+                    <div class="asset-card__value">14,580.00 USD</div>
+                    <div class="asset-card__actions">
+                        <button class="asset-btn asset-btn--primary" type="button">Go deposit</button>
+                        <button class="asset-btn asset-btn--secondary" type="button">Convert</button>
+                    </div>
+                </section>
 
-                <div class="placeholder-box">
-                    <p>Content box 2</p>
-                </div>
+                <section class="explore">
+                    <div class="section-title">Explore</div>
+                    <div class="explore__grid">
+                        <div class="explore-card">
+                            <div class="explore-card__image"></div>
+                            <div class="explore-card__content">
+                                <div class="explore-card__tag">Strategy guide for beginners</div>
+                                <div class="explore-card__title">Master the market with these trading strategies!</div>
+                            </div>
+                            <div class="explore-card__progress">
+                                <span class="is-active"></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="explore-side">
+                            <div class="explore-side__card">
+                                <div class="explore-side__icon">
+                                    <img src="assets/icon_trade.svg" alt="" />
+                                </div>
+                                <div class="explore-side__title">Trade Now</div>
+                                <div class="explore-side__desc">A wide range of trading tools</div>
+                            </div>
+                            <div class="explore-side__card">
+                                <div class="explore-side__icon explore-side__icon--btc">
+                                    <img src="assets/icon_currency_btc.svg" alt="" />
+                                </div>
+                                <div class="explore-side__title">BTC grid</div>
+                                <div class="explore-side__desc">Auto buy low, sell high.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                <div class="placeholder-box">
-                    <p>Content box 3</p>
-                </div>
+                <section class="markets">
+                    <div class="section-title">Markets today</div>
+                    <div class="markets__tabs">
+                        <button class="tab is-active" type="button">
+                            <img src="assets/icon_favorite_active.svg" alt="" />
+                        </button>
+                        <button class="tab" type="button">Spotlight</button>
+                        <button class="tab" type="button">Gainers</button>
+                        <button class="tab" type="button">Losers</button>
+                        <button class="tab" type="button">New</button>
+                    </div>
+                    <div class="markets__list">
+                        <div class="market-row">
+                            <div class="market-row__left">
+                                <img src="assets/icon_currency_btc.svg" alt="BTC" />
+                                <div>
+                                    <div class="market-row__symbol">BTC<span>/USDT</span></div>
+                                    <div class="market-row__name">Bitcoin</div>
+                                </div>
+                            </div>
+                            <div class="market-row__mid">
+                                <div class="market-row__price">89,292.99</div>
+                                <div class="market-row__sub">≈ 89,292.99 USD</div>
+                            </div>
+                            <div class="market-row__change is-up">↗ 1.09%</div>
+                        </div>
 
-                <div class="placeholder-box">
-                    <p>Content box 4</p>
-                </div>
+                        <div class="market-row">
+                            <div class="market-row__left">
+                                <img src="assets/icon_currency_eth.svg" alt="ETH" />
+                                <div>
+                                    <div class="market-row__symbol">ETH<span>/USDT</span></div>
+                                    <div class="market-row__name">Ethereum</div>
+                                </div>
+                            </div>
+                            <div class="market-row__mid">
+                                <div class="market-row__price">3,012.68</div>
+                                <div class="market-row__sub">≈ 3,012.68 USD</div>
+                            </div>
+                            <div class="market-row__change is-up">↗ 2.79%</div>
+                        </div>
 
-                <div class="placeholder-box">
-                    <p>Content box 5</p>
-                </div>
+                        <div class="market-row">
+                            <div class="market-row__left">
+                                <img src="assets/icon_currency_xrp.svg" alt="XRP" />
+                                <div>
+                                    <div class="market-row__symbol">XRP<span>/USDT</span></div>
+                                    <div class="market-row__name">Ripple</div>
+                                </div>
+                            </div>
+                            <div class="market-row__mid">
+                                <div class="market-row__price">1.91817</div>
+                                <div class="market-row__sub">≈ 1.91 USD</div>
+                            </div>
+                            <div class="market-row__change is-up">↗ 0.08%</div>
+                        </div>
 
-                <div class="placeholder-box">
-                    <p>Content box 6</p>
-                </div>
+                        <div class="market-row">
+                            <div class="market-row__left">
+                                <img src="assets/icon_currency_link.svg" alt="LINK" />
+                                <div>
+                                    <div class="market-row__symbol">LINK<span>/USDT</span></div>
+                                    <div class="market-row__name">Chainlink</div>
+                                </div>
+                            </div>
+                            <div class="market-row__mid">
+                                <div class="market-row__price">11.95</div>
+                                <div class="market-row__sub">≈ 11.95 USD</div>
+                            </div>
+                            <div class="market-row__change is-down">↘ 0.08%</div>
+                        </div>
 
-                <div class="placeholder-box">
-                    <p>Scroll to see more content</p>
-                </div>
+                        <div class="market-row">
+                            <div class="market-row__left">
+                                <img src="assets/icon_currency_xaut.svg" alt="XAUT" />
+                                <div>
+                                    <div class="market-row__symbol">XAUT<span>/USDT</span></div>
+                                    <div class="market-row__name">Tether Gold</div>
+                                </div>
+                            </div>
+                            <div class="market-row__mid">
+                                <div class="market-row__price">5,267.27</div>
+                                <div class="market-row__sub">≈ 5,267.27 USD</div>
+                            </div>
+                            <div class="market-row__change is-up">↗ 3.68%</div>
+                        </div>
+
+                        <div class="market-row">
+                            <div class="market-row__left">
+                                <img src="assets/icon_currency_usdt.svg" alt="USDT" />
+                                <div>
+                                    <div class="market-row__symbol">USDT<span>/TWD</span></div>
+                                    <div class="market-row__name">USD Tether</div>
+                                </div>
+                            </div>
+                            <div class="market-row__mid">
+                                <div class="market-row__price">31.3113</div>
+                                <div class="market-row__sub">≈ 1.00 USD</div>
+                            </div>
+                            <div class="market-row__change is-down">↘ 0.51%</div>
+                        </div>
+                    </div>
+                    <button class="markets__cta" type="button">Show all Favorites</button>
+                </section>
+
+                <section class="support">
+                    <div class="section-title">Support</div>
+                    <div class="support__card">
+                        <img src="assets/icon_support.svg" alt="" />
+                        <span>What would you like to do today?</span>
+                        <span class="support__chevron">›</span>
+                    </div>
+                </section>
             </div>
         </div>
+
+        <nav class="tabbar" aria-label="Bottom">
+            <button class="tabbar__item is-active" type="button">
+                <img src="assets/icon_tabbar_home_active.svg" alt="" />
+                <span>Home</span>
+            </button>
+            <button class="tabbar__item" type="button">
+                <img src="assets/icon_tabbar_markets_inactive.svg" alt="" />
+                <span>Market</span>
+            </button>
+            <button class="tabbar__item tabbar__item--trade" type="button">
+                <span>Trade</span>
+            </button>
+            <button class="tabbar__item" type="button">
+                <img src="assets/icon_tabbar_finance_inactive.svg" alt="" />
+                <span>Finance</span>
+            </button>
+            <button class="tabbar__item" type="button">
+                <img src="assets/icon_tabbar_wallet_inactive.svg" alt="" />
+                <span>Wallet</span>
+            </button>
+            <button class="tabbar__fab" type="button" aria-label="Trade">
+                <img src="assets/icon_trade.svg" alt="" />
+            </button>
+        </nav>
     </div>
 
     <div class="build-badge" role="note" aria-label="Prototype state controls">

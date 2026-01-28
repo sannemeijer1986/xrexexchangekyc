@@ -9,6 +9,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 // Status bar (iOS 17 style)
@@ -73,7 +74,7 @@
 
 // Content padding
 .content-inner {
-  padding: $spacing-lg;
+  padding: 16px;
   min-height: 100%;
 }
 
@@ -95,6 +96,426 @@
   p {
     color: $text-placeholder;
   }
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid $border-color;
+  background: $bg-container;
+}
+
+.app-header__logo {
+  width: 24px;
+  height: 24px;
+}
+
+.app-header__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.app-header__icon,
+.app-header__avatar {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-header__icon img,
+.app-header__avatar img {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 16px 0 8px;
+  padding-left: 4px;
+}
+
+.asset-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px;
+}
+
+.asset-card__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.asset-card__eye {
+  width: 16px;
+  height: 16px;
+  opacity: 0.9;
+}
+
+.asset-card__value {
+  font-size: 32px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.asset-card__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.asset-btn {
+  height: 32px;
+  border-radius: 12px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.asset-btn--primary {
+  background: #275cfd;
+  color: #ffffff;
+}
+
+.asset-btn--secondary {
+  background: #2d2f2f;
+  color: #ffffff;
+}
+
+.explore {
+  margin-top: 12px;
+}
+
+.explore__grid {
+  display: grid;
+  grid-template-columns: 1fr 106px;
+  gap: 8px;
+}
+
+.explore-card {
+  background: #15161a;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.explore-card__image {
+  height: 111px;
+  background: #808080;
+}
+
+.explore-card__content {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.explore-card__tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fad75a;
+}
+
+.explore-card__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.explore-card__progress {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 12px;
+}
+
+.explore-card__progress span {
+  height: 4px;
+  border-radius: 999px;
+  background: #252627;
+}
+
+.explore-card__progress span.is-active {
+  background: #275cfd;
+}
+
+.explore-side {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+}
+
+.explore-side__card {
+  background: #151718;
+  border-radius: 8px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.explore-side__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #275cfd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.explore-side__icon--btc {
+  background: transparent;
+}
+
+.explore-side__icon img {
+  width: 16px;
+  height: 16px;
+}
+
+.explore-side__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.explore-side__desc {
+  font-size: 12px;
+  color: #a3a3a3;
+}
+
+.markets {
+  margin-top: 16px;
+}
+
+.markets__tabs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.markets__tabs .tab {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 12px;
+  background: #1b1d1d;
+  border: none;
+  color: #9b9c9c;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.markets__tabs .tab.is-active {
+  background: #ffffff;
+  color: #0d0e0f;
+}
+
+.markets__tabs .tab img {
+  width: 16px;
+  height: 16px;
+}
+
+.markets__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.market-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 4px;
+}
+
+.market-row__left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.market-row__left img {
+  width: 32px;
+  height: 32px;
+}
+
+.market-row__symbol {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.market-row__symbol span {
+  font-size: 12px;
+  color: #9b9c9c;
+  margin-left: 2px;
+}
+
+.market-row__name {
+  font-size: 12px;
+  color: #9b9c9c;
+}
+
+.market-row__mid {
+  text-align: right;
+}
+
+.market-row__price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.market-row__sub {
+  font-size: 12px;
+  color: #7c7c7c;
+}
+
+.market-row__change {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.market-row__change.is-up {
+  color: #2ecc71;
+}
+
+.market-row__change.is-down {
+  color: #ff4d4f;
+}
+
+.markets__cta {
+  margin: 16px auto 0;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: none;
+  background: #2d2f2f;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  display: block;
+}
+
+.support {
+  margin-top: 16px;
+  padding-bottom: 8px;
+}
+
+.support__card {
+  height: 52px;
+  background: #1b1d1d;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.support__card img {
+  width: 20px;
+  height: 20px;
+}
+
+.support__card span {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.support__chevron {
+  font-size: 20px;
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+.tabbar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  background: $bg-container;
+  border-top: 1px solid $border-color;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  justify-content: space-around;
+}
+
+.tabbar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #58595a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tabbar__item img {
+  width: 24px;
+  height: 24px;
+}
+
+.tabbar__item.is-active {
+  color: #ffffff;
+}
+
+.tabbar__item--trade {
+  color: #58595a;
+}
+
+.tabbar__fab {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #275cfd;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabbar__fab img {
+  width: 24px;
+  height: 24px;
 }
 
 /* Floating build badge */
