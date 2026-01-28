@@ -48,16 +48,18 @@ body {
 }
 
 /* Typography */
-h1 {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: $spacing-md;
-  color: $text-primary;
-}
+.phone-container {
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: $spacing-md;
+    color: #000; // Dark text on white container
+  }
 
-p {
-  font-size: 16px;
-  line-height: 1.5;
-  color: $text-secondary;
-  margin-bottom: $spacing-md;
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333; // Dark text on white container
+    margin-bottom: $spacing-md;
+  }
 }

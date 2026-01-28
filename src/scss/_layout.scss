@@ -11,18 +11,116 @@
   flex-direction: column;
 }
 
-// Status bar (optional)
+// Status bar (iOS 17 style)
 .status-bar {
   height: $status-bar-height;
   background: $bg-container;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 $spacing-lg;
-  font-size: 14px;
+  padding: 0 $spacing-md;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+  font-size: 15px;
   font-weight: 600;
-  color: $text-primary;
+  letter-spacing: -0.01em;
+  color: #000;
   border-bottom: 1px solid $border-color;
+  position: relative;
+  
+  .status-bar__left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-weight: 600;
+  }
+  
+  .status-bar__right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    
+    .battery-icon {
+      width: 24px;
+      height: 12px;
+      border: 1.5px solid #000;
+      border-radius: 2.5px;
+      position: relative;
+      background: transparent;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        right: -3px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.5px;
+        height: 4px;
+        background: #000;
+        border-radius: 0 1px 1px 0;
+      }
+      
+      .battery-level {
+        position: absolute;
+        left: 1px;
+        top: 1px;
+        bottom: 1px;
+        width: 75%;
+        background: #34C759;
+        border-radius: 1px;
+      }
+    }
+    
+    .signal-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 10px;
+      
+      .bar {
+        width: 3px;
+        background: #000;
+        border-radius: 1px;
+        
+        &:nth-child(1) { height: 4px; }
+        &:nth-child(2) { height: 6px; }
+        &:nth-child(3) { height: 8px; }
+        &:nth-child(4) { height: 10px; }
+      }
+    }
+    
+    .wifi-icon {
+      width: 16px;
+      height: 12px;
+      position: relative;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 12px;
+        height: 8px;
+        border: 1.5px solid #000;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        width: 6px;
+        height: 4px;
+        border: 1.5px solid #000;
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+      }
+    }
+  }
 }
 
 // Safe area for notch devices
@@ -41,6 +139,7 @@
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background: $bg-container;
+  color: #000; // Dark text on white background
 }
 
 // Content padding
@@ -59,12 +158,12 @@
 }
 
 .content::-webkit-scrollbar-thumb {
-  background: $gray-300;
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 2px;
 }
 
 .content::-webkit-scrollbar-thumb:hover {
-  background: $gray-400;
+  background: rgba(0, 0, 0, 0.3);
 }
 
 // Placeholder box styles
@@ -73,6 +172,10 @@
   border-radius: $radius-md;
   padding: $spacing-xl;
   text-align: center;
-  color: $text-placeholder;
+  color: $gray-400;
   margin-bottom: $spacing-lg;
+  
+  p {
+    color: $gray-400;
+  }
 }

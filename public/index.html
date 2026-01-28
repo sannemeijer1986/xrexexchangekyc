@@ -8,10 +8,24 @@
 </head>
 <body>
     <div class="phone-container">
-        <!-- Optional status bar -->
+        <!-- iOS 17 Status bar -->
         <div class="status-bar safe-area-top">
-            <span>9:41</span>
-            <span>🔋 100%</span>
+            <div class="status-bar__left">
+                <span>9:41</span>
+            </div>
+            <div class="status-bar__right">
+                <div class="signal-bars">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+                <div class="wifi-icon"></div>
+                <div class="battery-icon">
+                    <div class="battery-level"></div>
+                </div>
+                <span>100%</span>
+            </div>
         </div>
 
         <!-- Scrollable content area -->

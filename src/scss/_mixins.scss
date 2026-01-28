@@ -1,7 +1,7 @@
 // Mixins for common patterns
 
 @mixin focus-ring($color: rgba(60, 165, 250, 0.45)) {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px $color;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px $color;
 }
