@@ -79,7 +79,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 20px;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
   font-size: 15px;
   font-weight: 600;
@@ -100,85 +100,11 @@ body {
   gap: 4px;
   font-weight: 600;
 }
-.status-bar .status-bar__right .battery-icon {
-  width: 24px;
-  height: 12px;
-  border: 1.5px solid #fff;
-  border-radius: 2.5px;
-  position: relative;
-  background: transparent;
-}
-.status-bar .status-bar__right .battery-icon::after {
-  content: "";
-  position: absolute;
-  right: -3px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1.5px;
-  height: 4px;
-  background: #fff;
-  border-radius: 0 1px 1px 0;
-}
-.status-bar .status-bar__right .battery-icon .battery-level {
-  position: absolute;
-  left: 1px;
-  top: 1px;
-  bottom: 1px;
-  width: 75%;
-  background: #34C759;
-  border-radius: 1px;
-}
-.status-bar .status-bar__right .signal-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 10px;
-}
-.status-bar .status-bar__right .signal-bars .bar {
-  width: 3px;
-  background: #fff;
-  border-radius: 1px;
-}
-.status-bar .status-bar__right .signal-bars .bar:nth-child(1) {
-  height: 4px;
-}
-.status-bar .status-bar__right .signal-bars .bar:nth-child(2) {
-  height: 6px;
-}
-.status-bar .status-bar__right .signal-bars .bar:nth-child(3) {
-  height: 8px;
-}
-.status-bar .status-bar__right .signal-bars .bar:nth-child(4) {
-  height: 10px;
-}
-.status-bar .status-bar__right .wifi-icon {
-  width: 16px;
-  height: 12px;
-  position: relative;
-}
-.status-bar .status-bar__right .wifi-icon::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 12px;
-  height: 8px;
-  border: 1.5px solid #fff;
-  border-top: none;
-  border-radius: 0 0 8px 8px;
-}
-.status-bar .status-bar__right .wifi-icon::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -30%);
-  width: 6px;
-  height: 4px;
-  border: 1.5px solid #fff;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
+.status-bar .status-bar__right .status-bar__icons {
+  height: 22px;
+  width: auto;
+  display: block;
+  align-self: center;
 }
 
 .safe-area-top {

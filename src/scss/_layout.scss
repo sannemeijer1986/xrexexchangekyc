@@ -18,7 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 $spacing-md;
+  padding: 0 ($spacing-md + 4px);
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
   font-size: 15px;
   font-weight: 600;
@@ -39,86 +39,12 @@
     align-items: center;
     gap: 4px;
     font-weight: 600;
-    
-    .battery-icon {
-      width: 24px;
-      height: 12px;
-      border: 1.5px solid #fff;
-      border-radius: 2.5px;
-      position: relative;
-      background: transparent;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        right: -3px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 1.5px;
-        height: 4px;
-        background: #fff;
-        border-radius: 0 1px 1px 0;
-      }
-      
-      .battery-level {
-        position: absolute;
-        left: 1px;
-        top: 1px;
-        bottom: 1px;
-        width: 75%;
-        background: #34C759;
-        border-radius: 1px;
-      }
-    }
-    
-    .signal-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 2px;
-      height: 10px;
-      
-      .bar {
-        width: 3px;
-        background: #fff;
-        border-radius: 1px;
-        
-        &:nth-child(1) { height: 4px; }
-        &:nth-child(2) { height: 6px; }
-        &:nth-child(3) { height: 8px; }
-        &:nth-child(4) { height: 10px; }
-      }
-    }
-    
-    .wifi-icon {
-      width: 16px;
-      height: 12px;
-      position: relative;
-      
-      &::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 12px;
-        height: 8px;
-        border: 1.5px solid #fff;
-        border-top: none;
-        border-radius: 0 0 8px 8px;
-      }
-      
-      &::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -30%);
-        width: 6px;
-        height: 4px;
-        border: 1.5px solid #fff;
-        border-top: none;
-        border-radius: 0 0 4px 4px;
-      }
+
+    .status-bar__icons {
+      height: 22px;
+      width: auto;
+      display: block;
+      align-self: center;
     }
   }
 }
