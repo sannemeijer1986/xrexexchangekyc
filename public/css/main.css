@@ -79,9 +79,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 28px;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: #fff;
@@ -93,6 +93,7 @@ body {
   align-items: center;
   gap: 4px;
   font-weight: 600;
+  margin-top: 2px;
 }
 .status-bar .status-bar__right {
   display: flex;
@@ -122,6 +123,8 @@ body {
   -webkit-overflow-scrolling: touch;
   background: #0D0E0F;
   color: #FFFFFF;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .content-inner {
@@ -130,20 +133,8 @@ body {
 }
 
 .content::-webkit-scrollbar {
-  width: 4px;
-}
-
-.content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.content::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 2px;
-}
-
-.content::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+  width: 0;
+  height: 0;
 }
 
 .placeholder-box {
