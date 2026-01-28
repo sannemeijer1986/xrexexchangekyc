@@ -18,11 +18,12 @@ $text-secondary: #FFFFFF;
 $text-placeholder: rgba(255, 255, 255, 0.6);
 
 // Background colors
-$bg-page: $bg-dark;
-$bg-container: $white;
+$bg-page: $gray-700;
+$bg-container: $bg-dark;
+
 
 // Border colors
-$border-color: #f0f0f0;
+$border-color: rgba(255, 255, 255, 0.08);
 
 // Shadows
 $shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.3);

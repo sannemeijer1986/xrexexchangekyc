@@ -53,13 +53,13 @@ body {
     font-size: 28px;
     font-weight: 700;
     margin-bottom: $spacing-md;
-    color: #000; // Dark text on white container
+    color: $text-primary;
   }
 
   p {
     font-size: 16px;
     line-height: 1.5;
-    color: #333; // Dark text on white container
+    color: $text-secondary;
     margin-bottom: $spacing-md;
   }
 }

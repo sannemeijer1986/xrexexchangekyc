@@ -23,7 +23,7 @@
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: #000;
+  color: #fff;
   border-bottom: 1px solid $border-color;
   position: relative;
   
@@ -43,7 +43,7 @@
     .battery-icon {
       width: 24px;
       height: 12px;
-      border: 1.5px solid #000;
+      border: 1.5px solid #fff;
       border-radius: 2.5px;
       position: relative;
       background: transparent;
@@ -56,7 +56,7 @@
         transform: translateY(-50%);
         width: 1.5px;
         height: 4px;
-        background: #000;
+        background: #fff;
         border-radius: 0 1px 1px 0;
       }
       
@@ -79,7 +79,7 @@
       
       .bar {
         width: 3px;
-        background: #000;
+        background: #fff;
         border-radius: 1px;
         
         &:nth-child(1) { height: 4px; }
@@ -102,7 +102,7 @@
         transform: translate(-50%, -50%);
         width: 12px;
         height: 8px;
-        border: 1.5px solid #000;
+        border: 1.5px solid #fff;
         border-top: none;
         border-radius: 0 0 8px 8px;
       }
@@ -115,7 +115,7 @@
         transform: translate(-50%, -30%);
         width: 6px;
         height: 4px;
-        border: 1.5px solid #000;
+        border: 1.5px solid #fff;
         border-top: none;
         border-radius: 0 0 4px 4px;
       }
@@ -139,7 +139,7 @@
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background: $bg-container;
-  color: #000; // Dark text on white background
+  color: $text-primary;
 }
 
 // Content padding
@@ -158,24 +158,24 @@
 }
 
 .content::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   border-radius: 2px;
 }
 
 .content::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 // Placeholder box styles
 .placeholder-box {
-  background: $gray-100;
+  background: rgba(255, 255, 255, 0.06);
   border-radius: $radius-md;
   padding: $spacing-xl;
   text-align: center;
-  color: $gray-400;
+  color: $text-placeholder;
   margin-bottom: $spacing-lg;
   
   p {
-    color: $gray-400;
+    color: $text-placeholder;
   }
 }
