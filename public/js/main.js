@@ -174,6 +174,36 @@
   initStates();
   initBadgeControls();
 
+  const initHeaderScrollSwap = () => {
+    const header = document.querySelector('.app-header');
+    const scroller = document.querySelector('.content');
+    if (!header || !scroller) return;
+
+    let isScrolled = false;
+    let ticking = false;
+    const threshold = 4;
+
+    const apply = () => {
+      const shouldBeScrolled = scroller.scrollTop > threshold;
+      if (shouldBeScrolled !== isScrolled) {
+        isScrolled = shouldBeScrolled;
+        header.classList.toggle('is-scrolled', isScrolled);
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(apply);
+    };
+
+    scroller.addEventListener('scroll', onScroll, { passive: true });
+    apply();
+  };
+
+  initHeaderScrollSwap();
+
   try {
     window.prototypeStates = {
       get: (group) => states[group],

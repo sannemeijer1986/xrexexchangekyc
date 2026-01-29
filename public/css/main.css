@@ -190,9 +190,46 @@ body {
   }
 }
 
-.app-header__logo {
-  width: 28px;
+.app-header__logo-wrap {
+  position: relative;
+  width: 120px;
   height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.app-header__logo-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 28px;
+  width: auto;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.app-header__logo-img--nolabel {
+  width: 22px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.app-header__logo-img--label {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition-delay: 0.06s;
+}
+
+.app-header.is-scrolled .app-header__logo-img--nolabel {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition-delay: 0s;
+}
+
+.app-header.is-scrolled .app-header__logo-img--label {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.06s;
 }
 
 .app-header__actions {
