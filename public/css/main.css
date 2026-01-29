@@ -250,7 +250,7 @@ body {
 .asset-card__label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 3px;
   font-size: 14px;
   font-weight: 600;
   color: #ffffff;
@@ -321,6 +321,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex: 1;
 }
 
 .explore-card__tag {
@@ -340,6 +341,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
   padding: 12px;
+  margin-top: auto;
 }
 
 .explore-card__progress span {
