@@ -75,6 +75,9 @@ body {
 }
 
 @media (max-width: 640px) {
+  .status-bar {
+    display: none;
+  }
   .phone-container {
     width: 100vw;
     height: 100vh;
