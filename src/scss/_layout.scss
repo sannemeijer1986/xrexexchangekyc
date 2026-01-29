@@ -608,7 +608,7 @@
   height: 68px;
   display: flex;
   align-items: center;
-  padding: 6px 0 22px;
+  padding: 6px 0 calc(22px + env(safe-area-inset-bottom, 0));
   justify-content: space-around;
 }
 
