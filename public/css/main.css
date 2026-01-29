@@ -453,8 +453,8 @@ body {
 }
 
 .markets__tabs .tab.is-star {
-  padding: 0;
-  width: 28px;
+  padding: 0 6px;
+  width: 40px;
 }
 
 .markets__tabs .tab.is-active {
@@ -463,8 +463,8 @@ body {
 }
 
 .markets__tabs .tab img {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   display: block;
 }
 
