@@ -182,6 +182,11 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: #0D0E0F;
 }
+@media (max-width: 640px) {
+  .app-header {
+    padding: 48px 16px 16px;
+  }
+}
 
 .app-header__logo {
   width: 24px;
