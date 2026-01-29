@@ -104,6 +104,7 @@
 .content-inner {
   padding: 16px;
   min-height: 100%;
+  padding-bottom: 96px;
 }
 
 // Custom scrollbar styling
@@ -600,15 +601,17 @@
 }
 
 .tabbar {
-  position: sticky;
-  bottom: 0;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: env(safe-area-inset-bottom, 0);
   z-index: 5;
   background: $bg-container;
   border-top: 1px solid $border-color;
-  height: calc(68px + env(safe-area-inset-bottom, 0));
+  height: 68px;
   display: flex;
   align-items: center;
-  padding: 6px 0 calc(22px + env(safe-area-inset-bottom, 0));
+  padding: 6px 0 22px;
   justify-content: space-around;
 }
 
