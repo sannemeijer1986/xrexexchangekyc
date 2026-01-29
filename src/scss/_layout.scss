@@ -143,20 +143,20 @@
 }
 
 .app-header__logo {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
 }
 
 .app-header__actions {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
 }
 
 .app-header__icon,
 .app-header__avatar {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: none;
   background: transparent;
@@ -167,10 +167,20 @@
 
 .app-header__icon img,
 .app-header__avatar img {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   object-fit: cover;
+}
+
+.app-header__icon {
+  width: 24px;
+  height: 24px;
+}
+
+.app-header__icon img {
+  width: 24px;
+  height: 24px;
 }
 
 .section-title {
