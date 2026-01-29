@@ -176,6 +176,7 @@
 .app-header__icon {
   width: 24px;
   height: 24px;
+  border-radius: 0px;
 }
 
 .app-header__icon img {
@@ -640,9 +641,20 @@
   filter: brightness(0) invert(1);
 }
 
+.build-badge__chevron .build-badge__chevron-icon--collapsed {
+  display: none;
+}
+
+
+.build-badge.is-collapsed .build-badge__chevron {
+  width: 40px;
+  height: 40px;
+}
+
 .build-badge.is-collapsed .build-badge__chevron img {
-  width: 16px;
-  height: 16px;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 2px;
 }
 
 .build-badge__body {
@@ -657,11 +669,11 @@
 }
 
 .build-badge.is-collapsed {
-  width: 44px;
-  min-width: 44px;
-  height: 44px;
-  min-height: 44px;
-  max-height: 44px;
+  width: 56px;
+  min-width: 56px;
+  height: 56px;
+  min-height: 56px;
+  max-height: 56px;
   border-radius: 999px;
   align-items: center;
   justify-content: center;
@@ -685,8 +697,16 @@
 }
 
 .build-badge.is-collapsed .build-badge__chevron {
-  transform: rotate(90deg);
+  transform: none;
   background: transparent;
+}
+
+.build-badge.is-collapsed .build-badge__chevron-icon {
+  display: none;
+}
+
+.build-badge.is-collapsed .build-badge__chevron-icon--collapsed {
+  display: block;
 }
 
 .build-badge.is-collapsed {
