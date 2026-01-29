@@ -148,6 +148,7 @@
   height: 28px;
   display: flex;
   align-items: center;
+  overflow: hidden;
 }
 
 .app-header__logo-img {
@@ -156,31 +157,27 @@
   top: 0;
   height: 28px;
   width: auto;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  transition: transform 0.25s ease;
   pointer-events: none;
 }
 
 .app-header__logo-img--nolabel {
   width: 22px;
-  opacity: 1;
   transform: translateY(0);
   transition-delay: 0.06s;
 }
 
 .app-header__logo-img--label {
-  opacity: 0;
   transform: translateY(6px);
   transition-delay: 0s;
 }
 
 .app-header.is-scrolled .app-header__logo-img--nolabel {
-  opacity: 0;
   transform: translateY(-6px);
   transition-delay: 0s;
 }
 
 .app-header.is-scrolled .app-header__logo-img--label {
-  opacity: 1;
   transform: translateY(0);
   transition-delay: 0.06s;
 }
@@ -301,7 +298,7 @@
 }
 
 .explore-card {
-  background: #15161a;
+  background: #1B1D1D;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -313,7 +310,6 @@
   width: 100%;
   display: block;
   object-fit: cover;
-  background: #808080;
 }
 
 .explore-card__content {
@@ -361,7 +357,7 @@
 }
 
 .explore-side__card {
-  background: #151718;
+  background: #1B1D1D;
   border-radius: 8px;
   padding: 10px 10px;
   display: flex;
