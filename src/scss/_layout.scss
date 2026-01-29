@@ -134,7 +134,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 32px 16px 16px;
-  border-bottom: 1px solid $border-color;
+  // border-bottom: 1px solid $border-color;
   background: $bg-container;
 
   @media (max-width: 640px) {
@@ -317,7 +317,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 }
 
@@ -325,7 +325,7 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: #275cfd;
+  background: #2D2F2F;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -336,8 +336,13 @@
 }
 
 .explore-side__icon img {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+}
+
+.explore-side__icon--btc img {
+  width: 32px;
+  height: 32px;
 }
 
 .explore-side__title {
@@ -349,6 +354,7 @@
 .explore-side__desc {
   font-size: 12px;
   color: #a3a3a3;
+  text-align: center;
 }
 
 .markets {
@@ -396,7 +402,7 @@
 .market-row {
   display: grid;
   grid-template-columns: 1fr auto auto;
-  gap: 8px;
+  gap: 16px;
   align-items: center;
   padding: 10px 4px;
 }
@@ -447,6 +453,28 @@
 .market-row__change {
   font-size: 12px;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.market-row__trend {
+  width: 56px;
+  height: 20px;
+  display: block;
+}
+
+.market-row__percent {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.market-row__percent img {
+  width: 12px;
+  height: 12px;
+  display: block;
 }
 
 .market-row__change.is-up {
