@@ -12,6 +12,21 @@
   font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
+.content.has-kyc-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle 300px at 50% 0%,
+      #0F255F 0%,
+      rgba(15, 37, 95, 0) 75%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 .content.has-resubmission::before {
   content: '';
   position: absolute;
@@ -71,7 +86,7 @@
   color: #fff;
   position: relative;
   z-index: 5;
-  transition: background 0.25s ease;
+  transition: background 0.083s ease;
 
   .status-bar__left {
     display: flex;
@@ -168,7 +183,7 @@
   padding: 32px 16px 16px;
   // border-bottom: 1px solid $border-color;
   background: rgba(255, 255, 255, 0);
-  transition: background 0.25s ease;
+  transition: background 0.083s ease;
 
   @media (max-width: 640px) {
     padding: 48px 16px 16px;

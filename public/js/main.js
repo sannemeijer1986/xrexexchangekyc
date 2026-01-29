@@ -100,13 +100,25 @@
     return config.labels[value] || '';
   };
 
-  const updateResubmissionBackground = () => {
+  const updateGradientBackground = () => {
     const container = document.querySelector('.content');
     if (!container) return;
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
     });
+    const isKycIdle = ['basic', 'identity'].every((group) => {
+      return states[group] === 1;
+    });
     container.classList.toggle('has-resubmission', hasResubmission);
+    container.classList.toggle('has-kyc-progress', isKycIdle);
+  };
+
+  const updateBankAvailability = () => {
+    const bankGroup = document.querySelector('[data-state-group="bank"]');
+    if (!bankGroup) return;
+    const isUnlocked = states.basic >= 2 && states.identity >= 2;
+    bankGroup.classList.toggle('is-locked', !isUnlocked);
+    bankGroup.setAttribute('aria-disabled', String(!isUnlocked));
   };
 
   const updateGroupUI = (group) => {
@@ -128,7 +140,8 @@
     }
     if (downBtn) downBtn.disabled = value <= config.min;
     if (upBtn) upBtn.disabled = value >= config.max;
-    updateResubmissionBackground();
+    updateGradientBackground();
+    updateBankAvailability();
   };
   const initStates = () => {
     Object.keys(STATE_CONFIGS).forEach((group) => {
@@ -138,7 +151,8 @@
       states[group] = clamped;
       applyDatasetState(group, clamped);
     });
-    updateResubmissionBackground();
+    updateGradientBackground();
+    updateBankAvailability();
   };
 
   const initBadgeControls = () => {
