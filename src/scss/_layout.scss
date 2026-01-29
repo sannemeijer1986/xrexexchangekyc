@@ -14,7 +14,8 @@
 
 @media (max-width: 640px) {
   .status-bar {
-    display: none;
+    display: none !important;
+    height: 0 !important;
   }
 
   .phone-container {
