@@ -107,7 +107,6 @@ body {
   font-weight: 600;
   letter-spacing: -0.01em;
   color: #fff;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
 }
 .status-bar .status-bar__left {
