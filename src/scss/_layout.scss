@@ -791,3 +791,23 @@
   white-space: nowrap;
   opacity: 0.75;
 }
+
+.build-badge__state-name[data-state-label="Submitted"] {
+  color: #8FB8FF;
+  opacity: 1;
+}
+
+.build-badge__state-name[data-state-label="Approved"] {
+  color: #6DCF8E;
+  opacity: 1;
+}
+
+.build-badge__state-name[data-state-label="Rejected"] {
+  color: #F76767;
+  opacity: 1;
+}
+
+.build-badge__state-name[data-state-label="Resubmission"] {
+  color: #FF926E;
+  opacity: 1;
+}

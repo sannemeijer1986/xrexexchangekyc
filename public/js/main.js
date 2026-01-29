@@ -112,7 +112,11 @@
     const value = states[group];
 
     if (valueEl) valueEl.textContent = value;
-    if (nameEl) nameEl.textContent = getLabel(group, value);
+    if (nameEl) {
+      const label = getLabel(group, value);
+      nameEl.textContent = label;
+      nameEl.dataset.stateLabel = label;
+    }
     if (downBtn) downBtn.disabled = value <= config.min;
     if (upBtn) upBtn.disabled = value >= config.max;
   };
