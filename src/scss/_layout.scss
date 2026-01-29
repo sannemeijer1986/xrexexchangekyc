@@ -12,11 +12,13 @@
   font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-.phone-container.has-resubmission {
+.content.has-resubmission {
   background: radial-gradient(circle 300px at 50% 0%,
       #623111 0%,
       rgba(242, 132, 86, 0) 75%),
     $bg-container;
+  background-repeat: no-repeat;
+  background-attachment: local;
 }
 
 @media (max-width: $bp-mobile) {
@@ -51,7 +53,7 @@
 // Status bar (iOS 17 style)
 .status-bar {
   height: $status-bar-height;
-  // background: $bg-container;
+  background: rgba(13, 14, 15, 0);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -62,6 +64,7 @@
   letter-spacing: -0.01em;
   color: #fff;
   position: relative;
+  transition: background 0.25s ease;
 
   .status-bar__left {
     display: flex;
@@ -86,6 +89,10 @@
   }
 }
 
+.status-bar.is-scrolled {
+  background: #0D0E0F;
+}
+
 // Safe area for notch devices
 .safe-area-top {
   padding-top: env(safe-area-inset-top, 0);
@@ -104,6 +111,11 @@
   color: $text-primary;
   scrollbar-width: none; // Firefox
   -ms-overflow-style: none; // IE/Edge legacy
+}
+
+.content--home {
+  margin-top: -124px;
+  padding-top: 124px;
 }
 
 // Content padding

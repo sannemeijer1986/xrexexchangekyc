@@ -101,7 +101,7 @@
   };
 
   const updateResubmissionBackground = () => {
-    const container = document.querySelector('.phone-container');
+    const container = document.querySelector('.content');
     if (!container) return;
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
@@ -186,6 +186,7 @@
 
   const initHeaderScrollSwap = () => {
     const header = document.querySelector('.app-header');
+    const statusBar = document.querySelector('.status-bar');
     const scroller = document.querySelector('.content');
     if (!header || !scroller) return;
 
@@ -198,6 +199,7 @@
       if (shouldBeScrolled !== isScrolled) {
         isScrolled = shouldBeScrolled;
         header.classList.toggle('is-scrolled', isScrolled);
+        if (statusBar) statusBar.classList.toggle('is-scrolled', isScrolled);
       }
       ticking = false;
     };
