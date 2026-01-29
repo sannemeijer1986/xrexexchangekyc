@@ -491,7 +491,7 @@
   z-index: 5;
   background: $bg-container;
   border-top: 1px solid $border-color;
-  height: 72px;
+  height: 68px;
   display: flex;
   align-items: center;
   padding: 6px 0 22px;
@@ -509,7 +509,7 @@
   font-size: 12px;
   font-weight: 600;
   width: 100%;
-  padding-top: 12px;
+  padding-top: 8px;
 }
 
 .tabbar__item img {
@@ -528,7 +528,7 @@
 
 .tabbar__fab {
   position: absolute;
-  top: -8px;
+  top: -10px;
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
