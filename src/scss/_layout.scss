@@ -605,7 +605,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 2px;
+  padding: 8px 0px;
   background: transparent;
   border: none;
   color: inherit;
@@ -700,9 +700,24 @@
 }
 
 .build-badge__group-label {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   opacity: 0.75;
+}
+
+.build-badge__section-title {
+  font-family: Sora, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 4px;
+}
+
+.build-badge__divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.075);
+  margin: 4px 2px;
+  border-radius: 999px;
 }
 
 .build-badge__state {
