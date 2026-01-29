@@ -45,6 +45,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: $spacing-lg;
+  touch-action: manipulation;
 }
 
 /* Typography */

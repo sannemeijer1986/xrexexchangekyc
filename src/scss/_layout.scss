@@ -12,7 +12,7 @@
   font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-@media (max-width: 640px) {
+@media (max-width: $bp-mobile) {
   .status-bar {
     display: none !important;
     height: 0 !important;
@@ -34,6 +34,10 @@
   body {
     padding: 0;
     background: $bg-container;
+  }
+
+  .build-badge {
+    bottom: 74px;
   }
 }
 
@@ -570,6 +574,10 @@
   flex-direction: column;
 
   pointer-events: auto;
+
+  @media (max-width: $bp-mobile) {
+    bottom: 84px;
+  }
 }
 
 .build-badge__header {

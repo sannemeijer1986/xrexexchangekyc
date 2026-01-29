@@ -45,6 +45,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  touch-action: manipulation;
 }
 
 /* Typography */
@@ -93,6 +94,9 @@ body {
   body {
     padding: 0;
     background: #0D0E0F;
+  }
+  .build-badge {
+    bottom: 74px;
   }
 }
 .status-bar {
@@ -618,6 +622,11 @@ body {
   display: flex;
   flex-direction: column;
   pointer-events: auto;
+}
+@media (max-width: 640px) {
+  .build-badge {
+    bottom: 84px;
+  }
 }
 
 .build-badge__header {
