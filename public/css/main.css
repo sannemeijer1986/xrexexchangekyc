@@ -154,7 +154,11 @@ body {
 .content-inner {
   padding: 16px;
   min-height: 100%;
-  padding-bottom: 96px;
+}
+@media (max-width: 640px) {
+  .content-inner {
+    padding-bottom: 96px;
+  }
 }
 
 .content::-webkit-scrollbar {
@@ -653,10 +657,10 @@ body {
 }
 
 .tabbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: env(safe-area-inset-bottom, 0);
+  position: sticky;
+  left: auto;
+  right: auto;
+  bottom: 0;
   z-index: 5;
   background: #0D0E0F;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -665,6 +669,14 @@ body {
   align-items: center;
   padding: 6px 0 22px;
   justify-content: space-around;
+}
+@media (max-width: 640px) {
+  .tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: env(safe-area-inset-bottom, 0);
+  }
 }
 
 .tabbar__item {

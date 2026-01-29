@@ -103,7 +103,10 @@
 .content-inner {
   padding: 16px;
   min-height: 100%;
-  padding-bottom: 96px;
+
+  @media (max-width: $bp-mobile) {
+    padding-bottom: 96px;
+  }
 }
 
 // Custom scrollbar styling
@@ -605,10 +608,10 @@
 }
 
 .tabbar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: env(safe-area-inset-bottom, 0);
+  position: sticky;
+  left: auto;
+  right: auto;
+  bottom: 0;
   z-index: 5;
   background: $bg-container;
   border-top: 1px solid $border-color;
@@ -617,6 +620,13 @@
   align-items: center;
   padding: 6px 0 22px;
   justify-content: space-around;
+
+  @media (max-width: $bp-mobile) {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: env(safe-area-inset-bottom, 0);
+  }
 }
 
 .tabbar__item {
