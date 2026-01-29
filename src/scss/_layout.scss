@@ -94,7 +94,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  background: $bg-container;
   color: $text-primary;
   scrollbar-width: none; // Firefox
   -ms-overflow-style: none; // IE/Edge legacy
@@ -136,11 +135,16 @@
   justify-content: space-between;
   padding: 32px 16px 16px;
   // border-bottom: 1px solid $border-color;
-  background: $bg-container;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.25s ease;
 
   @media (max-width: 640px) {
     padding: 48px 16px 16px;
   }
+}
+
+.app-header.is-scrolled {
+  background: #0D0E0F;
 }
 
 .app-header__logo-wrap {
