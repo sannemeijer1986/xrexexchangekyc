@@ -157,7 +157,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 32px 16px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: #0D0E0F;
 }
@@ -518,10 +518,10 @@ body {
   z-index: 5;
   background: #0D0E0F;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  height: 52px;
+  height: 72px;
   display: flex;
   align-items: center;
-  padding: 6px 0;
+  padding: 6px 0 22px;
   justify-content: space-around;
 }
 
@@ -535,6 +535,7 @@ body {
   color: #58595a;
   font-size: 12px;
   font-weight: 600;
+  width: 100%;
 }
 
 .tabbar__item img {
@@ -548,6 +549,7 @@ body {
 
 .tabbar__item--trade {
   color: #58595a;
+  margin-top: 28px;
 }
 
 .tabbar__fab {
