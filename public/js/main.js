@@ -100,6 +100,15 @@
     return config.labels[value] || '';
   };
 
+  const updateResubmissionBackground = () => {
+    const container = document.querySelector('.phone-container');
+    if (!container) return;
+    const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
+      return getLabel(group, states[group]) === 'Resubmission';
+    });
+    container.classList.toggle('has-resubmission', hasResubmission);
+  };
+
   const updateGroupUI = (group) => {
     const config = STATE_CONFIGS[group];
     const groupEl = document.querySelector(`[data-state-group="${group}"]`);
@@ -119,8 +128,8 @@
     }
     if (downBtn) downBtn.disabled = value <= config.min;
     if (upBtn) upBtn.disabled = value >= config.max;
+    updateResubmissionBackground();
   };
-
   const initStates = () => {
     Object.keys(STATE_CONFIGS).forEach((group) => {
       const config = STATE_CONFIGS[group];
@@ -129,6 +138,7 @@
       states[group] = clamped;
       applyDatasetState(group, clamped);
     });
+    updateResubmissionBackground();
   };
 
   const initBadgeControls = () => {
