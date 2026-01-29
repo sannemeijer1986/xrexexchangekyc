@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iOS Prototype</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&family=Sora:wght@600;700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="css/main.css" />
 </head>
+
 <body>
     <div class="phone-container">
         <!-- iOS 17 Status bar -->
@@ -225,39 +228,51 @@
     </div>
 
     <div class="build-badge" role="note" aria-label="Prototype state controls">
-        <div class="build-badge__title">Prototype states</div>
+        <button class="build-badge__header" type="button" aria-expanded="true" aria-controls="prototypeStatesBody">
+            <span class="build-badge__title">Prototype states</span>
+            <span class="build-badge__chevron" aria-hidden="true">›</span>
+        </button>
 
-        <div class="build-badge__group" data-state-group="basic">
-            <div class="build-badge__group-label">Basic information</div>
-            <div class="build-badge__state">
-                <button type="button" class="build-badge__state-btn" data-state-action="down" aria-label="Previous basic information state">−</button>
-                <span class="build-badge__state-value" data-state-value></span>
-                <button type="button" class="build-badge__state-btn" data-state-action="up" aria-label="Next basic information state">+</button>
-                <span class="build-badge__state-name" data-state-name></span>
+        <div class="build-badge__body" id="prototypeStatesBody">
+            <div class="build-badge__group" data-state-group="basic">
+                <div class="build-badge__group-label">Basic information</div>
+                <div class="build-badge__state">
+                    <button type="button" class="build-badge__state-btn" data-state-action="down"
+                        aria-label="Previous basic information state">−</button>
+                    <span class="build-badge__state-value" data-state-value></span>
+                    <button type="button" class="build-badge__state-btn" data-state-action="up"
+                        aria-label="Next basic information state">+</button>
+                    <span class="build-badge__state-name" data-state-name></span>
+                </div>
             </div>
-        </div>
 
-        <div class="build-badge__group" data-state-group="kyc">
-            <div class="build-badge__group-label">KYC state</div>
-            <div class="build-badge__state">
-                <button type="button" class="build-badge__state-btn" data-state-action="down" aria-label="Previous KYC state">−</button>
-                <span class="build-badge__state-value" data-state-value></span>
-                <button type="button" class="build-badge__state-btn" data-state-action="up" aria-label="Next KYC state">+</button>
-                <span class="build-badge__state-name" data-state-name></span>
+            <div class="build-badge__group" data-state-group="kyc">
+                <div class="build-badge__group-label">KYC state</div>
+                <div class="build-badge__state">
+                    <button type="button" class="build-badge__state-btn" data-state-action="down"
+                        aria-label="Previous KYC state">−</button>
+                    <span class="build-badge__state-value" data-state-value></span>
+                    <button type="button" class="build-badge__state-btn" data-state-action="up"
+                        aria-label="Next KYC state">+</button>
+                    <span class="build-badge__state-name" data-state-name></span>
+                </div>
             </div>
-        </div>
 
-        <div class="build-badge__group" data-state-group="bank">
-            <div class="build-badge__group-label">Bank account state</div>
-            <div class="build-badge__state">
-                <button type="button" class="build-badge__state-btn" data-state-action="down" aria-label="Previous bank account state">−</button>
-                <span class="build-badge__state-value" data-state-value></span>
-                <button type="button" class="build-badge__state-btn" data-state-action="up" aria-label="Next bank account state">+</button>
-                <span class="build-badge__state-name" data-state-name></span>
+            <div class="build-badge__group" data-state-group="bank">
+                <div class="build-badge__group-label">Bank account state</div>
+                <div class="build-badge__state">
+                    <button type="button" class="build-badge__state-btn" data-state-action="down"
+                        aria-label="Previous bank account state">−</button>
+                    <span class="build-badge__state-value" data-state-value></span>
+                    <button type="button" class="build-badge__state-btn" data-state-action="up"
+                        aria-label="Next bank account state">+</button>
+                    <span class="build-badge__state-name" data-state-name></span>
+                </div>
             </div>
         </div>
     </div>
 
     <script defer src="js/main.js"></script>
 </body>
+
 </html>

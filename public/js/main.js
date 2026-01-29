@@ -115,6 +115,17 @@
   const initBadgeControls = () => {
     const badge = document.querySelector('.build-badge');
     if (!badge) return;
+    const header = badge.querySelector('.build-badge__header');
+    const body = badge.querySelector('.build-badge__body');
+    const toggleCollapse = () => {
+      const isCollapsed = badge.classList.toggle('is-collapsed');
+      if (header) header.setAttribute('aria-expanded', String(!isCollapsed));
+      if (body) body.hidden = false;
+    };
+
+    if (header) {
+      header.addEventListener('click', toggleCollapse);
+    }
 
     badge.addEventListener('click', (event) => {
       const button = event.target.closest('[data-state-action]');
