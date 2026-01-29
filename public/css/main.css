@@ -679,7 +679,7 @@ body {
 }
 
 .build-badge.is-collapsed {
-  opacity: 0.35;
+  opacity: 0.75;
 }
 
 .build-badge.is-collapsed .build-badge__body {
