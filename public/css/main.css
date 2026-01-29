@@ -619,7 +619,9 @@ body {
   bottom: 24px;
   z-index: 1201;
   min-width: 240px;
+  width: 240px;
   min-height: 40px;
+  max-height: 500px;
   background: rgba(17, 24, 39, 0.45);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -632,6 +634,7 @@ body {
   display: flex;
   flex-direction: column;
   pointer-events: auto;
+  transition: width 0.15s ease, max-height 0.25s ease, opacity 0.2s ease;
 }
 @media (max-width: 640px) {
   .build-badge {
@@ -655,6 +658,7 @@ body {
   font-size: 13px;
   font-weight: 700;
   font-family: Sora;
+  transition: opacity 0.4s ease;
   opacity: 1;
 }
 
@@ -683,13 +687,32 @@ body {
   flex-direction: column;
   gap: 8px;
   transform-origin: bottom;
-  transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.25s ease;
+  transition: max-height 0.15s ease, opacity 0.2s ease, transform 0.25s ease;
   max-height: 500px;
   opacity: 1;
+  overflow: hidden;
 }
 
 .build-badge.is-collapsed {
   opacity: 0.75;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  max-height: 44px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+}
+
+.build-badge.is-collapsed .build-badge__title {
+  display: none;
+  opacity: 0;
+}
+
+.build-badge.is-collapsed .build-badge__header {
+  padding: 0;
+  justify-content: center;
 }
 
 .build-badge.is-collapsed .build-badge__body {
