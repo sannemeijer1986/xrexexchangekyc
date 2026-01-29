@@ -873,6 +873,11 @@
 
 }
 
+.build-badge__group.is-locked {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
 .build-badge__group-label {
   font-size: 9px;
   font-weight: 600;
