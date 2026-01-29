@@ -1,35 +1,50 @@
 (() => {
   const STATE_CONFIGS = {
     basic: {
-      storageKey: 'xrexexchangekyc.basicState.v1',
-      min: 1,
-      max: 3,
-      labels: {
-        1: 'Not submitted',
-        2: 'Completed',
-        3: 'Rejected',
-      },
-    },
-    kyc: {
-      storageKey: 'xrexexchangekyc.kycState.v1',
+      storageKey: 'xrexexchangekyc.basicState.v2',
       min: 1,
       max: 4,
       labels: {
-        1: 'Unverified',
-        2: 'Attention (resubmit)',
-        3: 'Verified',
+        1: 'Not submitted',
+        2: 'Submitted',
+        3: 'Approved',
         4: 'Rejected',
       },
     },
-    bank: {
-      storageKey: 'xrexexchangekyc.bankState.v1',
+    identity: {
+      storageKey: 'xrexexchangekyc.identityState.v1',
       min: 1,
-      max: 4,
+      max: 5,
       labels: {
-        1: 'No bank account',
-        2: 'Processing',
-        3: 'Bank account verified',
-        4: 'Bank account rejected',
+        1: 'Not submitted',
+        2: 'Submitted',
+        3: 'Resubmission',
+        4: 'Approved',
+        5: 'Rejected',
+      },
+    },
+    questionnaire: {
+      storageKey: 'xrexexchangekyc.questionnaireState.v1',
+      min: 1,
+      max: 5,
+      labels: {
+        1: 'Not enabled',
+        2: 'Enabled & not submitted',
+        3: 'Submitted',
+        4: 'Approved',
+        5: 'Rejected',
+      },
+    },
+    bank: {
+      storageKey: 'xrexexchangekyc.bankState.v2',
+      min: 1,
+      max: 5,
+      labels: {
+        1: 'Not submitted',
+        2: 'Submitted',
+        3: 'Resubmission',
+        4: 'Approved',
+        5: 'Rejected',
       },
     },
   };
@@ -124,8 +139,17 @@
     };
 
     if (header) {
-      header.addEventListener('click', toggleCollapse);
+      header.addEventListener('click', (event) => {
+        event.stopPropagation();
+        toggleCollapse();
+      });
     }
+
+    badge.addEventListener('click', (event) => {
+      if (!badge.classList.contains('is-collapsed')) return;
+      if (event.target.closest('[data-state-action]')) return;
+      toggleCollapse();
+    });
 
     badge.addEventListener('click', (event) => {
       const button = event.target.closest('[data-state-action]');
