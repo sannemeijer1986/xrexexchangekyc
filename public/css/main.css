@@ -75,10 +75,17 @@ body {
   font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-.content.has-resubmission {
-  background: radial-gradient(circle 300px at 50% 0%, #623111 0%, rgba(242, 132, 86, 0) 75%), #0D0E0F;
-  background-repeat: no-repeat;
-  background-attachment: local;
+.content.has-resubmission::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle 300px at 50% 0%, #623111 0%, rgba(242, 132, 86, 0) 75%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 @media (max-width: 640px) {
@@ -160,6 +167,7 @@ body {
   color: #FFFFFF;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: relative;
 }
 
 .content--home {
@@ -170,6 +178,8 @@ body {
 .content-inner {
   padding: 16px;
   min-height: 100%;
+  position: relative;
+  z-index: 1;
 }
 @media (max-width: 640px) {
   .content-inner {
