@@ -689,6 +689,11 @@ body {
   filter: brightness(0) invert(1);
 }
 
+.build-badge.is-collapsed .build-badge__chevron img {
+  width: 16px;
+  height: 16px;
+}
+
 .build-badge__body {
   display: flex;
   flex-direction: column;
@@ -701,7 +706,6 @@ body {
 }
 
 .build-badge.is-collapsed {
-  opacity: 0.75;
   width: 44px;
   min-width: 44px;
   height: 44px;
