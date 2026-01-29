@@ -653,7 +653,7 @@ body {
   z-index: 5;
   background: #0D0E0F;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  height: 68px;
+  height: calc(68px + env(safe-area-inset-bottom, 0));
   display: flex;
   align-items: center;
   padding: 6px 0 calc(22px + env(safe-area-inset-bottom, 0));
