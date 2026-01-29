@@ -629,6 +629,10 @@
   opacity: 1;
 }
 
+.build-badge.is-collapsed {
+  opacity: 0.35;
+}
+
 .build-badge.is-collapsed .build-badge__body {
   max-height: 1px;
   opacity: 0;
