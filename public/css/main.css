@@ -550,13 +550,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   background: transparent;
   border: none;
   color: #58595a;
   font-size: 12px;
   font-weight: 600;
   width: 100%;
+  padding-top: 12px;
 }
 
 .tabbar__item img {
@@ -570,12 +571,12 @@ body {
 
 .tabbar__item--trade {
   color: #58595a;
-  margin-top: 28px;
+  margin-top: 26px;
 }
 
 .tabbar__fab {
   position: absolute;
-  top: -12px;
+  top: -8px;
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
