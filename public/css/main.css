@@ -622,17 +622,17 @@ body {
 /* Floating build badge */
 .build-badge {
   position: fixed;
-  left: 16px;
+  right: 16px;
   bottom: 24px;
   z-index: 1201;
   min-width: 240px;
   width: 240px;
   min-height: 40px;
   max-height: 500px;
-  background: rgba(17, 24, 39, 0.45);
+  background: rgba(57, 59, 59, 0.65);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   color: #ffffff;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 12px;
