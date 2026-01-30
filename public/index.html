@@ -90,7 +90,7 @@
                             <div class="side-menu__item">
                                 <img class="side-menu__item-icon" src="assets/icon_checklist.svg" alt="" />
                                 <span class="side-menu__item-text">Setup checklist</span>
-                                <span class="side-menu__item-meta">Action required</span>
+                        <span class="side-menu__item-meta" data-setup-status>Action required</span>
                             </div>
                             <div class="side-menu__item">
                                 <img class="side-menu__item-icon" src="assets/icon_bankaccounts.svg" alt="" />
@@ -106,7 +106,10 @@
                             </div>
                         </div>
 
-                        <div class="side-menu__banner">Banner</div>
+                        <div class="side-menu__banner">
+                            <span class="side-menu__banner-text">Refer and earn 20% trading fees</span>
+                            <img class="side-menu__banner-illu" src="assets/illu_banner.svg" alt="" />
+                        </div>
 
                         <div class="side-menu__section-label">Others</div>
                         <div class="side-menu__list">
@@ -131,6 +134,9 @@
         <!-- Scrollable content area -->
         <div class="content content--home">
             <div class="content-inner safe-area-bottom">
+                <section class="setup-state" data-setup-state>
+                    <div class="setup-state__title" data-setup-title>First time content</div>
+                </section>
                 <section class="asset-card">
                     <div class="asset-card__label">
                         <span>Net assets ≈</span>

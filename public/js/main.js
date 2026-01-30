@@ -121,6 +121,39 @@
     bankGroup.setAttribute('aria-disabled', String(!isUnlocked));
   };
 
+  const updateSetupState = () => {
+    const titleEl = document.querySelector('[data-setup-title]');
+    const statusEl = document.querySelector('[data-setup-status]');
+    if (!titleEl) return;
+    const basic = states.basic;
+    const identity = states.identity;
+    let title = '';
+    let label = '';
+    let statusText = '';
+
+    if (basic === 1 && identity === 1) {
+      title = 'First time content';
+      label = 'Setup not started';
+      statusText = 'Get started';
+    } else if (basic === 2 && identity === 2) {
+      title = 'Submitted, please wait content';
+      label = 'Submitted BI and PI, awaiting';
+      statusText = 'Processing';
+    } else if ((basic !== 1 || identity !== 1) && (basic !== 2 && identity !== 2)) {
+      title = 'Continue setup content';
+      label = 'Setup part 1 started but not finished';
+      statusText = 'Continue setup';
+    } else {
+      title = 'Continue setup content';
+      label = 'Setup part 1 started but not finished';
+      statusText = 'Continue setup';
+    }
+
+    titleEl.textContent = title;
+    titleEl.dataset.setupLabel = label;
+    if (statusEl) statusEl.textContent = statusText;
+  };
+
   const updateGroupUI = (group) => {
     const config = STATE_CONFIGS[group];
     const groupEl = document.querySelector(`[data-state-group="${group}"]`);
@@ -142,6 +175,7 @@
     if (upBtn) upBtn.disabled = value >= config.max;
     updateGradientBackground();
     updateBankAvailability();
+    updateSetupState();
   };
   const initStates = () => {
     Object.keys(STATE_CONFIGS).forEach((group) => {
@@ -153,6 +187,7 @@
     });
     updateGradientBackground();
     updateBankAvailability();
+    updateSetupState();
   };
 
   const initBadgeControls = () => {
