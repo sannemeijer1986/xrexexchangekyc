@@ -920,8 +920,18 @@
   background: #151718;
   display: flex;
   flex-direction: column;
-  padding-bottom: 16px;
+}
+
+.side-menu__content {
+  flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.side-menu__content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .side-menu__top {
@@ -943,9 +953,10 @@
   cursor: pointer;
 }
 
-.side-menu__icon {
-  font-size: 18px;
-  font-weight: 600;
+.side-menu__icon-img {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 .side-menu__cards {
@@ -976,11 +987,7 @@
 .side-menu__card-icon {
   width: 24px;
   height: 24px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #ffffff;
+  display: block;
 }
 
 .side-menu__card-label {
@@ -1023,6 +1030,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.side-menu__item-icon {
+  object-fit: contain;
 }
 
 .side-menu__item-text {

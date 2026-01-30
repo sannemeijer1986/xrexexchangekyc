@@ -234,9 +234,13 @@
     const container = document.querySelector('.phone-container');
     const trigger = document.querySelector('[data-menu-trigger]');
     const overlay = document.querySelector('.side-menu-overlay');
+    const scrollable = document.querySelector('.side-menu__content');
     if (!container || !trigger || !overlay) return;
 
-    const openMenu = () => container.classList.add('is-menu-open');
+    const openMenu = () => {
+      container.classList.add('is-menu-open');
+      if (scrollable) scrollable.scrollTop = 0;
+    };
     const closeMenu = () => container.classList.remove('is-menu-open');
 
     trigger.addEventListener('click', openMenu);
