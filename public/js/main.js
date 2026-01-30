@@ -230,6 +230,23 @@
 
   initHeaderScrollSwap();
 
+  const initSideMenu = () => {
+    const container = document.querySelector('.phone-container');
+    const trigger = document.querySelector('[data-menu-trigger]');
+    const overlay = document.querySelector('.side-menu-overlay');
+    if (!container || !trigger || !overlay) return;
+
+    const openMenu = () => container.classList.add('is-menu-open');
+    const closeMenu = () => container.classList.remove('is-menu-open');
+
+    trigger.addEventListener('click', openMenu);
+    overlay.addEventListener('click', (event) => {
+      if (event.target.closest('[data-menu-close]')) closeMenu();
+    });
+  };
+
+  initSideMenu();
+
   try {
     window.prototypeStates = {
       get: (group) => states[group],

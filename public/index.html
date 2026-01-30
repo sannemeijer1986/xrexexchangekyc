@@ -34,11 +34,86 @@
                 <button class="app-header__icon" type="button" aria-label="Menu">
                     <img src="assets/icon_navbar_all.svg" alt="" />
                 </button>
-                <button class="app-header__avatar" type="button" aria-label="Profile">
+                <button class="app-header__avatar" type="button" aria-label="Profile" data-menu-trigger>
                     <img src="assets/icon_navbar_user.png" alt="User profile" />
                 </button>
             </div>
         </header>
+
+        <div class="side-menu-overlay" aria-hidden="true">
+            <button class="side-menu__backdrop" type="button" data-menu-close aria-label="Close menu"></button>
+            <aside class="side-menu" role="dialog" aria-modal="true" aria-label="Side menu">
+                <div class="side-menu__panel">
+                    <div class="side-menu__top">
+                        <button class="side-menu__icon-btn" type="button" data-menu-close aria-label="Close menu">
+                            <span class="side-menu__icon side-menu__icon--close">X</span>
+                        </button>
+                        <button class="side-menu__icon-btn" type="button" aria-label="Show QR code">
+                            <span class="side-menu__icon side-menu__icon--qr">QR</span>
+                        </button>
+                    </div>
+
+                    <div class="side-menu__cards">
+                        <div class="side-menu__card">
+                            <img class="side-menu__avatar" src="assets/icon_navbar_user.png" alt="" />
+                            <div class="side-menu__card-label">Club</div>
+                            <div class="side-menu__card-title">XREXer</div>
+                        </div>
+                        <div class="side-menu__card">
+                            <span class="side-menu__card-icon">+</span>
+                            <div class="side-menu__card-title">Referrals</div>
+                        </div>
+                        <div class="side-menu__card">
+                            <img class="side-menu__card-icon" src="assets/icon_support.svg" alt="" />
+                            <div class="side-menu__card-title">Support</div>
+                        </div>
+                    </div>
+
+                    <div class="side-menu__section-label">Account</div>
+                    <div class="side-menu__list">
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">Account &amp; Security</span>
+                        </div>
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">Setup checklist</span>
+                            <span class="side-menu__item-meta">Action required</span>
+                        </div>
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">Bank accounts</span>
+                        </div>
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">Limits</span>
+                        </div>
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">Discount level</span>
+                        </div>
+                    </div>
+
+                    <div class="side-menu__banner">Banner</div>
+
+                    <div class="side-menu__section-label">Others</div>
+                    <div class="side-menu__list">
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">Settings</span>
+                        </div>
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">Support guide</span>
+                        </div>
+                        <div class="side-menu__item">
+                            <span class="side-menu__item-icon"></span>
+                            <span class="side-menu__item-text">XREX Community</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
 
         <!-- Scrollable content area -->
         <div class="content content--home">
