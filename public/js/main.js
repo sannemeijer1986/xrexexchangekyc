@@ -130,8 +130,14 @@
     let title = '';
     let label = '';
     let statusText = '';
+    let isWarning = false;
 
-    if (basic === 1 && identity === 1) {
+    if (identity === 3) {
+      title = 'Resubmission content';
+      label = 'PI resubmission';
+      statusText = 'Continue setup';
+      isWarning = true;
+    } else if (basic === 1 && identity === 1) {
       title = 'First time content';
       label = 'Setup not started';
       statusText = 'Get started';
@@ -151,6 +157,7 @@
 
     titleEl.textContent = title;
     titleEl.dataset.setupLabel = label;
+    titleEl.classList.toggle('is-warning', isWarning);
     if (statusEl) statusEl.textContent = statusText;
   };
 
