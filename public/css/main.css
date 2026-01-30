@@ -1034,7 +1034,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 44px 16px 16px 16px;
+  padding: calc(16px + env(safe-area-inset-top, 0)) 16px 16px;
 }
 
 .side-menu__icon-btn {
