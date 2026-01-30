@@ -106,11 +106,11 @@
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
     });
-    const isKycIdle = ['basic', 'identity'].every((group) => {
-      return states[group] === 1;
+    const isAwaitingSubmission = ['basic', 'identity'].every((group) => {
+      return states[group] === 2;
     });
     container.classList.toggle('has-resubmission', hasResubmission);
-    container.classList.toggle('has-kyc-progress', isKycIdle);
+    container.classList.toggle('has-kyc-progress', !isAwaitingSubmission);
   };
 
   const updateBankAvailability = () => {
