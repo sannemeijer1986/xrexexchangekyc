@@ -971,11 +971,62 @@ body {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  padding-bottom: 32px;
 }
 
 .side-menu__content::-webkit-scrollbar {
   width: 0;
   height: 0;
+}
+
+.side-menu__profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: calc(100% - 32px);
+  box-sizing: border-box;
+  padding: 16px;
+  background: #1b1d1d;
+  border-radius: 12px;
+  margin: 0 16px 16px;
+  border: none;
+  color: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.side-menu__profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.side-menu__profile-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-menu__profile-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.side-menu__profile-handle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9b9c9c;
+}
+
+.side-menu__profile-chevron {
+  width: 20px;
+  height: 20px;
+  transform: rotate(180deg);
+  filter: brightness(0) invert(1);
+  flex-shrink: 0;
 }
 
 .side-menu__top {
@@ -1022,15 +1073,15 @@ body {
 }
 
 .side-menu__avatar {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 .side-menu__card-icon {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   display: block;
 }
 
@@ -1070,7 +1121,6 @@ body {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1089,7 +1139,7 @@ body {
 }
 
 .side-menu__item-meta {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #7a99ff;
 }
