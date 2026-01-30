@@ -910,7 +910,7 @@
   position: relative;
   height: 100%;
   width: calc(100% - 40px);
-  max-width: 328px;
+  // max-width: 328px;
   transform: translateX(100%);
   transition: transform 0.25s ease;
 }
