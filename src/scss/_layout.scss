@@ -240,6 +240,8 @@
   align-items: center;
 }
 
+
+
 .app-header__icon,
 .app-header__avatar {
   width: 32px;
@@ -269,6 +271,7 @@
 .app-header__icon img {
   width: 24px;
   height: 24px;
+  border-radius: 0px;
 }
 
 .section-title {
@@ -990,7 +993,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 32px 16px 16px 16px;
 }
 
 .side-menu__icon-btn {
@@ -1008,6 +1011,11 @@
 .side-menu__icon-img {
   width: 24px;
   height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  object-fit: contain;
   display: block;
 }
 
