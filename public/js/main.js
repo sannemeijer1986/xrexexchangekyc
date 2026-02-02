@@ -144,6 +144,7 @@
     let title = '';
     let label = '';
     let statusText = '';
+    let statusState = '';
     let isWarning = false;
     let showCard = false;
     let cardTitle = '';
@@ -166,10 +167,13 @@
 
     if (isAllApproved) {
       showCard = false;
+      statusText = 'Approved';
+      statusState = 'approved';
     } else if (hasResubmission) {
       title = 'Resubmission content';
       label = 'PI resubmission';
-      statusText = 'Continue setup';
+      statusText = 'Action required';
+      statusState = 'resubmission';
       isWarning = true;
       showCard = true;
       cardTitle = 'Some required information or documents are missing and need an update.';
@@ -180,6 +184,7 @@
       title = 'First time content';
       label = 'Setup not started';
       statusText = 'Get started';
+      statusState = 'getstarted';
       showCard = true;
       cardTitle = 'Just a few steps to\nunlock the best of XREX!';
       cardCta = 'Get started';
@@ -187,7 +192,8 @@
     } else if (basic >= 2 && identity >= 2 && bank >= 2 && (!isQuestionnaireActive || isQuestionnaireSubmitted)) {
       title = 'Submitted, please wait content';
       label = 'Submitted BI and PI, awaiting';
-      statusText = 'Processing';
+      statusText = 'Reviewing';
+      statusState = 'reviewing';
       showCard = true;
       cardTitle = 'We\u2019re reviewing your application, we will notify you of further updates.';
       cardSubtitle = 'Reviewing usually takes 1-2 business days';
@@ -197,7 +203,8 @@
     } else if ((basic !== 1 || identity !== 1) && (basic !== 2 && identity !== 2)) {
       title = 'Continue setup content';
       label = 'Setup part 1 started but not finished';
-      statusText = 'Continue setup';
+      statusText = 'Continue';
+      statusState = 'continue';
       showCard = true;
       cardTitle = 'Pick up where you left off,\njust a few steps to unlock the best of XREX!';
       cardCta = 'Continue';
@@ -205,7 +212,8 @@
     } else {
       title = 'Continue setup content';
       label = 'Setup part 1 started but not finished';
-      statusText = 'Continue setup';
+      statusText = 'Continue';
+      statusState = 'continue';
       showCard = true;
       cardTitle = 'Pick up where you left off,\njust a few steps to unlock the best of XREX!';
       cardCta = 'Continue';
@@ -215,7 +223,10 @@
     titleEl.textContent = title;
     titleEl.dataset.setupLabel = label;
     titleEl.classList.toggle('is-warning', isWarning);
-    if (statusEl) statusEl.textContent = statusText;
+    if (statusEl) {
+      statusEl.textContent = statusText;
+      statusEl.dataset.setupStatus = statusState;
+    }
     if (setupStateEl) setupStateEl.dataset.setupLabel = label;
     const toggleHidden = (el, shouldHide) => {
       if (!el) return;
@@ -244,6 +255,9 @@
         buttonsWrapEl.querySelectorAll('.setup-first__button'),
       ).filter((button) => !button.hidden);
       buttonsWrapEl.classList.toggle('is-single', visibleButtons.length === 1);
+      const isWideSingle = visibleButtons.length === 1
+        && (stepState === 'reviewing' || stepState === 'resubmission');
+      buttonsWrapEl.classList.toggle('is-single-wide', isWideSingle);
     }
 
     const clearStep = (el) => {
@@ -254,7 +268,8 @@
 
     if (stepState === 'reviewing') {
       if (stepFinalEl) stepFinalEl.classList.add('is-current');
-      if (stepNextEl) stepNextEl.classList.add('is-done', 'is-rail-after-active');
+      if (stepSignUpEl) stepSignUpEl.classList.add('is-done', 'is-rail-after-active');
+      if (stepNextEl) stepNextEl.classList.add('is-done', 'is-rail-after-active', 'is-rail-before-active');
       if (stepFinalEl) stepFinalEl.classList.add('is-rail-before-active');
     } else {
       if (stepSignUpEl) stepSignUpEl.classList.add('is-done', 'is-rail-after-active');

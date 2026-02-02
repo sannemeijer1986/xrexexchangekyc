@@ -442,6 +442,10 @@
   min-width: 140px;
 }
 
+.setup-first__buttons.is-single-wide .setup-first__button {
+  min-width: 180px;
+}
+
 .setup-first__button {
   height: 40px;
   border-radius: 12px;
@@ -1287,6 +1291,20 @@
   font-size: 14px;
   font-weight: 600;
   color: #7a99ff;
+}
+
+.side-menu__item-meta[data-setup-status="getstarted"],
+.side-menu__item-meta[data-setup-status="continue"],
+.side-menu__item-meta[data-setup-status="reviewing"] {
+  color: #7a99ff;
+}
+
+.side-menu__item-meta[data-setup-status="resubmission"] {
+  color: #FF6D47;
+}
+
+.side-menu__item-meta[data-setup-status="approved"] {
+  color: #5AC47D;
 }
 
 .side-menu__banner {
