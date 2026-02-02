@@ -124,6 +124,17 @@
   const updateSetupState = () => {
     const titleEl = document.querySelector('[data-setup-title]');
     const statusEl = document.querySelector('[data-setup-status]');
+    const setupStateEl = document.querySelector('[data-setup-state]');
+    const firstTimeEl = document.querySelector('[data-setup-first-time]');
+    const cardTitleEl = document.querySelector('[data-setup-card-title]');
+    const cardSubtitleEl = document.querySelector('[data-setup-card-subtitle]');
+    const cardCtaEl = document.querySelector('[data-setup-cta]');
+    const finalStepEl = document.querySelector('[data-setup-step-final]');
+    const stepSignUpEl = document.querySelector('[data-setup-step="sign-up"]');
+    const stepNextEl = document.querySelector('[data-setup-step="next-steps"]');
+    const stepFinalEl = document.querySelector('[data-setup-step="final"]');
+    const btnSecondaryEl = document.querySelector('[data-setup-btn-secondary]');
+    const btnPrimaryEl = document.querySelector('[data-setup-btn-primary]');
     if (!titleEl) return;
     const basic = states.basic;
     const identity = states.identity;
@@ -131,34 +142,94 @@
     let label = '';
     let statusText = '';
     let isWarning = false;
+    let showCard = false;
+    let cardTitle = '';
+    let cardSubtitle = '';
+    let cardCta = '';
+    let finalStepLabel = 'Trade';
+    let hideSecondaryBtn = false;
+    let hidePrimaryBtn = false;
+    let stepState = 'progress';
 
     if (identity === 3) {
       title = 'Resubmission content';
       label = 'PI resubmission';
       statusText = 'Continue setup';
       isWarning = true;
+      showCard = true;
+      cardTitle = 'Some required information or documents are missing and need an update.';
+      cardCta = 'Review and update';
+      hideSecondaryBtn = true;
+      stepState = 'resubmission';
     } else if (basic === 1 && identity === 1) {
       title = 'First time content';
       label = 'Setup not started';
       statusText = 'Get started';
+      showCard = true;
+      cardTitle = 'Just a few steps to\nunlock the best of XREX!';
+      cardCta = 'Get started';
+      stepState = 'progress';
     } else if (basic === 2 && identity === 2) {
       title = 'Submitted, please wait content';
       label = 'Submitted BI and PI, awaiting';
       statusText = 'Processing';
+      showCard = true;
+      cardTitle = 'We\u2019re reviewing your application, we will notify you of further updates.';
+      cardSubtitle = 'Reviewing usually takes 1-2 business days';
+      finalStepLabel = 'Reviewing';
+      hidePrimaryBtn = true;
+      stepState = 'reviewing';
     } else if ((basic !== 1 || identity !== 1) && (basic !== 2 && identity !== 2)) {
       title = 'Continue setup content';
       label = 'Setup part 1 started but not finished';
       statusText = 'Continue setup';
+      showCard = true;
+      cardTitle = 'Pick up where you left off,\njust a few steps to unlock the best of XREX!';
+      cardCta = 'Continue';
+      stepState = 'progress';
     } else {
       title = 'Continue setup content';
       label = 'Setup part 1 started but not finished';
       statusText = 'Continue setup';
+      showCard = true;
+      cardTitle = 'Pick up where you left off,\njust a few steps to unlock the best of XREX!';
+      cardCta = 'Continue';
+      stepState = 'progress';
     }
 
     titleEl.textContent = title;
     titleEl.dataset.setupLabel = label;
     titleEl.classList.toggle('is-warning', isWarning);
     if (statusEl) statusEl.textContent = statusText;
+    if (setupStateEl) setupStateEl.dataset.setupLabel = label;
+    if (firstTimeEl) firstTimeEl.hidden = !showCard;
+    titleEl.hidden = showCard;
+    if (cardTitleEl) {
+      cardTitleEl.textContent = cardTitle;
+    }
+    if (cardSubtitleEl) {
+      cardSubtitleEl.textContent = cardSubtitle;
+      cardSubtitleEl.hidden = !cardSubtitle;
+    }
+    if (cardCtaEl && cardCta) cardCtaEl.textContent = cardCta;
+    if (finalStepEl) finalStepEl.textContent = finalStepLabel;
+    if (btnSecondaryEl) btnSecondaryEl.hidden = hideSecondaryBtn;
+    if (btnPrimaryEl) btnPrimaryEl.hidden = hidePrimaryBtn;
+
+    const clearStep = (el) => {
+      if (!el) return;
+      el.classList.remove('is-done', 'is-current', 'is-rail-before-active', 'is-rail-after-active');
+    };
+    [stepSignUpEl, stepNextEl, stepFinalEl].forEach(clearStep);
+
+    if (stepState === 'reviewing') {
+      if (stepFinalEl) stepFinalEl.classList.add('is-current');
+      if (stepNextEl) stepNextEl.classList.add('is-done', 'is-rail-after-active');
+      if (stepFinalEl) stepFinalEl.classList.add('is-rail-before-active');
+    } else {
+      if (stepSignUpEl) stepSignUpEl.classList.add('is-done', 'is-rail-after-active');
+      if (stepNextEl) stepNextEl.classList.add('is-current', 'is-rail-before-active');
+    }
   };
 
   const updateGroupUI = (group) => {
