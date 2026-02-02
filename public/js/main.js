@@ -138,6 +138,7 @@
     if (!titleEl) return;
     const basic = states.basic;
     const identity = states.identity;
+    const bank = states.bank;
     let title = '';
     let label = '';
     let statusText = '';
@@ -151,7 +152,11 @@
     let hidePrimaryBtn = false;
     let stepState = 'progress';
 
-    if (identity === 3) {
+    const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
+      return getLabel(group, states[group]) === 'Resubmission';
+    });
+
+    if (hasResubmission) {
       title = 'Resubmission content';
       label = 'PI resubmission';
       statusText = 'Continue setup';
@@ -169,7 +174,7 @@
       cardTitle = 'Just a few steps to\nunlock the best of XREX!';
       cardCta = 'Get started';
       stepState = 'progress';
-    } else if (basic === 2 && identity === 2) {
+    } else if (basic >= 2 && identity >= 2 && bank >= 2) {
       title = 'Submitted, please wait content';
       label = 'Submitted BI and PI, awaiting';
       statusText = 'Processing';
