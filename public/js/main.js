@@ -126,6 +126,7 @@
     const statusEl = document.querySelector('[data-setup-status]');
     const setupStateEl = document.querySelector('[data-setup-state]');
     const firstTimeEl = document.querySelector('[data-setup-first-time]');
+    const assetCardEl = document.querySelector('.asset-card');
     const cardTitleEl = document.querySelector('[data-setup-card-title]');
     const cardSubtitleEl = document.querySelector('[data-setup-card-subtitle]');
     const cardCtaEl = document.querySelector('[data-setup-cta]');
@@ -155,8 +156,13 @@
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
     });
+    const isAllApproved = ['basic', 'identity', 'bank'].every((group) => {
+      return getLabel(group, states[group]) === 'Approved';
+    });
 
-    if (hasResubmission) {
+    if (isAllApproved) {
+      showCard = false;
+    } else if (hasResubmission) {
       title = 'Resubmission content';
       label = 'PI resubmission';
       statusText = 'Continue setup';
@@ -207,8 +213,16 @@
     titleEl.classList.toggle('is-warning', isWarning);
     if (statusEl) statusEl.textContent = statusText;
     if (setupStateEl) setupStateEl.dataset.setupLabel = label;
-    if (firstTimeEl) firstTimeEl.hidden = !showCard;
-    titleEl.hidden = showCard;
+    const toggleHidden = (el, shouldHide) => {
+      if (!el) return;
+      el.hidden = shouldHide;
+      el.classList.toggle('is-hidden', shouldHide);
+    };
+
+    toggleHidden(firstTimeEl, !showCard);
+    toggleHidden(titleEl, showCard);
+    toggleHidden(setupStateEl, !showCard);
+    toggleHidden(assetCardEl, showCard);
     if (cardTitleEl) {
       cardTitleEl.textContent = cardTitle;
     }
@@ -235,6 +249,21 @@
       if (stepSignUpEl) stepSignUpEl.classList.add('is-done', 'is-rail-after-active');
       if (stepNextEl) stepNextEl.classList.add('is-current', 'is-rail-before-active');
     }
+
+    const updateStepIcon = (el) => {
+      if (!el) return;
+      const icon = el.querySelector('[data-setup-step-icon]');
+      if (!icon) return;
+      if (el.classList.contains('is-done')) {
+        icon.src = 'assets/icon_timeline_completed.svg';
+      } else if (el.classList.contains('is-current')) {
+        icon.src = 'assets/icon_timeline_active.svg';
+      } else {
+        icon.src = 'assets/icon_timeline_upcoming.svg';
+      }
+    };
+
+    [stepSignUpEl, stepNextEl, stepFinalEl].forEach(updateStepIcon);
   };
 
   const updateGroupUI = (group) => {
