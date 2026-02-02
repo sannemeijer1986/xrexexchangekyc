@@ -105,12 +105,12 @@
     if (!container) return;
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
-    });
+    }) || states.questionnaire === 2;
     const isAwaitingSubmission = ['basic', 'identity'].every((group) => {
       return states[group] === 2;
     });
     container.classList.toggle('has-resubmission', hasResubmission);
-    container.classList.toggle('has-kyc-progress', !isAwaitingSubmission);
+    container.classList.toggle('has-kyc-progress', true);
   };
 
   const updateBankAvailability = () => {
@@ -136,6 +136,7 @@
     const stepFinalEl = document.querySelector('[data-setup-step="final"]');
     const btnSecondaryEl = document.querySelector('[data-setup-btn-secondary]');
     const btnPrimaryEl = document.querySelector('[data-setup-btn-primary]');
+    const buttonsWrapEl = document.querySelector('.setup-first__buttons');
     if (!titleEl) return;
     const basic = states.basic;
     const identity = states.identity;
@@ -155,10 +156,13 @@
 
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
-    });
+    }) || states.questionnaire === 2;
+    const isQuestionnaireActive = states.questionnaire > 1;
+    const isQuestionnaireSubmitted = states.questionnaire >= 3;
+    const isQuestionnaireApproved = states.questionnaire === 4;
     const isAllApproved = ['basic', 'identity', 'bank'].every((group) => {
       return getLabel(group, states[group]) === 'Approved';
-    });
+    }) && (!isQuestionnaireActive || isQuestionnaireApproved);
 
     if (isAllApproved) {
       showCard = false;
@@ -180,7 +184,7 @@
       cardTitle = 'Just a few steps to\nunlock the best of XREX!';
       cardCta = 'Get started';
       stepState = 'progress';
-    } else if (basic >= 2 && identity >= 2 && bank >= 2) {
+    } else if (basic >= 2 && identity >= 2 && bank >= 2 && (!isQuestionnaireActive || isQuestionnaireSubmitted)) {
       title = 'Submitted, please wait content';
       label = 'Submitted BI and PI, awaiting';
       statusText = 'Processing';
@@ -224,7 +228,8 @@
     toggleHidden(setupStateEl, !showCard);
     toggleHidden(assetCardEl, showCard);
     if (cardTitleEl) {
-      cardTitleEl.textContent = cardTitle;
+      const safeTitle = cardTitle.replace(/\n/g, '<br />');
+      cardTitleEl.innerHTML = safeTitle;
     }
     if (cardSubtitleEl) {
       cardSubtitleEl.textContent = cardSubtitle;
@@ -234,6 +239,12 @@
     if (finalStepEl) finalStepEl.textContent = finalStepLabel;
     if (btnSecondaryEl) btnSecondaryEl.hidden = hideSecondaryBtn;
     if (btnPrimaryEl) btnPrimaryEl.hidden = hidePrimaryBtn;
+    if (buttonsWrapEl) {
+      const visibleButtons = Array.from(
+        buttonsWrapEl.querySelectorAll('.setup-first__button'),
+      ).filter((button) => !button.hidden);
+      buttonsWrapEl.classList.toggle('is-single', visibleButtons.length === 1);
+    }
 
     const clearStep = (el) => {
       if (!el) return;
@@ -257,7 +268,9 @@
       if (el.classList.contains('is-done')) {
         icon.src = 'assets/icon_timeline_completed.svg';
       } else if (el.classList.contains('is-current')) {
-        icon.src = 'assets/icon_timeline_active.svg';
+        icon.src = isWarning
+          ? 'assets/icon_timeline_activewarning.svg'
+          : 'assets/icon_timeline_active.svg';
       } else {
         icon.src = 'assets/icon_timeline_upcoming.svg';
       }

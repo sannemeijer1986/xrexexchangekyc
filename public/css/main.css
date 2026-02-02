@@ -399,9 +399,9 @@ body {
 
 .setup-first__subtitle {
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: #9B9C9C;
   margin-top: -8px;
 }
 
@@ -468,9 +468,21 @@ body {
 }
 
 .setup-first__buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 10px;
+}
+
+.setup-first__button {
+  flex: 1;
+}
+
+.setup-first__buttons.is-single {
+  justify-content: center;
+}
+
+.setup-first__buttons.is-single .setup-first__button {
+  flex: 0 0 auto;
+  min-width: 140px;
 }
 
 .setup-first__button {
