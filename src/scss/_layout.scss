@@ -90,9 +90,24 @@
 }
 
 // Status bar (iOS 17 style)
+.top-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(13, 14, 15, 0);
+  transition: background-color 0.083s ease;
+  will-change: background-color;
+}
+
+.top-chrome.is-scrolled {
+  background-color: #0D0E0F;
+}
+
 .status-bar {
   height: $status-bar-height;
-  background: rgba(13, 14, 15, 0);
+  background-color: rgba(13, 14, 15, 0);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -103,8 +118,7 @@
   letter-spacing: -0.01em;
   color: #fff;
   position: relative;
-  z-index: 5;
-  transition: background 0.083s ease;
+  z-index: 1;
 
   .status-bar__left {
     display: flex;
@@ -127,10 +141,6 @@
       align-self: center;
     }
   }
-}
-
-.status-bar.is-scrolled {
-  background: #0D0E0F;
 }
 
 // Safe area for notch devices
@@ -192,25 +202,20 @@
 }
 
 .app-header {
-  position: sticky;
-  top: 0;
-  z-index: 5;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 32px 16px 16px;
   // border-bottom: 1px solid $border-color;
-  background: rgba(255, 255, 255, 0);
-  transition: background 0.083s ease;
+  background-color: transparent;
 
   @media (max-width: 640px) {
     padding: 48px 16px 16px;
   }
 }
 
-.app-header.is-scrolled {
-  background: #0D0E0F;
-}
 
 .app-header__logo-wrap {
   position: relative;

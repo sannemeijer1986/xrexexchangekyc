@@ -451,7 +451,7 @@
 
   const initHeaderScrollSwap = () => {
     const header = document.querySelector('.app-header');
-    const statusBar = document.querySelector('.status-bar');
+    const topChrome = document.querySelector('.top-chrome');
     const scroller = document.querySelector('.content');
     if (!header || !scroller) return;
 
@@ -464,7 +464,7 @@
       if (shouldBeScrolled !== isScrolled) {
         isScrolled = shouldBeScrolled;
         header.classList.toggle('is-scrolled', isScrolled);
-        if (statusBar) statusBar.classList.toggle('is-scrolled', isScrolled);
+        if (topChrome) topChrome.classList.toggle('is-scrolled', isScrolled);
       }
       ticking = false;
     };

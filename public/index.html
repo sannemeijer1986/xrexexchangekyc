@@ -18,30 +18,32 @@
 
 <body>
     <div class="phone-container">
-        <!-- iOS 17 Status bar -->
-        <div class="status-bar safe-area-top">
-            <div class="status-bar__left">
-                <span>9:41</span>
+        <div class="top-chrome">
+            <!-- iOS 17 Status bar -->
+            <div class="status-bar safe-area-top">
+                <div class="status-bar__left">
+                    <span>9:41</span>
+                </div>
+                <div class="status-bar__right">
+                    <img class="status-bar__icons" src="assets/icons_statusbar.svg" alt="Status icons" />
+                </div>
             </div>
-            <div class="status-bar__right">
-                <img class="status-bar__icons" src="assets/icons_statusbar.svg" alt="Status icons" />
-            </div>
-        </div>
 
-        <header class="app-header">
-            <div class="app-header__logo-wrap" aria-label="XREX">
-                <img class="app-header__logo-img app-header__logo-img--nolabel" src="assets/logo_nolabel.svg" alt="" />
-                <img class="app-header__logo-img app-header__logo-img--label" src="assets/logo_label.svg" alt="" />
-            </div>
-            <div class="app-header__actions">
-                <button class="app-header__icon" type="button" aria-label="Menu">
-                    <img src="assets/icon_navbar_all.svg" alt="" />
-                </button>
-                <button class="app-header__avatar" type="button" aria-label="Profile" data-menu-trigger>
-                    <img src="assets/icon_navbar_user.png" alt="User profile" />
-                </button>
-            </div>
-        </header>
+            <header class="app-header">
+                <div class="app-header__logo-wrap" aria-label="XREX">
+                    <img class="app-header__logo-img app-header__logo-img--nolabel" src="assets/logo_nolabel.svg" alt="" />
+                    <img class="app-header__logo-img app-header__logo-img--label" src="assets/logo_label.svg" alt="" />
+                </div>
+                <div class="app-header__actions">
+                    <button class="app-header__icon" type="button" aria-label="Menu">
+                        <img src="assets/icon_navbar_all.svg" alt="" />
+                    </button>
+                    <button class="app-header__avatar" type="button" aria-label="Profile" data-menu-trigger>
+                        <img src="assets/icon_navbar_user.png" alt="User profile" />
+                    </button>
+                </div>
+            </header>
+        </div>
 
         <div class="side-menu-overlay" aria-hidden="true">
             <button class="side-menu__backdrop" type="button" data-menu-close aria-label="Close menu"></button>
