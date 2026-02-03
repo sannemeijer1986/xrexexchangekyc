@@ -12,6 +12,24 @@
   font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
+.phone-container.is-checklist-open .app-header,
+.phone-container.is-checklist-open .content,
+.phone-container.is-checklist-open .tabbar {
+  visibility: hidden;
+}
+
+.phone-container .app-header,
+.phone-container .content,
+.phone-container .tabbar {
+  transition: opacity 0.25s ease;
+}
+
+.phone-container.is-checklist-fading .app-header,
+.phone-container.is-checklist-fading .content,
+.phone-container.is-checklist-fading .tabbar {
+  opacity: 0;
+}
+
 .content.has-kyc-progress::before {
   content: '';
   position: absolute;
@@ -453,6 +471,209 @@
 
 .setup-first__buttons.is-single-wide .setup-first__button {
   min-width: 180px;
+}
+
+.setup-checklist {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background: #0d0e0f;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+}
+
+.setup-checklist.is-open {
+  transform: translateX(0);
+}
+
+
+.setup-checklist__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: env(safe-area-inset-top, 0) 16px 0;
+  height: 64px;
+  gap: 12px;
+}
+
+.setup-checklist__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  flex: 1;
+  text-align: left;
+}
+
+.setup-checklist__icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.setup-checklist__icon-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.setup-checklist__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setup-checklist__card {
+  background: #1b1d1d;
+  border-radius: 20px;
+  padding: 20px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.setup-checklist__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  overflow: hidden;
+  padding: 3px;
+  box-sizing: border-box;
+  background: conic-gradient(#2f6bff 0deg 72deg, rgba(255, 255, 255, 0.12) 72deg 360deg);
+}
+
+.setup-checklist__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.setup-checklist__card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.setup-checklist__card-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8FB8FF;
+}
+
+.setup-checklist__cta {
+  width: 100%;
+  height: 44px;
+  margin-top: 6px;
+  border-radius: 12px;
+  border: 0;
+  background: #2f6bff;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.setup-checklist__section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #9B9C9C;
+}
+
+.setup-checklist__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setup-checklist__item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.setup-checklist__item.is-disabled {
+  opacity: 0.4;
+}
+
+.setup-checklist__item-status {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.setup-checklist__item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.setup-checklist__item-icon img {
+  width: 20px;
+  height: 20px;
+}
+
+.setup-checklist__item-icon--transparent {
+  background: transparent;
+}
+
+.setup-checklist__item-icon--transparent img {
+  width: 18px;
+  height: 18px;
+}
+
+.setup-checklist__item-content {
+  flex: 1;
+}
+
+.setup-checklist__item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.setup-checklist__item-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.setup-checklist__item.is-complete .setup-checklist__item-meta {
+  color: #2bd66e;
+}
+
+.setup-checklist__item-action {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 0;
+  background: #2f6bff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.setup-checklist__item-action img {
+  width: 12px;
+  height: 12px;
 }
 
 .setup-first__button {
@@ -1300,6 +1521,10 @@
   font-size: 14px;
   font-weight: 600;
   color: #7a99ff;
+}
+
+.side-menu__item[data-setup-open] {
+  cursor: pointer;
 }
 
 .side-menu__item-meta[data-setup-status="getstarted"],

@@ -383,8 +383,71 @@
     Object.keys(STATE_CONFIGS).forEach((group) => updateGroupUI(group));
   };
 
+  const initChecklistPanel = () => {
+    const panel = document.querySelector('[data-setup-checklist]');
+    const container = document.querySelector('.phone-container');
+    if (!panel) return;
+    const openButtons = document.querySelectorAll('[data-setup-open]');
+    const closeButtons = panel.querySelectorAll('[data-setup-close]');
+
+    const setOpen = (nextOpen) => {
+      if (nextOpen) {
+        panel.hidden = false;
+        if (container) {
+          container.classList.remove('is-checklist-open');
+          container.classList.remove('is-checklist-fading');
+        }
+        requestAnimationFrame(() => {
+          panel.classList.add('is-open');
+        });
+        setTimeout(() => {
+          if (container && panel.classList.contains('is-open')) {
+            container.classList.add('is-checklist-fading');
+          }
+        }, 80);
+        setTimeout(() => {
+          if (container && panel.classList.contains('is-open')) {
+            container.classList.add('is-checklist-open');
+          }
+        }, 350);
+      } else {
+        panel.classList.remove('is-open');
+        if (container) {
+          container.classList.add('is-checklist-fading');
+          container.classList.remove('is-checklist-open');
+          requestAnimationFrame(() => {
+            container.classList.remove('is-checklist-fading');
+          });
+        }
+        const onEnd = () => {
+          if (!panel.classList.contains('is-open')) {
+            panel.hidden = true;
+          }
+          panel.removeEventListener('transitionend', onEnd);
+        };
+        panel.addEventListener('transitionend', onEnd);
+        setTimeout(onEnd, 400);
+      }
+    };
+
+    openButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (container && container.classList.contains('is-menu-open')) {
+          container.classList.remove('is-menu-open');
+          setTimeout(() => setOpen(true), 220);
+        } else {
+          setOpen(true);
+        }
+      });
+    });
+    closeButtons.forEach((button) => {
+      button.addEventListener('click', () => setOpen(false));
+    });
+  };
+
   initStates();
   initBadgeControls();
+  initChecklistPanel();
 
   const initHeaderScrollSwap = () => {
     const header = document.querySelector('.app-header');
