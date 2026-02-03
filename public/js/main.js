@@ -328,43 +328,149 @@
     const questionnaireItem = document.querySelector('[data-checklist-item="questionnaire"]');
     const stepsEl = document.querySelector('[data-checklist-steps]');
     const ringEl = document.querySelector('[data-checklist-ring]');
+    const ctaEl = document.querySelector('[data-checklist-cta]');
+    const ctaNoteEl = document.querySelector('[data-checklist-cta-note]');
+    const checklistCard = document.querySelector('.setup-checklist__card');
+    const checklistContent = document.querySelector('.setup-checklist__content');
+    const rejectedEl = document.querySelector('[data-checklist-rejected]');
 
-    const applyProcessingState = (item, isProcessing, defaultIcon) => {
+    const resetItemState = (item, defaultIcon) => {
       if (!item) return;
       const icon = item.querySelector('[data-checklist-icon]');
       const iconWrap = item.querySelector('.setup-checklist__item-icon');
       const action = item.querySelector('[data-checklist-action]');
       const status = item.querySelector('[data-checklist-status]');
       const meta = item.querySelector('.setup-checklist__item-meta');
-      if (icon) icon.src = isProcessing ? 'assets/icon_processing.svg' : defaultIcon;
-      if (iconWrap) iconWrap.classList.toggle('setup-checklist__item-icon--transparent', isProcessing);
-      if (status) status.textContent = isProcessing ? 'Reviewing' : '';
-      if (meta) meta.hidden = isProcessing;
+      if (icon) icon.src = defaultIcon;
+      if (iconWrap) iconWrap.classList.remove('setup-checklist__item-icon--transparent');
+      if (status) {
+        status.textContent = '';
+        status.classList.remove('setup-checklist__item-status-label--success', 'setup-checklist__item-status-label--warning');
+      }
+      if (meta) meta.hidden = false;
       if (action) {
-        action.disabled = isProcessing;
-        action.classList.toggle('is-disabled', isProcessing);
+        action.disabled = false;
+        action.classList.remove('is-disabled');
       }
     };
 
-    applyProcessingState(
-      basicItem,
-      states.basic === 2,
-      'assets/icon-checklist-basicprofile.svg',
-    );
-    applyProcessingState(
-      identityItem,
-      states.identity === 2,
-      'assets/icon-checklist-identityverification.svg',
-    );
+    const applyProcessingState = (item, defaultIcon) => {
+      if (!item) return;
+      const icon = item.querySelector('[data-checklist-icon]');
+      const iconWrap = item.querySelector('.setup-checklist__item-icon');
+      const action = item.querySelector('[data-checklist-action]');
+      const status = item.querySelector('[data-checklist-status]');
+      const meta = item.querySelector('.setup-checklist__item-meta');
+      if (icon) icon.src = 'assets/icon_processing.svg';
+      if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
+      if (status) {
+        status.textContent = 'Reviewing';
+        status.classList.remove('setup-checklist__item-status-label--success', 'setup-checklist__item-status-label--warning');
+      }
+      if (meta) meta.hidden = true;
+      if (action) {
+        action.disabled = true;
+        action.classList.add('is-disabled');
+      }
+    };
+
+    if (states.basic === 2) {
+      applyProcessingState(basicItem, 'assets/icon-checklist-basicprofile.svg');
+    } else if (states.basic === 3) {
+      if (basicItem) {
+        const icon = basicItem.querySelector('[data-checklist-icon]');
+        const iconWrap = basicItem.querySelector('.setup-checklist__item-icon');
+        const action = basicItem.querySelector('[data-checklist-action]');
+        const status = basicItem.querySelector('[data-checklist-status]');
+        const meta = basicItem.querySelector('.setup-checklist__item-meta');
+        if (icon) icon.src = 'assets/icon_timeline_completed.svg';
+        if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
+        if (status) {
+          status.textContent = 'Verified';
+          status.classList.remove('setup-checklist__item-status-label--warning');
+          status.classList.add('setup-checklist__item-status-label--success');
+        }
+        if (meta) meta.hidden = true;
+        if (action) {
+          action.disabled = true;
+          action.classList.add('is-disabled');
+        }
+      }
+    } else {
+      resetItemState(basicItem, 'assets/icon-checklist-basicprofile.svg');
+    }
+
+    if (states.identity === 2) {
+      applyProcessingState(identityItem, 'assets/icon-checklist-identityverification.svg');
+    } else if (states.identity === 3) {
+      if (identityItem) {
+        const icon = identityItem.querySelector('[data-checklist-icon]');
+        const iconWrap = identityItem.querySelector('.setup-checklist__item-icon');
+        const action = identityItem.querySelector('[data-checklist-action]');
+        const status = identityItem.querySelector('[data-checklist-status]');
+        const meta = identityItem.querySelector('.setup-checklist__item-meta');
+        if (icon) icon.src = 'assets/icon-checklist-identityverification.svg';
+        if (iconWrap) iconWrap.classList.remove('setup-checklist__item-icon--transparent');
+        if (status) {
+          status.textContent = '{$resubmissionMessage}';
+          status.classList.remove('setup-checklist__item-status-label--success');
+          status.classList.add('setup-checklist__item-status-label--warning');
+        }
+        if (meta) meta.hidden = true;
+        if (action) {
+          action.disabled = false;
+          action.classList.remove('is-disabled');
+        }
+      }
+    } else if (states.identity === 4) {
+      if (identityItem) {
+        const icon = identityItem.querySelector('[data-checklist-icon]');
+        const iconWrap = identityItem.querySelector('.setup-checklist__item-icon');
+        const action = identityItem.querySelector('[data-checklist-action]');
+        const status = identityItem.querySelector('[data-checklist-status]');
+        const meta = identityItem.querySelector('.setup-checklist__item-meta');
+        if (icon) icon.src = 'assets/icon_timeline_completed.svg';
+        if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
+        if (status) {
+          status.textContent = 'Verified';
+          status.classList.remove('setup-checklist__item-status-label--warning');
+          status.classList.add('setup-checklist__item-status-label--success');
+        }
+        if (meta) meta.hidden = true;
+        if (action) {
+          action.disabled = true;
+          action.classList.add('is-disabled');
+        }
+      }
+    } else {
+      resetItemState(identityItem, 'assets/icon-checklist-identityverification.svg');
+    }
 
     const bankUnlocked = states.basic >= 2 && states.identity >= 2;
     if (bankItem) {
       bankItem.classList.toggle('is-disabled', !bankUnlocked);
       const action = bankItem.querySelector('[data-checklist-action]');
+      const icon = bankItem.querySelector('[data-checklist-icon]');
+      const status = bankItem.querySelector('[data-checklist-status]');
+      const meta = bankItem.querySelector('.setup-checklist__item-meta');
+      const isBankProcessing = states.bank === 2;
       if (action) {
-        action.disabled = !bankUnlocked;
-        action.classList.toggle('is-disabled', !bankUnlocked);
+        action.disabled = !bankUnlocked || isBankProcessing;
+        action.classList.toggle('is-disabled', !bankUnlocked || isBankProcessing);
       }
+      if (icon) {
+        icon.src = isBankProcessing ? 'assets/icon_processing.svg' : 'assets/icon_bankaccounts.svg';
+      }
+      if (status) status.textContent = isBankProcessing ? 'Reviewing' : '';
+      if (meta) meta.hidden = isBankProcessing;
+      bankItem.classList.toggle('is-processing', isBankProcessing);
+    }
+
+    if (ctaEl) {
+      const isBankProcessing = states.bank === 2;
+      ctaEl.disabled = isBankProcessing;
+      ctaEl.classList.toggle('is-disabled', isBankProcessing);
+      if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing;
     }
 
     const isQuestionnaireActive = states.questionnaire >= 2;
@@ -384,9 +490,11 @@
     if (states.basic >= 2 || states.identity >= 2) stepsRemaining = 3;
     if (states.basic >= 2 && states.identity >= 2) stepsRemaining = 2;
     if (isQuestionnaireActive) stepsRemaining += 1;
+    if (states.bank === 2) stepsRemaining = Math.max(1, stepsRemaining - 1);
+    if (states.identity === 3) stepsRemaining += 1;
 
     if (stepsEl) {
-      stepsEl.textContent = `${stepsRemaining} steps to go`;
+      stepsEl.textContent = `${stepsRemaining} step${stepsRemaining === 1 ? '' : 's'} to go`;
     }
 
     if (ringEl) {
@@ -395,6 +503,11 @@
       const progressPercent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
       ringEl.style.setProperty('--progress', `${progressPercent}%`);
     }
+
+    const isRejected = states.basic === 4 || states.identity === 5;
+    if (rejectedEl) rejectedEl.hidden = !isRejected;
+    if (checklistCard) checklistCard.hidden = false;
+    if (checklistContent) checklistContent.hidden = isRejected;
   };
 
   const updateGroupUI = (group) => {

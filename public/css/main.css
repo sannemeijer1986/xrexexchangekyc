@@ -581,6 +581,22 @@ body {
   -ms-overflow-style: none;
 }
 
+.setup-checklist__rejected {
+  color: #EF4444;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  padding: 24px 16px;
+}
+
+.setup-checklist__rejected {
+  color: #EF4444;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  padding: 24px 16px;
+}
+
 .setup-checklist__body::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -671,6 +687,27 @@ body {
   gap: 8px;
 }
 
+.setup-checklist__cta.is-disabled {
+  background: #2D2F2F;
+  color: #47494A;
+  cursor: not-allowed;
+}
+
+.setup-checklist__cta-note {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8FB8FF;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.setup-checklist__cta-note-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: #9B9C9C;
+  margin-top: 2px;
+}
+
 .setup-checklist__section-title {
   font-size: 16px;
   font-weight: 700;
@@ -754,6 +791,10 @@ body {
 
 .setup-checklist__item-status-label--success {
   color: #2bd66e;
+}
+
+.setup-checklist__item-status-label--warning {
+  color: #F4A261;
 }
 
 .setup-checklist__item-status-label--warning {

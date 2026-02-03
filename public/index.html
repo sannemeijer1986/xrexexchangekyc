@@ -421,8 +421,13 @@
                         <div class="setup-checklist__card-title">Unlock trading</div>
                         <div class="setup-checklist__card-subtitle" data-checklist-steps>4 steps to go</div>
                     </div>
-                    <button class="setup-checklist__cta" type="button">Continue to next step</button>
+                    <button class="setup-checklist__cta" type="button" data-checklist-cta>Continue to next step</button>
+                    <div class="setup-checklist__cta-note" data-checklist-cta-note hidden>
+                        We're reviewing your application
+                        <div class="setup-checklist__cta-note-sub">Typically takes 1-2 business days</div>
+                    </div>
                 </div>
+                <div class="setup-checklist__rejected" data-checklist-rejected hidden>Rejected user UI (TBD)</div>
                 
                 <div class="setup-checklist__content">
                     <div class="setup-checklist__section-title">Next steps</div>
@@ -462,7 +467,7 @@
                             <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
                         </div>
-                        <div class="setup-checklist__item is-disabled" data-checklist-item="questionnaire" hidden>
+                        <div class="setup-checklist__item is-disabled" data-checklist-item="questionnaire" data-checklist-item-action hidden>
                             <div class="setup-checklist__item-icon">
                                 <img src="assets/icon-checklist-kycquestionaire.svg" alt="" data-checklist-icon />
                             </div>
@@ -474,19 +479,20 @@
                                 <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
                         </div>
-                        <div class="setup-checklist__item is-disabled" data-checklist-item="bank">
+                        <div class="setup-checklist__item is-disabled" data-checklist-item="bank" data-checklist-item-action>
                              <div class="setup-checklist__item-icon">
-                                 <img src="assets/icon_bankaccounts.svg" alt="" />
+                                 <img src="assets/icon_bankaccounts.svg" alt="" data-checklist-icon />
                             </div>
                             <div class="setup-checklist__item-content">
                                 <div class="setup-checklist__item-title">Add bank</div>
                                 <div class="setup-checklist__item-meta">Link at least one bank account to use USD-TWD fiat services</div>
+                                <div class="setup-checklist__item-status-label" data-checklist-status></div>
                             </div>
                             <button class="setup-checklist__item-action is-disabled" type="button" aria-label="Go to add bank" disabled data-checklist-action>
                                 <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
                         </div>
-                        <div class="setup-checklist__item is-disabled">
+                        <div class="setup-checklist__item is-disabled" data-checklist-item-action>
                             <div class="setup-checklist__item-icon">
                                 <img src="assets/icon-checklist-deposit.svg" alt="" />
                            </div>
