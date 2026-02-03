@@ -412,14 +412,14 @@
             </div>
             <div class="setup-checklist__body">
                 <div class="setup-checklist__card">
-                    <div class="setup-checklist__avatar-ring">
+                    <div class="setup-checklist__avatar-ring" data-checklist-ring>
                         <div class="setup-checklist__avatar">
                             <img src="assets/icon_navbar_user.png" alt="" />
                         </div>
                     </div>
                     <div class="setup-checklist__card-titlewrapper">
                         <div class="setup-checklist__card-title">Unlock trading</div>
-                        <div class="setup-checklist__card-subtitle">4 steps to go</div>
+                        <div class="setup-checklist__card-subtitle" data-checklist-steps>4 steps to go</div>
                     </div>
                     <button class="setup-checklist__cta" type="button">Continue to next step</button>
                 </div>
@@ -433,34 +433,48 @@
                             </div>
                             <div class="setup-checklist__item-content">
                                 <div class="setup-checklist__item-title">Sign up</div>
-                                <div class="setup-checklist__item-meta">Completed</div>
+                                <div class="setup-checklist__item-status-label setup-checklist__item-status-label--success">Completed</div>
                             </div>
                         </div>
-                        <div class="setup-checklist__item">
+                    <div class="setup-checklist__item" data-checklist-item="basic" data-checklist-item-action>
                         <div class="setup-checklist__item-icon">
-                            <img src="assets/icon-checklist-basicprofile.svg" alt="" />
+                            <img src="assets/icon-checklist-basicprofile.svg" alt="" data-checklist-icon />
                             </div>
                             <div class="setup-checklist__item-content">
-                                <div class="setup-checklist__item-title">Provide basic information</div>
+                                <div class="setup-checklist__item-title">Basic information</div>
                                 <div class="setup-checklist__item-meta">A few questions about how you’ll use your account.</div>
+                                <div class="setup-checklist__item-status-label" data-checklist-status></div>
                             </div>
-                        <button class="setup-checklist__item-action" type="button" aria-label="Go to basic information">
+                        <button class="setup-checklist__item-action" type="button" aria-label="Go to basic information" data-checklist-action>
                             <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
                         </div>
-                        <div class="setup-checklist__item">
+                    <div class="setup-checklist__item" data-checklist-item="identity" data-checklist-item-action>
                         <div class="setup-checklist__item-icon">
-                            <img src="assets/icon-checklist-identityverification.svg" alt="" />
+                            <img src="assets/icon-checklist-identityverification.svg" alt="" data-checklist-icon />
                             </div>
                             <div class="setup-checklist__item-content">
                                 <div class="setup-checklist__item-title">Proof of identity</div>
                                 <div class="setup-checklist__item-meta">Your ID and a short selfie check to confirm it’s you.</div>
+                                <div class="setup-checklist__item-status-label" data-checklist-status></div>
                             </div>
-                        <button class="setup-checklist__item-action" type="button" aria-label="Go to proof of identity">
+                        <button class="setup-checklist__item-action" type="button" aria-label="Go to proof of identity" data-checklist-action>
                             <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
                         </div>
-                        <div class="setup-checklist__item is-disabled">
+                        <div class="setup-checklist__item is-disabled" data-checklist-item="questionnaire" hidden>
+                            <div class="setup-checklist__item-icon">
+                                <img src="assets/icon-checklist-kycquestionaire.svg" alt="" data-checklist-icon />
+                            </div>
+                            <div class="setup-checklist__item-content">
+                                <div class="setup-checklist__item-title">KYC questionnaire</div>
+                                <div class="setup-checklist__item-status-label setup-checklist__item-status-label--warning" data-checklist-status>Additional information requested</div>
+                            </div>
+                            <button class="setup-checklist__item-action is-disabled" type="button" aria-label="Go to KYC questionnaire" disabled data-checklist-action>
+                                <img src="assets/icon-checklist-continue.svg" alt="" />
+                            </button>
+                        </div>
+                        <div class="setup-checklist__item is-disabled" data-checklist-item="bank">
                              <div class="setup-checklist__item-icon">
                                  <img src="assets/icon_bankaccounts.svg" alt="" />
                             </div>
@@ -468,7 +482,7 @@
                                 <div class="setup-checklist__item-title">Add bank</div>
                                 <div class="setup-checklist__item-meta">Link at least one bank account to use USD-TWD fiat services</div>
                             </div>
-                            <button class="setup-checklist__item-action disabled" type="button" aria-label="Go to add bank" disabled>
+                            <button class="setup-checklist__item-action is-disabled" type="button" aria-label="Go to add bank" disabled data-checklist-action>
                                 <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
                         </div>

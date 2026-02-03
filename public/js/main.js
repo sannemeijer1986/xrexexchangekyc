@@ -321,6 +321,82 @@
     [stepSignUpEl, stepNextEl, stepFinalEl].forEach(updateStepIcon);
   };
 
+  const updateChecklistItems = () => {
+    const basicItem = document.querySelector('[data-checklist-item="basic"]');
+    const identityItem = document.querySelector('[data-checklist-item="identity"]');
+    const bankItem = document.querySelector('[data-checklist-item="bank"]');
+    const questionnaireItem = document.querySelector('[data-checklist-item="questionnaire"]');
+    const stepsEl = document.querySelector('[data-checklist-steps]');
+    const ringEl = document.querySelector('[data-checklist-ring]');
+
+    const applyProcessingState = (item, isProcessing, defaultIcon) => {
+      if (!item) return;
+      const icon = item.querySelector('[data-checklist-icon]');
+      const iconWrap = item.querySelector('.setup-checklist__item-icon');
+      const action = item.querySelector('[data-checklist-action]');
+      const status = item.querySelector('[data-checklist-status]');
+      const meta = item.querySelector('.setup-checklist__item-meta');
+      if (icon) icon.src = isProcessing ? 'assets/icon_processing.svg' : defaultIcon;
+      if (iconWrap) iconWrap.classList.toggle('setup-checklist__item-icon--transparent', isProcessing);
+      if (status) status.textContent = isProcessing ? 'Reviewing' : '';
+      if (meta) meta.hidden = isProcessing;
+      if (action) {
+        action.disabled = isProcessing;
+        action.classList.toggle('is-disabled', isProcessing);
+      }
+    };
+
+    applyProcessingState(
+      basicItem,
+      states.basic === 2,
+      'assets/icon-checklist-basicprofile.svg',
+    );
+    applyProcessingState(
+      identityItem,
+      states.identity === 2,
+      'assets/icon-checklist-identityverification.svg',
+    );
+
+    const bankUnlocked = states.basic >= 2 && states.identity >= 2;
+    if (bankItem) {
+      bankItem.classList.toggle('is-disabled', !bankUnlocked);
+      const action = bankItem.querySelector('[data-checklist-action]');
+      if (action) {
+        action.disabled = !bankUnlocked;
+        action.classList.toggle('is-disabled', !bankUnlocked);
+      }
+    }
+
+    const isQuestionnaireActive = states.questionnaire >= 2;
+    if (questionnaireItem) {
+      const shouldHide = !isQuestionnaireActive;
+      questionnaireItem.hidden = shouldHide;
+      questionnaireItem.classList.toggle('is-hidden', shouldHide);
+      questionnaireItem.classList.remove('is-disabled');
+      const action = questionnaireItem.querySelector('[data-checklist-action]');
+      if (action) {
+        action.disabled = !isQuestionnaireActive;
+        action.classList.toggle('is-disabled', !isQuestionnaireActive);
+      }
+    }
+
+    let stepsRemaining = 4;
+    if (states.basic >= 2 || states.identity >= 2) stepsRemaining = 3;
+    if (states.basic >= 2 && states.identity >= 2) stepsRemaining = 2;
+    if (isQuestionnaireActive) stepsRemaining += 1;
+
+    if (stepsEl) {
+      stepsEl.textContent = `${stepsRemaining} steps to go`;
+    }
+
+    if (ringEl) {
+      const totalSteps = isQuestionnaireActive ? 6 : 5;
+      const completedSteps = Math.max(0, totalSteps - stepsRemaining);
+      const progressPercent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
+      ringEl.style.setProperty('--progress', `${progressPercent}%`);
+    }
+  };
+
   const updateGroupUI = (group) => {
     const config = STATE_CONFIGS[group];
     const groupEl = document.querySelector(`[data-state-group="${group}"]`);
@@ -344,6 +420,7 @@
     updateBankAvailability();
     updateQuestionnaireAvailability();
     updateSetupState();
+    updateChecklistItems();
   };
   const initStates = () => {
     Object.keys(STATE_CONFIGS).forEach((group) => {
@@ -364,6 +441,7 @@
     updateBankAvailability();
     updateQuestionnaireAvailability();
     updateSetupState();
+    updateChecklistItems();
   };
 
   const initBadgeControls = () => {
@@ -465,6 +543,14 @@
     });
     closeButtons.forEach((button) => {
       button.addEventListener('click', () => setOpen(false));
+    });
+
+    panel.querySelectorAll('[data-checklist-item-action]').forEach((item) => {
+      item.addEventListener('click', (event) => {
+        if (event.target.closest('.setup-checklist__item-action')) return;
+        const action = item.querySelector('.setup-checklist__item-action');
+        if (action && !action.disabled) action.click();
+      });
     });
 
     setOpen(true);
