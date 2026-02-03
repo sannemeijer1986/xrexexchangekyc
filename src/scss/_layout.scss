@@ -552,14 +552,33 @@
   gap: 8px;
 }
 
+.setup-checklist__avatar-ring {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.setup-checklist__avatar-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: conic-gradient(#5B8DE6 0deg 72deg, rgba(255, 255, 255, 0.12) 72deg 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  pointer-events: none;
+}
+
 .setup-checklist__avatar {
   width: 64px;
   height: 64px;
   border-radius: 999px;
   overflow: hidden;
-  padding: 3px;
   box-sizing: border-box;
-  background: conic-gradient(#2f6bff 0deg 72deg, rgba(255, 255, 255, 0.12) 72deg 360deg);
+  background: #0d0e0f;
 }
 
 .setup-checklist__avatar img {
