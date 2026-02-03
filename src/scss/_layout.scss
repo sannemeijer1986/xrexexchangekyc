@@ -539,7 +539,7 @@
 }
 
 .setup-checklist__content {
-  padding: 16px;
+  padding: 16px 0px;
 }
 
 .setup-checklist__card {
@@ -617,25 +617,31 @@
   color: #ffffff;
   font-weight: 600;
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
+
 
 .setup-checklist__section-title {
   font-size: 16px;
   font-weight: 700;
   color: #9B9C9C;
   margin-bottom: 16px;
+  padding: 0px 16px;
 }
 
 .setup-checklist__list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .setup-checklist__item {
   display: flex;
   gap: 12px;
   align-items: center;
+  padding: 12px 16px;
 }
 
 .setup-checklist__item.is-disabled {
@@ -643,8 +649,8 @@
 }
 
 .setup-checklist__item-status {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   flex: 0 0 auto;
 }
 
@@ -652,7 +658,7 @@
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #1B1D1D;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -669,8 +675,8 @@
 }
 
 .setup-checklist__item-icon--transparent img {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
 .setup-checklist__item-content {
@@ -678,14 +684,14 @@
 }
 
 .setup-checklist__item-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #ffffff;
 }
 
 .setup-checklist__item-meta {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #9B9C9C;
 }
 
 .setup-checklist__item.is-complete .setup-checklist__item-meta {
@@ -693,20 +699,24 @@
 }
 
 .setup-checklist__item-action {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
   border: 0;
-  background: #2f6bff;
+  background: #275CFD;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
 }
 
+.setup-checklist__item-action.disabled {
+  opacity: 0;
+}
+
 .setup-checklist__item-action img {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
 }
 
 .setup-first__button {
