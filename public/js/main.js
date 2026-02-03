@@ -207,7 +207,7 @@
       statusText = 'Continue';
       statusState = 'continue';
       showCard = true;
-      cardTitle = 'Pick up where you left off,\njust a few steps to unlock the best of XREX!';
+      cardTitle = 'Pick up where you left off,\nunlock the best of XREX!';
       cardCta = 'Continue';
       stepState = 'progress';
     } else {
@@ -216,7 +216,7 @@
       statusText = 'Continue';
       statusState = 'continue';
       showCard = true;
-      cardTitle = 'Pick up where you left off,\njust a few steps to unlock the best of XREX!';
+      cardTitle = 'Pick up where you left off,\nunlock the best of XREX!';
       cardCta = 'Continue';
       stepState = 'progress';
     }
@@ -257,6 +257,8 @@
         illustration = 'assets/illu_setup_1.png';
       } else if (statusState === 'resubmission') {
         illustration = 'assets/illu_setup_2_resubmit.png';
+      } else if (statusState === 'reviewing') {
+        illustration = 'assets/illu_setup_3_reviewing.png';
       }
       heroEl.classList.toggle('is-illustration', Boolean(illustration));
       heroEl.style.backgroundImage = illustration ? `url('${illustration}')` : '';
