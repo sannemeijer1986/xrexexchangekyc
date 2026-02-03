@@ -119,6 +119,20 @@
     const isUnlocked = states.basic >= 2 && states.identity >= 2;
     bankGroup.classList.toggle('is-locked', !isUnlocked);
     bankGroup.setAttribute('aria-disabled', String(!isUnlocked));
+    if (!isUnlocked && states.bank !== 1) {
+      setState('bank', 1, { force: true });
+    }
+  };
+
+  const updateQuestionnaireAvailability = () => {
+    const questionnaireGroup = document.querySelector('[data-state-group="questionnaire"]');
+    if (!questionnaireGroup) return;
+    const isUnlocked = states.basic >= 2 && states.identity >= 2;
+    questionnaireGroup.classList.toggle('is-locked', !isUnlocked);
+    questionnaireGroup.setAttribute('aria-disabled', String(!isUnlocked));
+    if (!isUnlocked && states.questionnaire !== 1) {
+      setState('questionnaire', 1, { force: true });
+    }
   };
 
   const updateSetupState = () => {
@@ -328,18 +342,27 @@
     if (upBtn) upBtn.disabled = value >= config.max;
     updateGradientBackground();
     updateBankAvailability();
+    updateQuestionnaireAvailability();
     updateSetupState();
   };
   const initStates = () => {
     Object.keys(STATE_CONFIGS).forEach((group) => {
       const config = STATE_CONFIGS[group];
-      const initial = readStored(config.storageKey, config.min);
+      const initial = config.min;
       const clamped = clamp(initial, config.min, config.max);
       states[group] = clamped;
       applyDatasetState(group, clamped);
+      try {
+        if (window.localStorage) {
+          window.localStorage.setItem(config.storageKey, String(clamped));
+        }
+      } catch (_) {
+        // ignore storage errors
+      }
     });
     updateGradientBackground();
     updateBankAvailability();
+    updateQuestionnaireAvailability();
     updateSetupState();
   };
 
@@ -443,6 +466,8 @@
     closeButtons.forEach((button) => {
       button.addEventListener('click', () => setOpen(false));
     });
+
+    setOpen(true);
   };
 
   initStates();
