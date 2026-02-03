@@ -131,6 +131,7 @@
     const cardSubtitleEl = document.querySelector('[data-setup-card-subtitle]');
     const cardCtaEl = document.querySelector('[data-setup-cta]');
     const finalStepEl = document.querySelector('[data-setup-step-final]');
+    const heroEl = document.querySelector('[data-setup-hero]');
     const stepSignUpEl = document.querySelector('[data-setup-step="sign-up"]');
     const stepNextEl = document.querySelector('[data-setup-step="next-steps"]');
     const stepFinalEl = document.querySelector('[data-setup-step="final"]');
@@ -250,6 +251,13 @@
     if (finalStepEl) finalStepEl.textContent = finalStepLabel;
     if (btnSecondaryEl) btnSecondaryEl.hidden = hideSecondaryBtn;
     if (btnPrimaryEl) btnPrimaryEl.hidden = hidePrimaryBtn;
+    if (heroEl) {
+      const useIllustration = statusState === 'getstarted' || statusState === 'continue';
+      heroEl.classList.toggle('is-illustration', useIllustration);
+      heroEl.style.backgroundImage = useIllustration
+        ? "url('assets/illu_setup_1.svg')"
+        : '';
+    }
     if (buttonsWrapEl) {
       const visibleButtons = Array.from(
         buttonsWrapEl.querySelectorAll('.setup-first__button'),
