@@ -675,6 +675,9 @@
       ctaEl.classList.toggle('is-hidden', isDepositComplete);
       ctaEl.style.display = isDepositComplete ? 'none' : '';
       if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing || isDepositComplete;
+      ctaEl.textContent = (states.basic === 1 && states.identity === 1)
+        ? 'Get started'
+        : 'Continue to next step';
     }
 
     const isQuestionnaireActive = states.questionnaire >= 2;
