@@ -1437,7 +1437,7 @@ body {
 }
 
 .build-badge__group.is-locked {
-  opacity: 0.25;
+  opacity: 0.5;
   pointer-events: none;
 }
 

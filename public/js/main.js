@@ -114,6 +114,11 @@
   const updateBankAvailability = () => {
     const bankGroup = document.querySelector('[data-state-group="bank"]');
     if (!bankGroup) return;
+    if (rejectedOverride) {
+      bankGroup.classList.add('is-locked');
+      bankGroup.setAttribute('aria-disabled', 'true');
+      return;
+    }
     const isUnlocked = states.basic >= 2 && states.identity >= 2;
     bankGroup.classList.toggle('is-locked', !isUnlocked);
     bankGroup.setAttribute('aria-disabled', String(!isUnlocked));
@@ -127,6 +132,19 @@
     const basicGroup = document.querySelector('[data-state-group="basic"]');
     const identityGroup = document.querySelector('[data-state-group="identity"]');
     if (!questionnaireGroup) return;
+    if (rejectedOverride) {
+      questionnaireGroup.classList.add('is-locked');
+      questionnaireGroup.setAttribute('aria-disabled', 'true');
+      if (basicGroup) {
+        basicGroup.classList.add('is-locked');
+        basicGroup.setAttribute('aria-disabled', 'true');
+      }
+      if (identityGroup) {
+        identityGroup.classList.add('is-locked');
+        identityGroup.setAttribute('aria-disabled', 'true');
+      }
+      return;
+    }
     const isUnlocked = states.basic >= 2 && states.identity >= 2;
     questionnaireGroup.classList.toggle('is-locked', !isUnlocked);
     questionnaireGroup.setAttribute('aria-disabled', String(!isUnlocked));
@@ -655,10 +673,17 @@
     };
     applyLock(checkbox.checked);
     updateChecklistItems();
+    const refreshLockedUI = () => {
+      updateBankAvailability();
+      updateQuestionnaireAvailability();
+      updateSetupState();
+      updateChecklistItems();
+    };
     checkbox.addEventListener('change', () => {
       rejectedOverride = checkbox.checked;
       applyLock(rejectedOverride);
-      updateChecklistItems();
+      refreshLockedUI();
+      requestAnimationFrame(refreshLockedUI);
     });
   };
 
