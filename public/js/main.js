@@ -72,6 +72,7 @@
 
   const states = {};
   let rejectedOverride = false;
+  let mvpOverride = true;
 
   const applyDatasetState = (group, value) => {
     const datasetKey = `${group}State`;
@@ -162,10 +163,10 @@
         setState('questionnaire', 3, { force: true });
       }
     }
-    if (states.bank === 4 && states.deposit !== 1) {
+    if (!mvpOverride && states.bank === 4 && states.deposit !== 1) {
       setState('deposit', 1, { force: true });
     }
-    const depositUnlocked = states.bank >= 3 && states.bank !== 4;
+    const depositUnlocked = !mvpOverride && states.bank >= 3 && states.bank !== 4;
     if (depositGroup) {
       depositGroup.classList.toggle('is-locked', !depositUnlocked);
       depositGroup.setAttribute('aria-disabled', String(!depositUnlocked));
@@ -266,7 +267,7 @@
     const isQuestionnaireApproved = states.questionnaire === 3;
     const isAllApproved = ['basic', 'identity', 'bank'].every((group) => {
       return getLabel(group, states[group]) === 'Approved';
-    }) && states.deposit === 2 && (!isQuestionnaireActive || isQuestionnaireApproved);
+    }) && (mvpOverride ? true : states.deposit === 2) && (!isQuestionnaireActive || isQuestionnaireApproved);
 
     if (rejectedOverride) {
       title = 'Rejected';
@@ -279,6 +280,10 @@
       hideSecondaryBtn = true;
       hidePrimaryBtn = true;
       stepState = 'progress';
+    } else if (mvpOverride && bank === 3) {
+      showCard = false;
+      statusText = 'Completed';
+      statusState = 'approved';
     } else if (isAllApproved) {
       showCard = false;
       statusText = states.deposit === 2 ? 'Completed' : 'Approved';
@@ -634,13 +639,15 @@
     }
 
     if (depositItem) {
+      depositItem.hidden = mvpOverride;
+      depositItem.classList.toggle('is-hidden', mvpOverride);
       const action = depositItem.querySelector('[data-checklist-action]');
       const icon = depositItem.querySelector('[data-checklist-icon]');
       const status = depositItem.querySelector('[data-checklist-status]');
       const meta = depositItem.querySelector('.setup-checklist__item-meta');
       const secondaryBtn = depositItem.querySelector('[data-checklist-deposit-secondary]');
       const isDepositUnlocked = states.bank === 3;
-      const isDepositComplete = states.deposit === 2;
+      const isDepositComplete = mvpOverride ? states.bank === 3 : states.deposit === 2;
       if (action) {
         action.disabled = !isDepositUnlocked || isDepositComplete;
         action.classList.toggle('is-disabled', !isDepositUnlocked || isDepositComplete);
@@ -668,7 +675,7 @@
 
     if (ctaEl) {
       const isBankProcessing = states.bank === 2;
-      const isDepositComplete = states.deposit >= 2;
+      const isDepositComplete = mvpOverride ? states.bank === 3 : states.deposit >= 2;
       ctaEl.disabled = isBankProcessing;
       ctaEl.classList.toggle('is-disabled', isBankProcessing);
       ctaEl.hidden = isDepositComplete;
@@ -738,9 +745,13 @@
     if (states.questionnaire === 2 || states.questionnaire === 4) stepsRemaining += 1;
     if (states.bank === 2 || states.bank === 3) stepsRemaining = Math.max(1, stepsRemaining - 1);
     if (states.identity === 4) stepsRemaining += 1;
+    const isDepositComplete = mvpOverride ? states.bank === 3 : states.deposit === 2;
+    if (mvpOverride && !isDepositComplete) {
+      stepsRemaining = Math.max(1, stepsRemaining - 1);
+    }
 
     if (stepsEl) {
-      if (states.deposit === 2) {
+      if (isDepositComplete) {
         stepsEl.textContent = '31/08/2022';
         stepsEl.classList.add('is-timestamp');
       } else {
@@ -750,8 +761,8 @@
     }
 
     if (ringEl) {
-      const totalSteps = isQuestionnaireActive ? 6 : 5;
-      if (states.deposit === 2) {
+      const totalSteps = mvpOverride ? (isQuestionnaireActive ? 5 : 4) : (isQuestionnaireActive ? 6 : 5);
+      if (isDepositComplete) {
         ringEl.style.setProperty('--progress', '100%');
         ringEl.classList.add('is-complete');
       } else {
@@ -763,10 +774,10 @@
     }
 
     if (titleEl) {
-      titleEl.textContent = states.deposit === 2 ? 'Trading unlocked' : 'Unlock trading';
+      titleEl.textContent = isDepositComplete ? 'Trading unlocked' : 'Unlock trading';
     }
     if (ctaEl) {
-      const hideCta = states.deposit === 2 || states.bank === 2;
+      const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2;
       ctaEl.hidden = hideCta;
     }
 
@@ -902,6 +913,20 @@
     });
   };
 
+  const initMvpToggle = () => {
+    const checkbox = document.querySelector('[data-mvp-toggle]');
+    if (!checkbox) return;
+    checkbox.checked = true;
+    mvpOverride = true;
+    checkbox.addEventListener('change', () => {
+      mvpOverride = checkbox.checked;
+      updateBankAvailability();
+      updateQuestionnaireAvailability();
+      updateSetupState();
+      updateChecklistItems();
+    });
+  };
+
   const initPrototypeReset = () => {
     const resetBtn = document.querySelector('[data-prototype-reset]');
     const checkbox = document.querySelector('[data-rejected-toggle]');
@@ -998,6 +1023,7 @@
   initBadgeControls();
   initChecklistPanel();
   initRejectedToggle();
+  initMvpToggle();
   initPrototypeReset();
 
   const initHeaderScrollSwap = () => {

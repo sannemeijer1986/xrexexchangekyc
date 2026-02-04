@@ -529,10 +529,16 @@
             <button class="build-badge__reset" type="button" data-prototype-reset>Reset states</button>
             <div class="build-badge__section-row">
                 <div class="build-badge__section-title">KYC</div>
-                <label class="build-badge__checkbox">
-                    <span>Rejected</span>
-                    <input type="checkbox" data-rejected-toggle />
-                </label>
+                <div class="build-badge__checkbox-group">
+                    <label class="build-badge__checkbox">
+                        <span>Rejected</span>
+                        <input type="checkbox" data-rejected-toggle />
+                    </label>
+                    <label class="build-badge__checkbox">
+                        <span>MVP</span>
+                        <input type="checkbox" data-mvp-toggle checked />
+                    </label>
+                </div>
             </div>
             <div class="build-badge__group" data-state-group="basic">
                 <div class="build-badge__group-label">Account (Basic) information</div>

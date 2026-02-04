@@ -612,10 +612,6 @@ body {
   opacity: 0.5;
 }
 
-.setup-checklist__card.is-dimmed {
-  opacity: 0.5;
-}
-
 .setup-checklist__avatar-ring {
   position: relative;
   width: 86px;
@@ -1788,6 +1784,18 @@ body {
   font-size: 10px;
   font-weight: 600;
   color: #ffffff;
+}
+
+.build-badge__checkbox-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.build-badge__checkbox-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .build-badge__checkbox input {
