@@ -125,9 +125,10 @@
   const updateGradientBackground = () => {
     const container = document.querySelector('.content');
     if (!container) return;
-    const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
+    let hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
     }) || states.questionnaire === 2 || states.questionnaire === 4;
+    if (rejectedOverride) hasResubmission = false;
     const isAwaitingSubmission = ['basic', 'identity'].every((group) => {
       return states[group] === 2;
     });
@@ -234,6 +235,8 @@
     const btnSecondaryEl = document.querySelector('[data-setup-btn-secondary]');
     const btnPrimaryEl = document.querySelector('[data-setup-btn-primary]');
     const buttonsWrapEl = document.querySelector('.setup-first__buttons');
+    const progressEl = document.querySelector('[data-setup-progress]');
+    const buttonsEl = document.querySelector('[data-setup-buttons]');
     if (!titleEl) return;
     const basic = states.basic;
     const identity = states.identity;
@@ -262,7 +265,18 @@
       return getLabel(group, states[group]) === 'Approved';
     }) && states.deposit === 2 && (!isQuestionnaireActive || isQuestionnaireApproved);
 
-    if (isAllApproved) {
+    if (rejectedOverride) {
+      title = 'Rejected';
+      label = 'Rejected';
+      statusText = '';
+      statusState = '';
+      showCard = true;
+      cardTitle = 'We are unable to verify your application as it did not satisfy our regulatory requirements';
+      cardCta = '';
+      hideSecondaryBtn = true;
+      hidePrimaryBtn = true;
+      stepState = 'progress';
+    } else if (isAllApproved) {
       showCard = false;
       statusText = 'Approved';
       statusState = 'approved';
@@ -332,6 +346,7 @@
     if (statusEl) {
       statusEl.textContent = statusText;
       statusEl.dataset.setupStatus = statusState;
+      statusEl.hidden = rejectedOverride;
     }
     if (setupStateEl) setupStateEl.dataset.setupLabel = label;
     const toggleHidden = (el, shouldHide) => {
@@ -381,6 +396,8 @@
         && (stepState === 'reviewing' || stepState === 'resubmission');
       buttonsWrapEl.classList.toggle('is-single-wide', isWideSingle);
     }
+    if (progressEl) progressEl.hidden = rejectedOverride;
+    if (buttonsEl) buttonsEl.hidden = rejectedOverride;
 
     const clearStep = (el) => {
       if (!el) return;
