@@ -1783,6 +1783,10 @@
   display: flex;
 }
 
+.build-badge.is-collapsed .build-badge__mvp {
+  display: none;
+}
+
 .build-badge__reset {
   background: transparent;
   border: 0;
