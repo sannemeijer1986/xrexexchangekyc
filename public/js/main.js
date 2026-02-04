@@ -1,4 +1,19 @@
 (() => {
+  const QUESTIONNAIRE_LABELS_DEFAULT = {
+    1: 'Not enabled',
+    2: 'Enabled, awaiting...',
+    3: 'Approved',
+    4: 'More info required',
+  };
+
+  const QUESTIONNAIRE_LABELS_MVP = {
+    1: 'Not enabled',
+    2: 'Enabled & no email sent',
+    3: 'Enabled & email sent',
+    4: 'Approved',
+    5: 'More info required',
+  };
+
   const STATE_CONFIGS = {
     basic: {
       storageKey: 'xrexexchangekyc.basicState.v2',
@@ -25,12 +40,7 @@
       storageKey: 'xrexexchangekyc.questionnaireState.v1',
       min: 1,
       max: 4,
-      labels: {
-        1: 'Not enabled',
-        2: 'Enabled, awaiting...',
-        3: 'Approved',
-        4: 'More info required',
-      },
+      labels: { ...QUESTIONNAIRE_LABELS_DEFAULT },
     },
     bank: {
       storageKey: 'xrexexchangekyc.bankState.v2',
@@ -123,12 +133,43 @@
     return config.labels[value] || '';
   };
 
+  const getQuestionnaireMode = () => {
+    if (mvpOverride) {
+      return {
+        labels: QUESTIONNAIRE_LABELS_MVP,
+        max: 5,
+        approvedState: 4,
+        resubmissionStates: [5],
+        pendingStates: [2, 3, 5],
+      };
+    }
+    return {
+      labels: QUESTIONNAIRE_LABELS_DEFAULT,
+      max: 4,
+      approvedState: 3,
+      resubmissionStates: [2, 4],
+      pendingStates: [2, 4],
+    };
+  };
+
+  const applyQuestionnaireConfig = () => {
+    const config = STATE_CONFIGS.questionnaire;
+    const mode = getQuestionnaireMode();
+    config.max = mode.max;
+    config.labels = { ...mode.labels };
+    if (states.questionnaire) {
+      setState('questionnaire', clamp(states.questionnaire, config.min, config.max), { force: true });
+    }
+  };
+
   const updateGradientBackground = () => {
     const container = document.querySelector('.content');
     if (!container) return;
+    const questionnaireMode = getQuestionnaireMode();
+    const mvpAdditionalNeeds = mvpOverride && (states.questionnaire === 2 || states.questionnaire === 3);
     let hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
-    }) || states.questionnaire === 2 || states.questionnaire === 4;
+    }) || questionnaireMode.resubmissionStates.includes(states.questionnaire) || mvpAdditionalNeeds;
     if (rejectedOverride) hasResubmission = false;
     const isAwaitingSubmission = ['basic', 'identity'].every((group) => {
       return states[group] === 2;
@@ -156,11 +197,12 @@
     if (!isUnlocked && states.bank !== 1) {
       setState('bank', 1, { force: true });
     }
+    const questionnaireMode = getQuestionnaireMode();
     if (states.bank >= 3) {
       if (states.basic !== 3) setState('basic', 3, { force: true });
       if (states.identity !== 3) setState('identity', 3, { force: true });
-      if (states.questionnaire >= 2 && states.questionnaire !== 3) {
-        setState('questionnaire', 3, { force: true });
+      if (states.questionnaire >= 2 && states.questionnaire !== questionnaireMode.approvedState) {
+        setState('questionnaire', questionnaireMode.approvedState, { force: true });
       }
     }
     if (!mvpOverride && states.bank === 4 && states.deposit !== 1) {
@@ -183,6 +225,7 @@
     const hasQuestionnaire = states.questionnaire >= 2;
     if (!questionnaireGroup) return;
     const bankApproved = states.bank >= 3;
+    const questionnaireMode = getQuestionnaireMode();
     if (rejectedOverride) {
       questionnaireGroup.classList.add('is-locked');
       questionnaireGroup.setAttribute('aria-disabled', 'true');
@@ -259,12 +302,16 @@
     let hidePrimaryBtn = false;
     let stepState = 'progress';
 
+    const questionnaireMode = getQuestionnaireMode();
+    const mvpAdditionalNeeds = mvpOverride && (states.questionnaire === 2 || states.questionnaire === 3);
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
-    }) || states.questionnaire === 2 || states.questionnaire === 4;
+    }) || questionnaireMode.resubmissionStates.includes(states.questionnaire) || mvpAdditionalNeeds;
     const isQuestionnaireActive = states.questionnaire > 1;
-    const isQuestionnaireSubmitted = states.questionnaire === 3;
-    const isQuestionnaireApproved = states.questionnaire === 3;
+    const isQuestionnaireSubmitted = mvpOverride
+      ? states.questionnaire >= 3 && !questionnaireMode.resubmissionStates.includes(states.questionnaire)
+      : states.questionnaire === questionnaireMode.approvedState;
+    const isQuestionnaireApproved = states.questionnaire === questionnaireMode.approvedState;
     const isAllApproved = ['basic', 'identity', 'bank'].every((group) => {
       return getLabel(group, states[group]) === 'Approved';
     }) && (mvpOverride ? true : states.deposit === 2) && (!isQuestionnaireActive || isQuestionnaireApproved);
@@ -694,6 +741,7 @@
         : 'Continue to next step';
     }
 
+    const questionnaireMode = getQuestionnaireMode();
     const isQuestionnaireActive = states.questionnaire >= 2;
     if (questionnaireItem) {
       const shouldHide = !isQuestionnaireActive;
@@ -701,45 +749,83 @@
       questionnaireItem.classList.toggle('is-hidden', shouldHide);
       questionnaireItem.classList.remove('is-disabled');
       const action = questionnaireItem.querySelector('[data-checklist-action]');
+      const secondaryBtn = questionnaireItem.querySelector('[data-checklist-questionnaire-secondary]');
       const meta = questionnaireItem.querySelector('[data-checklist-meta]');
       const status = questionnaireItem.querySelector('[data-checklist-status]');
       const icon = questionnaireItem.querySelector('[data-checklist-icon]');
       if (action) {
-        const isApproved = states.questionnaire === 3;
-        action.disabled = !isQuestionnaireActive || isApproved;
-        action.classList.toggle('is-disabled', !isQuestionnaireActive || isApproved);
+        const isApproved = states.questionnaire === questionnaireMode.approvedState;
+        const isMvpNoEmail = mvpOverride && states.questionnaire === 2;
+        const isMvpEmailSent = mvpOverride && (states.questionnaire === 3 || states.questionnaire === 5);
+        action.disabled = !isQuestionnaireActive || isApproved || isMvpEmailSent;
+        action.classList.toggle('is-disabled', !isQuestionnaireActive || isApproved || isMvpEmailSent);
+        action.classList.toggle('is-hidden', isMvpEmailSent);
+      }
+      if (secondaryBtn) {
+        const showResend = mvpOverride && states.questionnaire === 3;
+        secondaryBtn.hidden = !showResend;
       }
       const iconWrap = questionnaireItem.querySelector('.setup-checklist__item-icon');
       if (meta) {
-        meta.textContent = (states.questionnaire === 2 || states.questionnaire === 4)
-          ? 'Our team needs a bit more information. Please complete a short form by'
-          : '';
+        if (mvpOverride) {
+          if (states.questionnaire === 2) {
+            meta.textContent = 'As part of our standard process, we need a bit more information to complete your application';
+          } else if (states.questionnaire === 3 || states.questionnaire === 5) {
+            meta.textContent = 'Check your email inbox for further instructions and complete by';
+          } else if (questionnaireMode.resubmissionStates.includes(states.questionnaire)) {
+            meta.textContent = 'Our team needs a bit more information. Please complete a short form by';
+          } else {
+            meta.textContent = '';
+          }
+        } else {
+          meta.textContent = questionnaireMode.resubmissionStates.includes(states.questionnaire)
+            ? 'Our team needs a bit more information. Please complete a short form by'
+            : '';
+        }
         meta.hidden = !meta.textContent;
       }
       if (status) {
-        if (states.questionnaire === 2 || states.questionnaire === 4) {
-          status.textContent = '02/09/2077';
-          status.classList.remove('setup-checklist__item-status-label--success');
-          status.classList.add('setup-checklist__item-status-label--warning');
-        } else if (states.questionnaire === 3) {
-          status.textContent = 'Verified';
-          status.classList.remove('setup-checklist__item-status-label--warning');
-          status.classList.add('setup-checklist__item-status-label--success');
+        if (mvpOverride) {
+          if (states.questionnaire === 2) {
+            status.textContent = '';
+            status.classList.remove('setup-checklist__item-status-label--warning', 'setup-checklist__item-status-label--success');
+          } else if (states.questionnaire === 3 || states.questionnaire === 5) {
+            status.textContent = '02/29/2077';
+            status.classList.remove('setup-checklist__item-status-label--success');
+            status.classList.add('setup-checklist__item-status-label--warning');
+          } else if (states.questionnaire === questionnaireMode.approvedState) {
+            status.textContent = 'Verified';
+            status.classList.remove('setup-checklist__item-status-label--warning');
+            status.classList.add('setup-checklist__item-status-label--success');
+          } else {
+            status.textContent = '';
+            status.classList.remove('setup-checklist__item-status-label--warning', 'setup-checklist__item-status-label--success');
+          }
         } else {
-          status.textContent = '';
-          status.classList.remove('setup-checklist__item-status-label--warning', 'setup-checklist__item-status-label--success');
+          if (questionnaireMode.resubmissionStates.includes(states.questionnaire)) {
+            status.textContent = '02/09/2077';
+            status.classList.remove('setup-checklist__item-status-label--success');
+            status.classList.add('setup-checklist__item-status-label--warning');
+          } else if (states.questionnaire === questionnaireMode.approvedState) {
+            status.textContent = 'Verified';
+            status.classList.remove('setup-checklist__item-status-label--warning');
+            status.classList.add('setup-checklist__item-status-label--success');
+          } else {
+            status.textContent = '';
+            status.classList.remove('setup-checklist__item-status-label--warning', 'setup-checklist__item-status-label--success');
+          }
         }
         status.hidden = !status.textContent;
       }
       if (icon) {
-        icon.src = states.questionnaire === 3
+        icon.src = states.questionnaire === questionnaireMode.approvedState
           ? 'assets/icon_timeline_completed.svg'
           : 'assets/icon-checklist-kycquestionaire.svg';
       }
       if (iconWrap) {
-        iconWrap.classList.toggle('setup-checklist__item-icon--transparent', states.questionnaire === 3);
+        iconWrap.classList.toggle('setup-checklist__item-icon--transparent', states.questionnaire === questionnaireMode.approvedState);
       }
-      if (states.questionnaire === 3) {
+      if (states.questionnaire === questionnaireMode.approvedState) {
         questionnaireItem.dataset.nonclickable = 'true';
       } else {
         delete questionnaireItem.dataset.nonclickable;
@@ -749,7 +835,7 @@
     let stepsRemaining = 4;
     if (states.basic >= 2 || states.identity >= 2) stepsRemaining = 3;
     if (states.basic >= 2 && states.identity >= 2) stepsRemaining = 2;
-    if (states.questionnaire === 2 || states.questionnaire === 4) stepsRemaining += 1;
+    if (questionnaireMode.pendingStates.includes(states.questionnaire)) stepsRemaining += 1;
     if (states.bank === 2 || states.bank === 3) stepsRemaining = Math.max(1, stepsRemaining - 1);
     if (states.identity === 4) stepsRemaining += 1;
     const isDepositComplete = mvpOverride ? states.bank === 3 : states.deposit === 2;
@@ -846,6 +932,7 @@
     });
   };
   const initStates = () => {
+    applyQuestionnaireConfig();
     Object.keys(STATE_CONFIGS).forEach((group) => {
       const config = STATE_CONFIGS[group];
       const initial = config.min;
@@ -956,9 +1043,11 @@
     };
     checkbox.checked = true;
     mvpOverride = true;
+    applyQuestionnaireConfig();
     updateMvpUi();
     checkbox.addEventListener('change', () => {
       mvpOverride = checkbox.checked;
+      applyQuestionnaireConfig();
       updateMvpUi();
       updateBankAvailability();
       updateQuestionnaireAvailability();
@@ -1050,18 +1139,107 @@
     panel.querySelectorAll('[data-checklist-item-action]').forEach((item) => {
       item.addEventListener('click', (event) => {
         if (item.dataset.nonclickable === 'true') return;
+        if (item.getAttribute('data-checklist-item') === 'questionnaire' && mvpOverride && states.questionnaire === 2) {
+          openActionSheet();
+          return;
+        }
         if (event.target.closest('.setup-checklist__item-action')) return;
         const action = item.querySelector('.setup-checklist__item-action');
         if (action && !action.disabled) action.click();
       });
     });
 
+    const questionnaireAction = panel.querySelector('[data-checklist-item="questionnaire"] [data-checklist-action]');
+    if (questionnaireAction) {
+      questionnaireAction.addEventListener('click', (event) => {
+        if (mvpOverride && states.questionnaire === 2) {
+          event.preventDefault();
+          openActionSheet();
+        }
+      });
+    }
+    const questionnaireSecondary = panel.querySelector('[data-checklist-item="questionnaire"] [data-checklist-questionnaire-secondary]');
+    if (questionnaireSecondary) {
+      questionnaireSecondary.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (mvpOverride && states.questionnaire === 3) {
+          openActionSheet();
+        }
+      });
+    }
+
     setOpen(true);
+  };
+
+  const openActionSheet = () => {
+    const sheet = document.querySelector('[data-action-sheet]');
+    if (!sheet) return;
+    sheet.hidden = false;
+    requestAnimationFrame(() => sheet.classList.add('is-open'));
+  };
+
+  const closeActionSheet = () => {
+    const sheet = document.querySelector('[data-action-sheet]');
+    if (!sheet) return;
+    sheet.classList.remove('is-open');
+    const onEnd = () => {
+      if (!sheet.classList.contains('is-open')) {
+        sheet.hidden = true;
+      }
+      sheet.removeEventListener('transitionend', onEnd);
+    };
+    sheet.addEventListener('transitionend', onEnd);
+    setTimeout(onEnd, 300);
+  };
+
+  const initActionSheet = () => {
+    const sheet = document.querySelector('[data-action-sheet]');
+    if (!sheet) return;
+    sheet.querySelectorAll('[data-action-sheet-close]').forEach((btn) => {
+      btn.addEventListener('click', closeActionSheet);
+    });
+    const sendBtn = sheet.querySelector('[data-action-sheet-send]');
+    if (sendBtn) {
+      sendBtn.addEventListener('click', () => {
+        if (mvpOverride) {
+          if (states.questionnaire === 2) {
+            setState('questionnaire', 3, { force: true });
+          }
+          showSnackbar('Instructions sent to your email');
+        }
+        closeActionSheet();
+      });
+    }
+  };
+
+  let snackbarTimeout;
+  const showSnackbar = (message) => {
+    const snackbar = document.querySelector('[data-snackbar]');
+    if (!snackbar) return;
+    const text = snackbar.querySelector('.snackbar__text');
+    if (text) text.textContent = message;
+    if (snackbarTimeout) {
+      clearTimeout(snackbarTimeout);
+      snackbarTimeout = null;
+    }
+    snackbar.hidden = false;
+    snackbar.classList.remove('is-visible');
+    void snackbar.offsetWidth;
+    requestAnimationFrame(() => snackbar.classList.add('is-visible'));
+    snackbarTimeout = setTimeout(() => {
+      snackbar.classList.remove('is-visible');
+      setTimeout(() => {
+        if (!snackbar.classList.contains('is-visible')) {
+          snackbar.hidden = true;
+        }
+      }, 200);
+    }, 2200);
   };
 
   initStates();
   initBadgeControls();
   initChecklistPanel();
+  initActionSheet();
   initRejectedToggle();
   initMvpToggle();
   initPrototypeReset();

@@ -474,13 +474,14 @@
                                 <img src="assets/icon-checklist-kycquestionaire.svg" alt="" data-checklist-icon />
                             </div>
                             <div class="setup-checklist__item-content">
-                                <div class="setup-checklist__item-title">Supplementary information</div>
+                                <div class="setup-checklist__item-title">Additional information</div>
                                 <div class="setup-checklist__item-meta" data-checklist-meta></div>
                                 <div class="setup-checklist__item-status-label setup-checklist__item-status-label--warning" data-checklist-status></div>
                             </div>
-                            <button class="setup-checklist__item-action is-disabled" type="button" aria-label="Go to KYC questionnaire" disabled data-checklist-action>
+                            <button class="setup-checklist__item-action is-disabled" type="button" aria-label="Go to Additional information" disabled data-checklist-action>
                                 <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
+                            <button class="setup-checklist__item-secondary-btn" type="button" data-checklist-questionnaire-secondary hidden>Resend</button>
                         </div>
                         <div class="setup-checklist__item is-disabled" data-checklist-item="bank" data-checklist-item-action>
                              <div class="setup-checklist__item-icon">
@@ -514,6 +515,25 @@
                 </div>
             </div>
         </section>
+        <div class="action-sheet" data-action-sheet hidden>
+            <div class="action-sheet__backdrop" data-action-sheet-close></div>
+            <div class="action-sheet__panel" role="dialog" aria-modal="true" aria-label="Supplementary information">
+                <div class="action-sheet__handle"></div>
+                <div class="action-sheet__title">We’ll email you next steps</div>
+                <div class="action-sheet__text">When you press “Send email”, we’ll send an email to <span class="action-sheet__email">{Email}</span> with a link to a short form. The form only takes a few minutes to complete.</div>
+                <div class="action-sheet__hint">Be sure to check your spam folder</div>
+                <div class="action-sheet__actions">
+                    <button class="action-sheet__btn action-sheet__btn--primary" type="button" data-action-sheet-send>Ok, send email</button>
+                    <button class="action-sheet__btn action-sheet__btn--secondary" type="button" data-action-sheet-close>Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div class="snackbar" data-snackbar hidden>
+            <div class="snackbar__icon">
+                <img src="assets/icon_timeline_completed.svg" alt="" />
+            </div>
+            <div class="snackbar__text">Instructions sent to your email</div>
+        </div>
     </div>
 
     <div class="build-badge" role="note" aria-label="Prototype state controls">
@@ -562,7 +582,7 @@
             </div>
 
             <div class="build-badge__group" data-state-group="questionnaire">
-                <div class="build-badge__group-label">Supplementary information (EDD)</div>
+                <div class="build-badge__group-label">Additional information (EDD)</div>
                 <div class="build-badge__state">
                     <button type="button" class="build-badge__state-btn" data-state-action="down"
                         aria-label="Previous KYC questionnaire state">−</button>
