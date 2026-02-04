@@ -131,6 +131,10 @@
     if (!isUnlocked && states.questionnaire !== 1) {
       setState('questionnaire', 1, { force: true });
     }
+    if (states.questionnaire >= 2) {
+      if (states.basic !== 3) setState('basic', 3, { force: true });
+      if (states.identity !== 3) setState('identity', 3, { force: true });
+    }
   };
 
   const updateSetupState = () => {
@@ -478,9 +482,24 @@
       questionnaireItem.classList.toggle('is-hidden', shouldHide);
       questionnaireItem.classList.remove('is-disabled');
       const action = questionnaireItem.querySelector('[data-checklist-action]');
+      const meta = questionnaireItem.querySelector('[data-checklist-meta]');
+      const status = questionnaireItem.querySelector('[data-checklist-status]');
       if (action) {
         action.disabled = !isQuestionnaireActive;
         action.classList.toggle('is-disabled', !isQuestionnaireActive);
+      }
+      if (meta) {
+        meta.textContent = (states.questionnaire === 2 || states.questionnaire === 3)
+          ? 'Our team needs a bit more information. Please complete a short form by'
+          : '';
+        meta.hidden = !meta.textContent;
+      }
+      if (status) {
+        status.textContent = (states.questionnaire === 2 || states.questionnaire === 3)
+          ? '02/09/2077'
+          : '';
+        status.classList.toggle('setup-checklist__item-status-label--warning', Boolean(status.textContent));
+        status.hidden = !status.textContent;
       }
     }
 
@@ -637,6 +656,8 @@
           container.classList.remove('is-checklist-open');
           container.classList.remove('is-checklist-fading');
         }
+        const scrollBody = panel.querySelector('.setup-checklist__body');
+        if (scrollBody) scrollBody.scrollTop = 0;
         requestAnimationFrame(() => {
           panel.classList.add('is-open');
         });
