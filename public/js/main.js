@@ -456,6 +456,7 @@
     const ctaEl = document.querySelector('[data-checklist-cta]');
     const ctaNoteEl = document.querySelector('[data-checklist-cta-note]');
     const titleEl = document.querySelector('[data-checklist-title]');
+    const stepsSubEl = document.querySelector('[data-checklist-steps-sub]');
     const checklistCard = document.querySelector('.setup-checklist__card');
     const checklistContent = document.querySelector('.setup-checklist__content');
     const rejectedEl = document.querySelector('[data-checklist-rejected]');
@@ -754,8 +755,12 @@
       stepsRemaining = Math.max(1, stepsRemaining - 1);
     }
 
+    const isMvpReviewing = mvpOverride && states.bank === 2;
     if (stepsEl) {
-      if (isDepositComplete) {
+      if (isMvpReviewing) {
+        stepsEl.textContent = 'We\u2019re reviewing your application';
+        stepsEl.classList.remove('is-timestamp');
+      } else if (isDepositComplete) {
         stepsEl.textContent = '31/08/2022';
         stepsEl.classList.add('is-timestamp');
       } else {
@@ -763,10 +768,19 @@
         stepsEl.classList.remove('is-timestamp');
       }
     }
+    if (stepsSubEl) {
+      stepsSubEl.hidden = !isMvpReviewing;
+      if (isMvpReviewing) {
+        stepsSubEl.textContent = 'Typically takes 1-2 business days';
+      }
+    }
 
     if (ringEl) {
       const totalSteps = mvpOverride ? (isQuestionnaireActive ? 5 : 4) : (isQuestionnaireActive ? 6 : 5);
-      if (isDepositComplete) {
+      if (isMvpReviewing) {
+        ringEl.style.setProperty('--progress', '100%');
+        ringEl.classList.remove('is-complete');
+      } else if (isDepositComplete) {
         ringEl.style.setProperty('--progress', '100%');
         ringEl.classList.add('is-complete');
       } else {
@@ -783,6 +797,9 @@
     if (ctaEl) {
       const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2;
       ctaEl.hidden = hideCta;
+    }
+    if (ctaNoteEl) {
+      ctaNoteEl.hidden = isMvpReviewing || ctaNoteEl.hidden;
     }
 
     const isRejected = rejectedOverride;
