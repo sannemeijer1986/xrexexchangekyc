@@ -284,6 +284,10 @@
       showCard = false;
       statusText = 'Completed';
       statusState = 'approved';
+    } else if (mvpOverride && bank === 3) {
+      showCard = false;
+      statusText = 'Completed';
+      statusState = 'approved';
     } else if (isAllApproved) {
       showCard = false;
       statusText = states.deposit === 2 ? 'Completed' : 'Approved';
