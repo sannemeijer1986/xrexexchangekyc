@@ -278,7 +278,7 @@
       stepState = 'progress';
     } else if (isAllApproved) {
       showCard = false;
-      statusText = 'Approved';
+      statusText = states.deposit === 2 ? 'Completed' : 'Approved';
       statusState = 'approved';
     } else if (hasResubmission) {
       title = 'Resubmission content';
@@ -497,6 +497,7 @@
         const action = basicItem.querySelector('[data-checklist-action]');
         const status = basicItem.querySelector('[data-checklist-status]');
         const meta = basicItem.querySelector('.setup-checklist__item-meta');
+        const tag = basicItem.querySelector('[data-checklist-tag]');
         if (icon) icon.src = 'assets/icon_timeline_completed.svg';
         if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
         if (status) {
@@ -508,10 +509,16 @@
         if (action) {
           action.disabled = true;
           action.classList.add('is-disabled');
+          action.classList.add('is-hidden');
         }
+        if (tag) tag.hidden = false;
       }
     } else {
       resetItemState(basicItem, 'assets/icon-checklist-basicprofile.svg');
+      const tag = basicItem?.querySelector('[data-checklist-tag]');
+      if (tag) tag.hidden = true;
+      const action = basicItem?.querySelector('[data-checklist-action]');
+      if (action) action.classList.remove('is-hidden');
     }
 
     if (states.identity === 2) {
@@ -631,12 +638,12 @@
 
     if (ctaEl) {
       const isBankProcessing = states.bank === 2;
-      const isDepositComplete = states.deposit === 2;
+      const isDepositComplete = states.deposit >= 2;
       ctaEl.disabled = isBankProcessing;
       ctaEl.classList.toggle('is-disabled', isBankProcessing);
       ctaEl.hidden = isDepositComplete;
       ctaEl.classList.toggle('is-hidden', isDepositComplete);
-      if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing;
+      if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing || isDepositComplete;
     }
 
     const isQuestionnaireActive = states.questionnaire >= 2;
@@ -648,11 +655,13 @@
       const action = questionnaireItem.querySelector('[data-checklist-action]');
       const meta = questionnaireItem.querySelector('[data-checklist-meta]');
       const status = questionnaireItem.querySelector('[data-checklist-status]');
+      const icon = questionnaireItem.querySelector('[data-checklist-icon]');
       if (action) {
         const isApproved = states.questionnaire === 3;
         action.disabled = !isQuestionnaireActive || isApproved;
         action.classList.toggle('is-disabled', !isQuestionnaireActive || isApproved);
       }
+      const iconWrap = questionnaireItem.querySelector('.setup-checklist__item-icon');
       if (meta) {
         meta.textContent = (states.questionnaire === 2 || states.questionnaire === 4)
           ? 'Our team needs a bit more information. Please complete a short form by'
@@ -673,6 +682,14 @@
           status.classList.remove('setup-checklist__item-status-label--warning', 'setup-checklist__item-status-label--success');
         }
         status.hidden = !status.textContent;
+      }
+      if (icon) {
+        icon.src = states.questionnaire === 3
+          ? 'assets/icon_timeline_completed.svg'
+          : 'assets/icon-checklist-kycquestionaire.svg';
+      }
+      if (iconWrap) {
+        iconWrap.classList.toggle('setup-checklist__item-icon--transparent', states.questionnaire === 3);
       }
     }
 

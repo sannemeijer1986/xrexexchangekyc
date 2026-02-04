@@ -692,10 +692,6 @@ body {
   display: none;
 }
 
-.setup-checklist__cta.is-hidden {
-  display: none;
-}
-
 .setup-checklist__cta.is-disabled {
   background: #2D2F2F;
   color: #47494A;
@@ -824,6 +820,18 @@ body {
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+}
+
+.setup-checklist__item-action.is-hidden {
+  display: none;
+}
+
+.setup-checklist__item-tag {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 400;
+  color: #9B9C9C;
+  white-space: nowrap;
 }
 
 .setup-checklist__item-action.disabled,
