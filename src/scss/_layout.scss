@@ -638,6 +638,7 @@
 .setup-checklist__cta {
   width: 100%;
   height: 44px;
+  max-width: 360px;
   margin-top: 12px;
   border-radius: 16px;
   border: 0;
@@ -708,6 +709,10 @@
 
 .setup-checklist__item[data-checklist-item-action] {
   cursor: pointer;
+}
+
+.setup-checklist__item[data-checklist-item-action][data-nonclickable='true'] {
+  cursor: default;
 }
 
 .setup-checklist__item.is-disabled {
@@ -1305,7 +1310,7 @@
   min-width: 240px;
   width: 240px;
   min-height: 40px;
-  max-height: 500px;
+  max-height: 550px;
   background: rgba(57, 59, 59, 0.65);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -1388,7 +1393,7 @@
   gap: 8px;
   transform-origin: bottom;
   transition: max-height 0.15s ease, opacity 0.2s ease, transform 0.25s ease;
-  max-height: 500px;
+  max-height: 550px;
   opacity: 1;
   overflow: hidden;
 }
@@ -1451,6 +1456,10 @@
 .build-badge__group.is-locked {
   opacity: 0.5;
   pointer-events: none;
+}
+
+.build-badge.is-mvp [data-state-group='deposit'] {
+  display: none;
 }
 
 /* Side menu overlay */
@@ -1751,8 +1760,8 @@
 .build-badge__checkbox {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  font-size: 10px;
+  gap: 6px;
+  font-size: 12px;
   font-weight: 600;
   color: #ffffff;
 }
@@ -1764,7 +1773,14 @@
 }
 
 .build-badge__checkbox input {
-  accent-color: #EF4444;
+  width: 14px;
+  height: 14px;
+  accent-color: #4D88FF;
+}
+
+.build-badge__mvp {
+  margin-top: 12px;
+  display: flex;
 }
 
 .build-badge__reset {

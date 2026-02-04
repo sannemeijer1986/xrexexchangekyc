@@ -446,6 +446,7 @@
   };
 
   const updateChecklistItems = () => {
+    const signupItem = document.querySelector('[data-checklist-item="signup"]');
     const basicItem = document.querySelector('[data-checklist-item="basic"]');
     const identityItem = document.querySelector('[data-checklist-item="identity"]');
     const bankItem = document.querySelector('[data-checklist-item="bank"]');
@@ -503,6 +504,11 @@
       delete item.dataset.nonclickable;
     };
 
+    if (signupItem) {
+      const tag = signupItem.querySelector('[data-checklist-tag]');
+      if (tag) tag.hidden = false;
+    }
+
     if (states.basic === 2) {
       applyProcessingState(basicItem, 'assets/icon-checklist-basicprofile.svg');
     } else if (states.basic === 3) {
@@ -512,7 +518,6 @@
         const action = basicItem.querySelector('[data-checklist-action]');
         const status = basicItem.querySelector('[data-checklist-status]');
         const meta = basicItem.querySelector('.setup-checklist__item-meta');
-        const tag = basicItem.querySelector('[data-checklist-tag]');
         if (icon) icon.src = 'assets/icon_timeline_completed.svg';
         if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
         if (status) {
@@ -526,13 +531,10 @@
           action.classList.add('is-disabled');
           action.classList.add('is-hidden');
         }
-        if (tag) tag.hidden = false;
         basicItem.dataset.nonclickable = 'true';
       }
     } else {
       resetItemState(basicItem, 'assets/icon-checklist-basicprofile.svg');
-      const tag = basicItem?.querySelector('[data-checklist-tag]');
-      if (tag) tag.hidden = true;
       const action = basicItem?.querySelector('[data-checklist-action]');
       if (action) action.classList.remove('is-hidden');
     }
@@ -797,6 +799,8 @@
     if (ctaEl) {
       const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2;
       ctaEl.hidden = hideCta;
+      ctaEl.classList.toggle('is-hidden', hideCta);
+      ctaEl.style.display = hideCta ? 'none' : '';
     }
     if (ctaNoteEl) {
       ctaNoteEl.hidden = isMvpReviewing || ctaNoteEl.hidden;
@@ -937,10 +941,25 @@
   const initMvpToggle = () => {
     const checkbox = document.querySelector('[data-mvp-toggle]');
     if (!checkbox) return;
+    const badge = document.querySelector('.build-badge');
+    const bankTitle = document.querySelector('[data-bank-section-title]');
+    const depositGroup = document.querySelector('[data-state-group="deposit"]');
+    const updateMvpUi = () => {
+      if (badge) badge.classList.toggle('is-mvp', mvpOverride);
+      if (bankTitle) {
+        bankTitle.textContent = mvpOverride ? 'Bank' : 'Bank & First deposit';
+      }
+      if (depositGroup) depositGroup.hidden = mvpOverride;
+      if (mvpOverride && states.deposit !== 1) {
+        setState('deposit', 1, { force: true });
+      }
+    };
     checkbox.checked = true;
     mvpOverride = true;
+    updateMvpUi();
     checkbox.addEventListener('change', () => {
       mvpOverride = checkbox.checked;
+      updateMvpUi();
       updateBankAvailability();
       updateQuestionnaireAvailability();
       updateSetupState();

@@ -433,7 +433,7 @@
                 <div class="setup-checklist__content">
                     <div class="setup-checklist__section-title">Next steps</div>
                     <div class="setup-checklist__list">
-                        <div class="setup-checklist__item is-complete">
+                        <div class="setup-checklist__item is-complete" data-checklist-item="signup" data-nonclickable="true">
                             <div class="setup-checklist__item-icon setup-checklist__item-icon--transparent">
                                 <img class="setup-checklist__item-status" src="assets/icon_timeline_completed.svg" alt="" />
                             </div>
@@ -441,6 +441,7 @@
                                 <div class="setup-checklist__item-title">Sign up</div>
                                 <div class="setup-checklist__item-status-label setup-checklist__item-status-label--success">Completed</div>
                             </div>
+                            <span class="setup-checklist__item-tag" data-checklist-tag>Personal account</span>
                         </div>
                     <div class="setup-checklist__item" data-checklist-item="basic" data-checklist-item-action>
                         <div class="setup-checklist__item-icon">
@@ -454,7 +455,6 @@
                         <button class="setup-checklist__item-action" type="button" aria-label="Go to basic information" data-checklist-action>
                             <img src="assets/icon-checklist-continue.svg" alt="" />
                             </button>
-                        <span class="setup-checklist__item-tag" data-checklist-tag hidden>Personal account</span>
                         </div>
                     <div class="setup-checklist__item" data-checklist-item="identity" data-checklist-item-action>
                         <div class="setup-checklist__item-icon">
@@ -535,14 +535,10 @@
                         <span>Rejected</span>
                         <input type="checkbox" data-rejected-toggle />
                     </label>
-                    <label class="build-badge__checkbox">
-                        <span>MVP</span>
-                        <input type="checkbox" data-mvp-toggle checked />
-                    </label>
                 </div>
             </div>
             <div class="build-badge__group" data-state-group="basic">
-                <div class="build-badge__group-label">Account (Basic) information</div>
+                <div class="build-badge__group-label">Basic information</div>
                 <div class="build-badge__state">
                     <button type="button" class="build-badge__state-btn" data-state-action="down"
                         aria-label="Previous basic information state">−</button>
@@ -579,7 +575,7 @@
 
             <div class="build-badge__divider" aria-hidden="true"></div>
 
-            <div class="build-badge__section-title">Bank & First deposit</div>
+            <div class="build-badge__section-title" data-bank-section-title>Bank & First deposit</div>
             <div class="build-badge__group" data-state-group="bank">
                 <div class="build-badge__group-label">Bank account state</div>
                 <div class="build-badge__state">
@@ -591,7 +587,7 @@
                     <span class="build-badge__state-name" data-state-name></span>
                 </div>
             </div>
-            <div class="build-badge__group" data-state-group="deposit">
+            <div class="build-badge__group" data-state-group="deposit" hidden>
                 <div class="build-badge__group-label">Deposit state</div>
                 <div class="build-badge__state">
                     <button type="button" class="build-badge__state-btn" data-state-action="down"
@@ -602,6 +598,12 @@
                     <span class="build-badge__state-name" data-state-name></span>
                 </div>
             </div>
+        </div>
+        <div class="build-badge__mvp">
+            <label class="build-badge__checkbox">
+                <span>Show MVP features only</span>
+                <input type="checkbox" data-mvp-toggle checked />
+            </label>
         </div>
     </div>
 
