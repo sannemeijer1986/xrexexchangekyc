@@ -162,7 +162,10 @@
         setState('questionnaire', 3, { force: true });
       }
     }
-    const depositUnlocked = states.bank >= 3;
+    if (states.bank === 4 && states.deposit !== 1) {
+      setState('deposit', 1, { force: true });
+    }
+    const depositUnlocked = states.bank >= 3 && states.bank !== 4;
     if (depositGroup) {
       depositGroup.classList.toggle('is-locked', !depositUnlocked);
       depositGroup.setAttribute('aria-disabled', String(!depositUnlocked));
@@ -466,6 +469,7 @@
         action.disabled = false;
         action.classList.remove('is-disabled');
       }
+      delete item.dataset.nonclickable;
     };
 
     const applyProcessingState = (item, defaultIcon) => {
@@ -486,6 +490,7 @@
         action.disabled = true;
         action.classList.add('is-disabled');
       }
+      delete item.dataset.nonclickable;
     };
 
     if (states.basic === 2) {
@@ -512,6 +517,7 @@
           action.classList.add('is-hidden');
         }
         if (tag) tag.hidden = false;
+        basicItem.dataset.nonclickable = 'true';
       }
     } else {
       resetItemState(basicItem, 'assets/icon-checklist-basicprofile.svg');
@@ -542,6 +548,7 @@
           action.disabled = true;
           action.classList.add('is-disabled');
         }
+        identityItem.dataset.nonclickable = 'true';
       }
     } else if (states.identity === 4) {
       if (identityItem) {
@@ -562,6 +569,7 @@
           action.disabled = false;
           action.classList.remove('is-disabled');
         }
+        delete identityItem.dataset.nonclickable;
       }
     } else {
       resetItemState(identityItem, 'assets/icon-checklist-identityverification.svg');
@@ -574,8 +582,10 @@
       const icon = bankItem.querySelector('[data-checklist-icon]');
       const status = bankItem.querySelector('[data-checklist-status]');
       const meta = bankItem.querySelector('.setup-checklist__item-meta');
+      const secondaryBtn = bankItem.querySelector('[data-checklist-secondary]');
       const isBankProcessing = states.bank === 2;
       const isBankApproved = states.bank === 3;
+      const isBankResubmission = states.bank === 4;
       if (action) {
         const shouldDisable = !bankUnlocked || isBankProcessing || isBankApproved;
         action.disabled = shouldDisable;
@@ -586,6 +596,8 @@
           icon.src = 'assets/icon_processing.svg';
         } else if (isBankApproved) {
           icon.src = 'assets/icon_timeline_completed.svg';
+        } else if (isBankResubmission) {
+          icon.src = 'assets/icon_bankaccounts.svg';
         } else {
           icon.src = 'assets/icon_bankaccounts.svg';
         }
@@ -597,17 +609,28 @@
       if (status) {
         if (isBankProcessing) {
           status.textContent = 'Reviewing';
-          status.classList.remove('setup-checklist__item-status-label--success');
+          status.classList.remove('setup-checklist__item-status-label--success', 'setup-checklist__item-status-label--warning');
         } else if (isBankApproved) {
           status.textContent = 'Completed';
+          status.classList.remove('setup-checklist__item-status-label--warning');
           status.classList.add('setup-checklist__item-status-label--success');
+        } else if (isBankResubmission) {
+          status.textContent = '{$resubmissionMessage}';
+          status.classList.remove('setup-checklist__item-status-label--success');
+          status.classList.add('setup-checklist__item-status-label--warning');
         } else {
           status.textContent = '';
-          status.classList.remove('setup-checklist__item-status-label--success');
+          status.classList.remove('setup-checklist__item-status-label--success', 'setup-checklist__item-status-label--warning');
         }
       }
-      if (meta) meta.hidden = isBankProcessing || isBankApproved;
+      if (meta) meta.hidden = isBankProcessing || isBankApproved || isBankResubmission;
       bankItem.classList.toggle('is-processing', isBankProcessing);
+      if (secondaryBtn) secondaryBtn.hidden = !isBankApproved;
+      if (isBankApproved) {
+        bankItem.dataset.nonclickable = 'true';
+      } else {
+        delete bankItem.dataset.nonclickable;
+      }
     }
 
     if (depositItem) {
@@ -615,6 +638,7 @@
       const icon = depositItem.querySelector('[data-checklist-icon]');
       const status = depositItem.querySelector('[data-checklist-status]');
       const meta = depositItem.querySelector('.setup-checklist__item-meta');
+      const secondaryBtn = depositItem.querySelector('[data-checklist-deposit-secondary]');
       const isDepositUnlocked = states.bank === 3;
       const isDepositComplete = states.deposit === 2;
       if (action) {
@@ -634,6 +658,12 @@
       }
       if (meta) meta.hidden = isDepositComplete;
       depositItem.classList.toggle('is-disabled', !isDepositUnlocked);
+      if (secondaryBtn) secondaryBtn.hidden = !isDepositComplete;
+      if (isDepositComplete) {
+        depositItem.dataset.nonclickable = 'true';
+      } else {
+        delete depositItem.dataset.nonclickable;
+      }
     }
 
     if (ctaEl) {
@@ -643,6 +673,7 @@
       ctaEl.classList.toggle('is-disabled', isBankProcessing);
       ctaEl.hidden = isDepositComplete;
       ctaEl.classList.toggle('is-hidden', isDepositComplete);
+      ctaEl.style.display = isDepositComplete ? 'none' : '';
       if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing || isDepositComplete;
     }
 
@@ -691,6 +722,11 @@
       if (iconWrap) {
         iconWrap.classList.toggle('setup-checklist__item-icon--transparent', states.questionnaire === 3);
       }
+      if (states.questionnaire === 3) {
+        questionnaireItem.dataset.nonclickable = 'true';
+      } else {
+        delete questionnaireItem.dataset.nonclickable;
+      }
     }
 
     let stepsRemaining = 4;
@@ -733,7 +769,10 @@
 
     const isRejected = rejectedOverride;
     if (rejectedEl) rejectedEl.hidden = !isRejected;
-    if (checklistCard) checklistCard.hidden = false;
+    if (checklistCard) {
+      checklistCard.hidden = false;
+      checklistCard.classList.toggle('is-dimmed', isRejected);
+    }
     if (checklistContent) checklistContent.hidden = isRejected;
   };
 
@@ -942,6 +981,7 @@
 
     panel.querySelectorAll('[data-checklist-item-action]').forEach((item) => {
       item.addEventListener('click', (event) => {
+        if (item.dataset.nonclickable === 'true') return;
         if (event.target.closest('.setup-checklist__item-action')) return;
         const action = item.querySelector('.setup-checklist__item-action');
         if (action && !action.disabled) action.click();

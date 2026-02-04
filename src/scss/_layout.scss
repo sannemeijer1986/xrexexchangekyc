@@ -567,6 +567,10 @@
   gap: 8px;
 }
 
+.setup-checklist__card.is-dimmed {
+  opacity: 0.5;
+}
+
 .setup-checklist__avatar-ring {
   position: relative;
   width: 86px;
@@ -791,6 +795,20 @@
   font-size: 12px;
   font-weight: 400;
   color: #9B9C9C;
+  white-space: nowrap;
+}
+
+.setup-checklist__item-secondary-btn {
+  margin-left: auto;
+  background: #2d2f2f;
+  color: #ffffff;
+  border: 0;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  height: 32px;
+  cursor: pointer;
   white-space: nowrap;
 }
 
