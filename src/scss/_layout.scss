@@ -1262,7 +1262,7 @@
   color: #ffffff;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 12px;
-  padding: 10px 10px;
+  padding: 16px;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
@@ -1280,7 +1280,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 0px;
+  padding: 8px 0px 0px 0px;
   background: transparent;
   border: none;
   color: inherit;
@@ -1710,6 +1710,17 @@
   accent-color: #EF4444;
 }
 
+.build-badge__reset {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4D88FF;
+  text-align: left;
+  cursor: pointer;
+}
+
 .build-badge__divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.075);
@@ -1782,5 +1793,15 @@
 
 .build-badge__state-name[data-state-label="Resubmission"] {
   color: #FF926E;
+  opacity: 1;
+}
+
+.build-badge__state-name[data-state-label="Not deposited"] {
+  color: #9B9C9C;
+  opacity: 1;
+}
+
+.build-badge__state-name[data-state-label="1st deposit received"] {
+  color: #6DCF8E;
   opacity: 1;
 }

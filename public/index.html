@@ -522,6 +522,7 @@
         </button>
 
         <div class="build-badge__body" id="prototypeStatesBody">
+            <button class="build-badge__reset" type="button" data-prototype-reset>Reset states</button>
             <div class="build-badge__section-row">
                 <div class="build-badge__section-title">KYC</div>
                 <label class="build-badge__checkbox">
@@ -567,7 +568,7 @@
 
             <div class="build-badge__divider" aria-hidden="true"></div>
 
-            <div class="build-badge__section-title">Bank</div>
+            <div class="build-badge__section-title">Bank & First deposit</div>
             <div class="build-badge__group" data-state-group="bank">
                 <div class="build-badge__group-label">Bank account state</div>
                 <div class="build-badge__state">
@@ -576,6 +577,17 @@
                     <span class="build-badge__state-value" data-state-value></span>
                     <button type="button" class="build-badge__state-btn" data-state-action="up"
                         aria-label="Next bank account state">+</button>
+                    <span class="build-badge__state-name" data-state-name></span>
+                </div>
+            </div>
+            <div class="build-badge__group" data-state-group="deposit">
+                <div class="build-badge__group-label">Deposit state</div>
+                <div class="build-badge__state">
+                    <button type="button" class="build-badge__state-btn" data-state-action="down"
+                        aria-label="Previous deposit state">−</button>
+                    <span class="build-badge__state-value" data-state-value></span>
+                    <button type="button" class="build-badge__state-btn" data-state-action="up"
+                        aria-label="Next deposit state">+</button>
                     <span class="build-badge__state-name" data-state-name></span>
                 </div>
             </div>

@@ -39,9 +39,18 @@
       labels: {
         1: 'Not submitted',
         2: 'Submitted',
-        3: 'Resubmission',
-        4: 'Approved',
+        3: 'Approved',
+        4: 'Resubmission',
         5: 'Rejected',
+      },
+    },
+    deposit: {
+      storageKey: 'xrexexchangekyc.depositState.v1',
+      min: 1,
+      max: 2,
+      labels: {
+        1: 'Not deposited',
+        2: '1st deposit received',
       },
     },
   };
@@ -69,6 +78,18 @@
     document.documentElement.dataset[datasetKey] = `state-${value}`;
   };
 
+  const scrollActivePageToTop = () => {
+    const checklistPanel = document.querySelector('[data-setup-checklist]');
+    const checklistBody = checklistPanel?.querySelector('.setup-checklist__body');
+    const content = document.querySelector('.content');
+    const isChecklistOpen = checklistPanel?.classList.contains('is-open');
+    if (isChecklistOpen && checklistBody) {
+      checklistBody.scrollTop = 0;
+    } else if (content) {
+      content.scrollTop = 0;
+    }
+  };
+
   const setState = (group, next, opts = {}) => {
     const config = STATE_CONFIGS[group];
     if (!config) return config?.min ?? 1;
@@ -84,6 +105,9 @@
       // ignore storage errors
     }
     applyDatasetState(group, clamped);
+    if (group !== 'bank' && group !== 'deposit') {
+      scrollActivePageToTop();
+    }
     updateGroupUI(group);
     return clamped;
   };
@@ -113,10 +137,15 @@
 
   const updateBankAvailability = () => {
     const bankGroup = document.querySelector('[data-state-group="bank"]');
+    const depositGroup = document.querySelector('[data-state-group="deposit"]');
     if (!bankGroup) return;
     if (rejectedOverride) {
       bankGroup.classList.add('is-locked');
       bankGroup.setAttribute('aria-disabled', 'true');
+      if (depositGroup) {
+        depositGroup.classList.add('is-locked');
+        depositGroup.setAttribute('aria-disabled', 'true');
+      }
       return;
     }
     const isUnlocked = states.basic >= 2 && states.identity >= 2;
@@ -125,13 +154,30 @@
     if (!isUnlocked && states.bank !== 1) {
       setState('bank', 1, { force: true });
     }
+    if (states.bank >= 3) {
+      if (states.basic !== 3) setState('basic', 3, { force: true });
+      if (states.identity !== 3) setState('identity', 3, { force: true });
+      if (states.questionnaire >= 2 && states.questionnaire !== 3) {
+        setState('questionnaire', 3, { force: true });
+      }
+    }
+    const depositUnlocked = states.bank >= 3;
+    if (depositGroup) {
+      depositGroup.classList.toggle('is-locked', !depositUnlocked);
+      depositGroup.setAttribute('aria-disabled', String(!depositUnlocked));
+      if (!depositUnlocked && states.deposit !== 1) {
+        setState('deposit', 1, { force: true });
+      }
+    }
   };
 
   const updateQuestionnaireAvailability = () => {
     const questionnaireGroup = document.querySelector('[data-state-group="questionnaire"]');
     const basicGroup = document.querySelector('[data-state-group="basic"]');
     const identityGroup = document.querySelector('[data-state-group="identity"]');
+    const hasQuestionnaire = states.questionnaire >= 2;
     if (!questionnaireGroup) return;
+    const bankApproved = states.bank >= 3;
     if (rejectedOverride) {
       questionnaireGroup.classList.add('is-locked');
       questionnaireGroup.setAttribute('aria-disabled', 'true');
@@ -155,7 +201,7 @@
       if (states.basic !== 3) setState('basic', 3, { force: true });
       if (states.identity !== 3) setState('identity', 3, { force: true });
     }
-    const lockBasicIdentity = states.questionnaire >= 2;
+    const lockBasicIdentity = states.questionnaire >= 2 || bankApproved;
     if (basicGroup) {
       basicGroup.classList.toggle('is-locked', lockBasicIdentity);
       basicGroup.setAttribute('aria-disabled', String(lockBasicIdentity));
@@ -163,6 +209,11 @@
     if (identityGroup) {
       identityGroup.classList.toggle('is-locked', lockBasicIdentity);
       identityGroup.setAttribute('aria-disabled', String(lockBasicIdentity));
+    }
+    if (questionnaireGroup) {
+      const lockQuestionnaire = bankApproved || !isUnlocked;
+      questionnaireGroup.classList.toggle('is-locked', lockQuestionnaire);
+      questionnaireGroup.setAttribute('aria-disabled', String(lockQuestionnaire));
     }
   };
 
@@ -684,6 +735,24 @@
       applyLock(rejectedOverride);
       refreshLockedUI();
       requestAnimationFrame(refreshLockedUI);
+      scrollActivePageToTop();
+    });
+  };
+
+  const initPrototypeReset = () => {
+    const resetBtn = document.querySelector('[data-prototype-reset]');
+    const checkbox = document.querySelector('[data-rejected-toggle]');
+    if (!resetBtn) return;
+    resetBtn.addEventListener('click', () => {
+      rejectedOverride = false;
+      if (checkbox) checkbox.checked = false;
+      Object.keys(STATE_CONFIGS).forEach((group) => {
+        setState(group, STATE_CONFIGS[group].min, { force: true });
+      });
+      updateBankAvailability();
+      updateQuestionnaireAvailability();
+      updateSetupState();
+      updateChecklistItems();
     });
   };
 
@@ -765,6 +834,7 @@
   initBadgeControls();
   initChecklistPanel();
   initRejectedToggle();
+  initPrototypeReset();
 
   const initHeaderScrollSwap = () => {
     const header = document.querySelector('.app-header');
