@@ -27,8 +27,8 @@
       max: 4,
       labels: {
         1: 'Not enabled',
-        2: 'Enabled & not submitted',
-        3: 'Submitted',
+        2: 'Enabled, awaiting...',
+        3: 'More info required',
         4: 'Approved',
       },
     },
@@ -532,6 +532,11 @@
     updateQuestionnaireAvailability();
     updateSetupState();
     updateChecklistItems();
+    requestAnimationFrame(() => {
+      updateBankAvailability();
+      updateQuestionnaireAvailability();
+      updateChecklistItems();
+    });
   };
   const initStates = () => {
     Object.keys(STATE_CONFIGS).forEach((group) => {
@@ -594,14 +599,26 @@
     });
 
     Object.keys(STATE_CONFIGS).forEach((group) => updateGroupUI(group));
+    updateBankAvailability();
+    updateQuestionnaireAvailability();
+    updateChecklistItems();
   };
 
   const initRejectedToggle = () => {
     const checkbox = document.querySelector('[data-rejected-toggle]');
+    const badge = document.querySelector('.build-badge');
+    const groups = document.querySelectorAll('.build-badge__group');
     if (!checkbox) return;
     checkbox.checked = false;
+    const applyLock = (isLocked) => {
+      if (badge) badge.classList.toggle('is-rejected', isLocked);
+      groups.forEach((group) => group.classList.toggle('is-locked', isLocked));
+    };
+    applyLock(checkbox.checked);
+    updateChecklistItems();
     checkbox.addEventListener('change', () => {
       rejectedOverride = checkbox.checked;
+      applyLock(rejectedOverride);
       updateChecklistItems();
     });
   };
