@@ -260,7 +260,7 @@
     const isQuestionnaireApproved = states.questionnaire === 3;
     const isAllApproved = ['basic', 'identity', 'bank'].every((group) => {
       return getLabel(group, states[group]) === 'Approved';
-    }) && (!isQuestionnaireActive || isQuestionnaireApproved);
+    }) && states.deposit === 2 && (!isQuestionnaireActive || isQuestionnaireApproved);
 
     if (isAllApproved) {
       showCard = false;
@@ -286,7 +286,7 @@
       cardTitle = 'Just a few steps to\nunlock the best of XREX!';
       cardCta = 'Get started';
       stepState = 'progress';
-    } else if (basic >= 2 && identity >= 2 && bank >= 2 && (!isQuestionnaireActive || isQuestionnaireSubmitted)) {
+    } else if (basic >= 2 && identity >= 2 && bank === 2 && (!isQuestionnaireActive || isQuestionnaireSubmitted)) {
       title = 'Submitted, please wait content';
       label = 'Submitted BI and PI, awaiting';
       statusText = 'Reviewing';
@@ -297,6 +297,15 @@
       finalStepLabel = 'Reviewing';
       hidePrimaryBtn = true;
       stepState = 'reviewing';
+    } else if (bank === 3) {
+      title = 'Continue setup content';
+      label = 'Setup part 1 started but not finished';
+      statusText = 'Continue';
+      statusState = 'continue';
+      showCard = true;
+      cardTitle = 'Make your first deposit\n to activate trading & access all features.';
+      cardCta = 'Continue';
+      stepState = 'progress';
     } else if ((basic !== 1 || identity !== 1) && (basic !== 2 && identity !== 2)) {
       title = 'Continue setup content';
       label = 'Setup part 1 started but not finished';
@@ -349,7 +358,11 @@
     if (btnPrimaryEl) btnPrimaryEl.hidden = hidePrimaryBtn;
     if (heroEl) {
       let illustration = '';
-      if (statusState === 'getstarted' || statusState === 'continue') {
+      if (statusState === 'getstarted') {
+        illustration = 'assets/illu_setup_1.png';
+      } else if (statusState === 'continue' && states.bank === 3) {
+        illustration = 'assets/illu_setup_4_firstdeposit.png';
+      } else if (statusState === 'continue') {
         illustration = 'assets/illu_setup_1.png';
       } else if (statusState === 'resubmission') {
         illustration = 'assets/illu_setup_2_resubmit.png';
@@ -407,6 +420,7 @@
     const basicItem = document.querySelector('[data-checklist-item="basic"]');
     const identityItem = document.querySelector('[data-checklist-item="identity"]');
     const bankItem = document.querySelector('[data-checklist-item="bank"]');
+    const depositItem = document.querySelector('[data-checklist-item="deposit"]');
     const questionnaireItem = document.querySelector('[data-checklist-item="questionnaire"]');
     const stepsEl = document.querySelector('[data-checklist-steps]');
     const ringEl = document.querySelector('[data-checklist-ring]');
@@ -536,16 +550,55 @@
       const status = bankItem.querySelector('[data-checklist-status]');
       const meta = bankItem.querySelector('.setup-checklist__item-meta');
       const isBankProcessing = states.bank === 2;
+      const isBankApproved = states.bank === 3;
       if (action) {
-        action.disabled = !bankUnlocked || isBankProcessing;
-        action.classList.toggle('is-disabled', !bankUnlocked || isBankProcessing);
+        const shouldDisable = !bankUnlocked || isBankProcessing || isBankApproved;
+        action.disabled = shouldDisable;
+        action.classList.toggle('is-disabled', shouldDisable);
       }
       if (icon) {
-        icon.src = isBankProcessing ? 'assets/icon_processing.svg' : 'assets/icon_bankaccounts.svg';
+        if (isBankProcessing) {
+          icon.src = 'assets/icon_processing.svg';
+        } else if (isBankApproved) {
+          icon.src = 'assets/icon_timeline_completed.svg';
+        } else {
+          icon.src = 'assets/icon_bankaccounts.svg';
+        }
       }
-      if (status) status.textContent = isBankProcessing ? 'Reviewing' : '';
-      if (meta) meta.hidden = isBankProcessing;
+      const iconWrap = bankItem.querySelector('.setup-checklist__item-icon');
+      if (iconWrap) {
+        iconWrap.classList.toggle('setup-checklist__item-icon--transparent', isBankProcessing || isBankApproved);
+      }
+      if (status) {
+        if (isBankProcessing) {
+          status.textContent = 'Reviewing';
+          status.classList.remove('setup-checklist__item-status-label--success');
+        } else if (isBankApproved) {
+          status.textContent = 'Completed';
+          status.classList.add('setup-checklist__item-status-label--success');
+        } else {
+          status.textContent = '';
+          status.classList.remove('setup-checklist__item-status-label--success');
+        }
+      }
+      if (meta) meta.hidden = isBankProcessing || isBankApproved;
       bankItem.classList.toggle('is-processing', isBankProcessing);
+    }
+
+    if (depositItem) {
+      const action = depositItem.querySelector('[data-checklist-action]');
+      const icon = depositItem.querySelector('[data-checklist-icon]');
+      const status = depositItem.querySelector('[data-checklist-status]');
+      const meta = depositItem.querySelector('.setup-checklist__item-meta');
+      const isDepositUnlocked = states.bank === 3;
+      if (action) {
+        action.disabled = !isDepositUnlocked;
+        action.classList.toggle('is-disabled', !isDepositUnlocked);
+      }
+      if (icon) icon.src = 'assets/icon-checklist-deposit.svg';
+      if (status) status.textContent = '';
+      if (meta) meta.hidden = false;
+      depositItem.classList.toggle('is-disabled', !isDepositUnlocked);
     }
 
     if (ctaEl) {
@@ -595,8 +648,8 @@
     let stepsRemaining = 4;
     if (states.basic >= 2 || states.identity >= 2) stepsRemaining = 3;
     if (states.basic >= 2 && states.identity >= 2) stepsRemaining = 2;
-    if (isQuestionnaireActive) stepsRemaining += 1;
-    if (states.bank === 2) stepsRemaining = Math.max(1, stepsRemaining - 1);
+    if (states.questionnaire === 2 || states.questionnaire === 4) stepsRemaining += 1;
+    if (states.bank === 2 || states.bank === 3) stepsRemaining = Math.max(1, stepsRemaining - 1);
     if (states.identity === 4) stepsRemaining += 1;
 
     if (stepsEl) {
