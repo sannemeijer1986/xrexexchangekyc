@@ -762,7 +762,7 @@
         action.classList.toggle('is-hidden', isMvpEmailSent);
       }
       if (secondaryBtn) {
-        const showResend = mvpOverride && states.questionnaire === 3;
+        const showResend = mvpOverride && (states.questionnaire === 3 || states.questionnaire === 5);
         secondaryBtn.hidden = !showResend;
       }
       const iconWrap = questionnaireItem.querySelector('.setup-checklist__item-icon');
@@ -1162,7 +1162,7 @@
     if (questionnaireSecondary) {
       questionnaireSecondary.addEventListener('click', (event) => {
         event.stopPropagation();
-        if (mvpOverride && states.questionnaire === 3) {
+        if (mvpOverride && (states.questionnaire === 3 || states.questionnaire === 5)) {
           openActionSheet();
         }
       });
