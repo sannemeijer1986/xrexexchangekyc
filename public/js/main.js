@@ -28,8 +28,8 @@
       labels: {
         1: 'Not enabled',
         2: 'Enabled, awaiting...',
-        3: 'More info required',
-        4: 'Approved',
+        3: 'Approved',
+        4: 'More info required',
       },
     },
     bank: {
@@ -103,7 +103,7 @@
     if (!container) return;
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
-    }) || states.questionnaire === 2;
+    }) || states.questionnaire === 2 || states.questionnaire === 4;
     const isAwaitingSubmission = ['basic', 'identity'].every((group) => {
       return states[group] === 2;
     });
@@ -124,6 +124,8 @@
 
   const updateQuestionnaireAvailability = () => {
     const questionnaireGroup = document.querySelector('[data-state-group="questionnaire"]');
+    const basicGroup = document.querySelector('[data-state-group="basic"]');
+    const identityGroup = document.querySelector('[data-state-group="identity"]');
     if (!questionnaireGroup) return;
     const isUnlocked = states.basic >= 2 && states.identity >= 2;
     questionnaireGroup.classList.toggle('is-locked', !isUnlocked);
@@ -134,6 +136,15 @@
     if (states.questionnaire >= 2) {
       if (states.basic !== 3) setState('basic', 3, { force: true });
       if (states.identity !== 3) setState('identity', 3, { force: true });
+    }
+    const lockBasicIdentity = states.questionnaire >= 2;
+    if (basicGroup) {
+      basicGroup.classList.toggle('is-locked', lockBasicIdentity);
+      basicGroup.setAttribute('aria-disabled', String(lockBasicIdentity));
+    }
+    if (identityGroup) {
+      identityGroup.classList.toggle('is-locked', lockBasicIdentity);
+      identityGroup.setAttribute('aria-disabled', String(lockBasicIdentity));
     }
   };
 
@@ -174,10 +185,10 @@
 
     const hasResubmission = Object.keys(STATE_CONFIGS).some((group) => {
       return getLabel(group, states[group]) === 'Resubmission';
-    }) || states.questionnaire === 2;
+    }) || states.questionnaire === 2 || states.questionnaire === 4;
     const isQuestionnaireActive = states.questionnaire > 1;
-    const isQuestionnaireSubmitted = states.questionnaire >= 3;
-    const isQuestionnaireApproved = states.questionnaire === 4;
+    const isQuestionnaireSubmitted = states.questionnaire === 3;
+    const isQuestionnaireApproved = states.questionnaire === 3;
     const isAllApproved = ['basic', 'identity', 'bank'].every((group) => {
       return getLabel(group, states[group]) === 'Approved';
     }) && (!isQuestionnaireActive || isQuestionnaireApproved);
@@ -485,20 +496,29 @@
       const meta = questionnaireItem.querySelector('[data-checklist-meta]');
       const status = questionnaireItem.querySelector('[data-checklist-status]');
       if (action) {
-        action.disabled = !isQuestionnaireActive;
-        action.classList.toggle('is-disabled', !isQuestionnaireActive);
+        const isApproved = states.questionnaire === 3;
+        action.disabled = !isQuestionnaireActive || isApproved;
+        action.classList.toggle('is-disabled', !isQuestionnaireActive || isApproved);
       }
       if (meta) {
-        meta.textContent = (states.questionnaire === 2 || states.questionnaire === 3)
+        meta.textContent = (states.questionnaire === 2 || states.questionnaire === 4)
           ? 'Our team needs a bit more information. Please complete a short form by'
           : '';
         meta.hidden = !meta.textContent;
       }
       if (status) {
-        status.textContent = (states.questionnaire === 2 || states.questionnaire === 3)
-          ? '02/09/2077'
-          : '';
-        status.classList.toggle('setup-checklist__item-status-label--warning', Boolean(status.textContent));
+        if (states.questionnaire === 2 || states.questionnaire === 4) {
+          status.textContent = '02/09/2077';
+          status.classList.remove('setup-checklist__item-status-label--success');
+          status.classList.add('setup-checklist__item-status-label--warning');
+        } else if (states.questionnaire === 3) {
+          status.textContent = 'Verified';
+          status.classList.remove('setup-checklist__item-status-label--warning');
+          status.classList.add('setup-checklist__item-status-label--success');
+        } else {
+          status.textContent = '';
+          status.classList.remove('setup-checklist__item-status-label--warning', 'setup-checklist__item-status-label--success');
+        }
         status.hidden = !status.textContent;
       }
     }
