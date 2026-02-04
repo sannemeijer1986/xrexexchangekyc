@@ -3,36 +3,33 @@
     basic: {
       storageKey: 'xrexexchangekyc.basicState.v2',
       min: 1,
-      max: 4,
+      max: 3,
       labels: {
         1: 'Not submitted',
         2: 'Submitted',
         3: 'Approved',
-        4: 'Rejected',
       },
     },
     identity: {
       storageKey: 'xrexexchangekyc.identityState.v1',
       min: 1,
-      max: 5,
+      max: 4,
       labels: {
         1: 'Not submitted',
         2: 'Submitted',
-        3: 'Resubmission',
-        4: 'Approved',
-        5: 'Rejected',
+        3: 'Approved',
+        4: 'Resubmission',
       },
     },
     questionnaire: {
       storageKey: 'xrexexchangekyc.questionnaireState.v1',
       min: 1,
-      max: 5,
+      max: 4,
       labels: {
         1: 'Not enabled',
         2: 'Enabled & not submitted',
         3: 'Submitted',
         4: 'Approved',
-        5: 'Rejected',
       },
     },
     bank: {
@@ -65,6 +62,7 @@
   };
 
   const states = {};
+  let rejectedOverride = false;
 
   const applyDatasetState = (group, value) => {
     const datasetKey = `${group}State`;
@@ -409,26 +407,6 @@
         const action = identityItem.querySelector('[data-checklist-action]');
         const status = identityItem.querySelector('[data-checklist-status]');
         const meta = identityItem.querySelector('.setup-checklist__item-meta');
-        if (icon) icon.src = 'assets/icon-checklist-identityverification.svg';
-        if (iconWrap) iconWrap.classList.remove('setup-checklist__item-icon--transparent');
-        if (status) {
-          status.textContent = '{$resubmissionMessage}';
-          status.classList.remove('setup-checklist__item-status-label--success');
-          status.classList.add('setup-checklist__item-status-label--warning');
-        }
-        if (meta) meta.hidden = true;
-        if (action) {
-          action.disabled = false;
-          action.classList.remove('is-disabled');
-        }
-      }
-    } else if (states.identity === 4) {
-      if (identityItem) {
-        const icon = identityItem.querySelector('[data-checklist-icon]');
-        const iconWrap = identityItem.querySelector('.setup-checklist__item-icon');
-        const action = identityItem.querySelector('[data-checklist-action]');
-        const status = identityItem.querySelector('[data-checklist-status]');
-        const meta = identityItem.querySelector('.setup-checklist__item-meta');
         if (icon) icon.src = 'assets/icon_timeline_completed.svg';
         if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
         if (status) {
@@ -440,6 +418,26 @@
         if (action) {
           action.disabled = true;
           action.classList.add('is-disabled');
+        }
+      }
+    } else if (states.identity === 4) {
+      if (identityItem) {
+        const icon = identityItem.querySelector('[data-checklist-icon]');
+        const iconWrap = identityItem.querySelector('.setup-checklist__item-icon');
+        const action = identityItem.querySelector('[data-checklist-action]');
+        const status = identityItem.querySelector('[data-checklist-status]');
+        const meta = identityItem.querySelector('.setup-checklist__item-meta');
+        if (icon) icon.src = 'assets/icon-checklist-identityverification.svg';
+        if (iconWrap) iconWrap.classList.remove('setup-checklist__item-icon--transparent');
+        if (status) {
+          status.textContent = '{$resubmissionMessage}';
+          status.classList.remove('setup-checklist__item-status-label--success');
+          status.classList.add('setup-checklist__item-status-label--warning');
+        }
+        if (meta) meta.hidden = true;
+        if (action) {
+          action.disabled = false;
+          action.classList.remove('is-disabled');
         }
       }
     } else {
@@ -491,7 +489,7 @@
     if (states.basic >= 2 && states.identity >= 2) stepsRemaining = 2;
     if (isQuestionnaireActive) stepsRemaining += 1;
     if (states.bank === 2) stepsRemaining = Math.max(1, stepsRemaining - 1);
-    if (states.identity === 3) stepsRemaining += 1;
+    if (states.identity === 4) stepsRemaining += 1;
 
     if (stepsEl) {
       stepsEl.textContent = `${stepsRemaining} step${stepsRemaining === 1 ? '' : 's'} to go`;
@@ -504,7 +502,7 @@
       ringEl.style.setProperty('--progress', `${progressPercent}%`);
     }
 
-    const isRejected = states.basic === 4 || states.identity === 5;
+    const isRejected = rejectedOverride;
     if (rejectedEl) rejectedEl.hidden = !isRejected;
     if (checklistCard) checklistCard.hidden = false;
     if (checklistContent) checklistContent.hidden = isRejected;
@@ -550,6 +548,7 @@
         // ignore storage errors
       }
     });
+    rejectedOverride = false;
     updateGradientBackground();
     updateBankAvailability();
     updateQuestionnaireAvailability();
@@ -595,6 +594,16 @@
     });
 
     Object.keys(STATE_CONFIGS).forEach((group) => updateGroupUI(group));
+  };
+
+  const initRejectedToggle = () => {
+    const checkbox = document.querySelector('[data-rejected-toggle]');
+    if (!checkbox) return;
+    checkbox.checked = false;
+    checkbox.addEventListener('change', () => {
+      rejectedOverride = checkbox.checked;
+      updateChecklistItems();
+    });
   };
 
   const initChecklistPanel = () => {
@@ -672,6 +681,7 @@
   initStates();
   initBadgeControls();
   initChecklistPanel();
+  initRejectedToggle();
 
   const initHeaderScrollSwap = () => {
     const header = document.querySelector('.app-header');

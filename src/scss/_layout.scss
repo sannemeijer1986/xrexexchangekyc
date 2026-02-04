@@ -1689,6 +1689,27 @@
   margin-top: 4px;
 }
 
+.build-badge__section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.build-badge__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.build-badge__checkbox input {
+  accent-color: #EF4444;
+}
+
 .build-badge__divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.075);

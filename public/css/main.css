@@ -589,14 +589,6 @@ body {
   padding: 24px 16px;
 }
 
-.setup-checklist__rejected {
-  color: #EF4444;
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
-  padding: 24px 16px;
-}
-
 .setup-checklist__body::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -1732,6 +1724,48 @@ body {
   font-weight: 700;
   color: #ffffff;
   margin-top: 4px;
+}
+
+.build-badge__section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.build-badge__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.build-badge__checkbox input {
+  accent-color: #EF4444;
+}
+
+.build-badge__section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.build-badge__checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.build-badge__checkbox input {
+  accent-color: #EF4444;
 }
 
 .build-badge__divider {
