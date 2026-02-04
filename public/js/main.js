@@ -443,6 +443,7 @@
     const ringEl = document.querySelector('[data-checklist-ring]');
     const ctaEl = document.querySelector('[data-checklist-cta]');
     const ctaNoteEl = document.querySelector('[data-checklist-cta-note]');
+    const titleEl = document.querySelector('[data-checklist-title]');
     const checklistCard = document.querySelector('.setup-checklist__card');
     const checklistContent = document.querySelector('.setup-checklist__content');
     const rejectedEl = document.querySelector('[data-checklist-rejected]');
@@ -608,20 +609,33 @@
       const status = depositItem.querySelector('[data-checklist-status]');
       const meta = depositItem.querySelector('.setup-checklist__item-meta');
       const isDepositUnlocked = states.bank === 3;
+      const isDepositComplete = states.deposit === 2;
       if (action) {
-        action.disabled = !isDepositUnlocked;
-        action.classList.toggle('is-disabled', !isDepositUnlocked);
+        action.disabled = !isDepositUnlocked || isDepositComplete;
+        action.classList.toggle('is-disabled', !isDepositUnlocked || isDepositComplete);
       }
-      if (icon) icon.src = 'assets/icon-checklist-deposit.svg';
-      if (status) status.textContent = '';
-      if (meta) meta.hidden = false;
+      if (icon) {
+        icon.src = isDepositComplete ? 'assets/icon_timeline_completed.svg' : 'assets/icon-checklist-deposit.svg';
+      }
+      const iconWrap = depositItem.querySelector('.setup-checklist__item-icon');
+      if (iconWrap) {
+        iconWrap.classList.toggle('setup-checklist__item-icon--transparent', isDepositComplete);
+      }
+      if (status) {
+        status.textContent = isDepositComplete ? 'Completed' : '';
+        status.classList.toggle('setup-checklist__item-status-label--success', isDepositComplete);
+      }
+      if (meta) meta.hidden = isDepositComplete;
       depositItem.classList.toggle('is-disabled', !isDepositUnlocked);
     }
 
     if (ctaEl) {
       const isBankProcessing = states.bank === 2;
+      const isDepositComplete = states.deposit === 2;
       ctaEl.disabled = isBankProcessing;
       ctaEl.classList.toggle('is-disabled', isBankProcessing);
+      ctaEl.hidden = isDepositComplete;
+      ctaEl.classList.toggle('is-hidden', isDepositComplete);
       if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing;
     }
 
@@ -670,14 +684,34 @@
     if (states.identity === 4) stepsRemaining += 1;
 
     if (stepsEl) {
-      stepsEl.textContent = `${stepsRemaining} step${stepsRemaining === 1 ? '' : 's'} to go`;
+      if (states.deposit === 2) {
+        stepsEl.textContent = '31/08/2022';
+        stepsEl.classList.add('is-timestamp');
+      } else {
+        stepsEl.textContent = `${stepsRemaining} step${stepsRemaining === 1 ? '' : 's'} to go`;
+        stepsEl.classList.remove('is-timestamp');
+      }
     }
 
     if (ringEl) {
       const totalSteps = isQuestionnaireActive ? 6 : 5;
-      const completedSteps = Math.max(0, totalSteps - stepsRemaining);
-      const progressPercent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
-      ringEl.style.setProperty('--progress', `${progressPercent}%`);
+      if (states.deposit === 2) {
+        ringEl.style.setProperty('--progress', '100%');
+        ringEl.classList.add('is-complete');
+      } else {
+        const completedSteps = Math.max(0, totalSteps - stepsRemaining);
+        const progressPercent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
+        ringEl.style.setProperty('--progress', `${progressPercent}%`);
+        ringEl.classList.remove('is-complete');
+      }
+    }
+
+    if (titleEl) {
+      titleEl.textContent = states.deposit === 2 ? 'Trading unlocked' : 'Unlock trading';
+    }
+    if (ctaEl) {
+      const hideCta = states.deposit === 2 || states.bank === 2;
+      ctaEl.hidden = hideCta;
     }
 
     const isRejected = rejectedOverride;
