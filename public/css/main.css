@@ -1022,6 +1022,14 @@ body {
   padding: 6px 0;
 }
 
+.limits-panel__row span:first-child {
+  font-weight: 600;
+}
+
+.limits-panel__row span:first-child {
+  font-weight: 600;
+}
+
 .limits-panel__row span:last-child {
   color: #ffffff;
 }
