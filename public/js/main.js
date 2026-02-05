@@ -1171,6 +1171,70 @@
     setOpen(true);
   };
 
+  const initLimitsPanel = () => {
+    const panel = document.querySelector('[data-limits-panel]');
+    const container = document.querySelector('.phone-container');
+    if (!panel) return;
+    const openButtons = document.querySelectorAll('[data-limits-open]');
+    const closeButtons = panel.querySelectorAll('[data-limits-close]');
+
+    const setOpen = (nextOpen) => {
+      if (nextOpen) {
+        panel.hidden = false;
+        if (container) {
+          container.classList.remove('is-limits-open');
+          container.classList.remove('is-limits-fading');
+        }
+        const scrollBody = panel.querySelector('.limits-panel__body');
+        if (scrollBody) scrollBody.scrollTop = 0;
+        requestAnimationFrame(() => {
+          panel.classList.add('is-open');
+        });
+        setTimeout(() => {
+          if (container && panel.classList.contains('is-open')) {
+            container.classList.add('is-limits-fading');
+          }
+        }, 80);
+        setTimeout(() => {
+          if (container && panel.classList.contains('is-open')) {
+            container.classList.add('is-limits-open');
+          }
+        }, 350);
+      } else {
+        panel.classList.remove('is-open');
+        if (container) {
+          container.classList.add('is-limits-fading');
+          container.classList.remove('is-limits-open');
+          requestAnimationFrame(() => {
+            container.classList.remove('is-limits-fading');
+          });
+        }
+        const onEnd = () => {
+          if (!panel.classList.contains('is-open')) {
+            panel.hidden = true;
+          }
+          panel.removeEventListener('transitionend', onEnd);
+        };
+        panel.addEventListener('transitionend', onEnd);
+        setTimeout(onEnd, 400);
+      }
+    };
+
+    openButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        if (container && container.classList.contains('is-menu-open')) {
+          container.classList.remove('is-menu-open');
+          setTimeout(() => setOpen(true), 220);
+        } else {
+          setOpen(true);
+        }
+      });
+    });
+    closeButtons.forEach((button) => {
+      button.addEventListener('click', () => setOpen(false));
+    });
+  };
+
   const openActionSheet = () => {
     const sheet = document.querySelector('[data-action-sheet]');
     if (!sheet) return;
@@ -1239,6 +1303,7 @@
   initStates();
   initBadgeControls();
   initChecklistPanel();
+  initLimitsPanel();
   initActionSheet();
   initRejectedToggle();
   initMvpToggle();

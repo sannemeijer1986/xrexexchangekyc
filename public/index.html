@@ -98,7 +98,7 @@
                                 <img class="side-menu__item-icon" src="assets/icon_bankaccounts.svg" alt="" />
                                 <span class="side-menu__item-text">Bank accounts</span>
                             </div>
-                            <div class="side-menu__item">
+                            <div class="side-menu__item" data-limits-open>
                                 <img class="side-menu__item-icon" src="assets/icon_limits.svg" alt="" />
                                 <span class="side-menu__item-text">Limits</span>
                             </div>
@@ -512,6 +512,62 @@
                            <button class="setup-checklist__item-secondary-btn" type="button" data-checklist-deposit-secondary hidden>Deposit again</button>
                        </div>
                     </div>
+                </div>
+            </div>
+        </section>
+        <section class="limits-panel" data-limits-panel hidden>
+            <div class="limits-panel__header">
+                <button class="limits-panel__icon-btn" type="button" data-limits-close aria-label="Back">
+                    <img src="assets/icon_back.svg" alt="" />
+                </button>
+                <div class="limits-panel__title">Limits</div>
+                <button class="limits-panel__icon-btn" type="button" aria-label="Support">
+                    <img src="assets/icon_contactsupport.svg" alt="" />
+                </button>
+            </div>
+            <div class="limits-panel__body">
+                <div class="limits-panel__section-label">Account type</div>
+                <div class="limits-panel__account-type">
+                    <span>Personal</span>
+                    <button class="limits-panel__link" type="button">(Basic limits)</button>
+                </div>
+                <div class="limits-panel__card">
+                    <div class="limits-panel__tabs">
+                        <button class="limits-panel__tab is-active" type="button">Crypto</button>
+                        <button class="limits-panel__tab" type="button">TWD</button>
+                        <button class="limits-panel__tab" type="button">USD</button>
+                    </div>
+                    <div class="limits-panel__card-title">Deposit</div>
+                    <div class="limits-panel__row">
+                        <span>Single</span>
+                        <span>{$value}</span>
+                    </div>
+                    <div class="limits-panel__row">
+                        <span>Daily</span>
+                        <span>{$value}</span>
+                    </div>
+                    <div class="limits-panel__row">
+                        <span>Monthly</span>
+                        <span>{$value}</span>
+                    </div>
+                    <!-- <div class="limits-panel__divider"></div> -->
+                    <div class="limits-panel__card-title">Withdrawal</div>
+                    <div class="limits-panel__row">
+                        <span>Single</span>
+                        <span>{$value}</span>
+                    </div>
+                    <div class="limits-panel__row">
+                        <span>Daily</span>
+                        <span>{$value}</span>
+                    </div>
+                    <div class="limits-panel__row">
+                        <span>Monthly</span>
+                        <span>{$value}</span>
+                    </div>
+                </div>
+                <div class="limits-panel__cta">
+                    <div class="limits-panel__cta-text">Need higher limits?</div>
+                    <button class="limits-panel__cta-btn" type="button">Go Premium</button>
                 </div>
             </div>
         </section>
