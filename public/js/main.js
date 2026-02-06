@@ -443,6 +443,9 @@
       } else if (statusState === 'reviewing') {
         illustration = 'assets/illu_setup_3_reviewing.png';
       }
+      if (rejectedOverride) {
+        illustration = 'assets/illu_setup_rejected.png';
+      }
       heroEl.classList.toggle('is-illustration', Boolean(illustration));
       heroEl.style.backgroundImage = illustration ? `url('${illustration}')` : '';
     }
