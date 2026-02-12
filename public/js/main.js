@@ -298,7 +298,7 @@
     let cardSubtitle = '';
     let cardCta = '';
     let finalStepLabel = 'Trade';
-    let hideSecondaryBtn = false;
+    let hideSecondaryBtn = true;
     let hidePrimaryBtn = false;
     let stepState = 'progress';
 
@@ -377,7 +377,7 @@
       statusState = 'continue';
       showCard = true;
       cardTitle = 'Make your first deposit\n to activate trading & access all features.';
-      cardCta = 'Continue';
+      cardCta = 'Resume application';
       stepState = 'progress';
     } else if ((basic !== 1 || identity !== 1) && (basic !== 2 && identity !== 2)) {
       title = 'Continue setup content';
@@ -386,7 +386,7 @@
       statusState = 'continue';
       showCard = true;
       cardTitle = 'Pick up where you left off,\nunlock the best of XREX!';
-      cardCta = 'Continue';
+      cardCta = 'Resume application';
       stepState = 'progress';
     } else {
       title = 'Continue setup content';
@@ -395,7 +395,7 @@
       statusState = 'continue';
       showCard = true;
       cardTitle = 'Pick up where you left off,\nunlock the best of XREX!';
-      cardCta = 'Continue';
+      cardCta = 'Resume application';
       stepState = 'progress';
     }
 
@@ -454,9 +454,7 @@
         buttonsWrapEl.querySelectorAll('.setup-first__button'),
       ).filter((button) => !button.hidden);
       buttonsWrapEl.classList.toggle('is-single', visibleButtons.length === 1);
-      const isWideSingle = visibleButtons.length === 1
-        && (stepState === 'reviewing' || stepState === 'resubmission');
-      buttonsWrapEl.classList.toggle('is-single-wide', isWideSingle);
+      buttonsWrapEl.classList.toggle('is-single-wide', visibleButtons.length === 1);
     }
     if (progressEl) progressEl.hidden = rejectedOverride;
     if (buttonsEl) buttonsEl.hidden = rejectedOverride;
@@ -739,9 +737,7 @@
       ctaEl.classList.toggle('is-hidden', isDepositComplete);
       ctaEl.style.display = isDepositComplete ? 'none' : '';
       if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing || isDepositComplete;
-      ctaEl.textContent = (states.basic === 1 && states.identity === 1)
-        ? 'Get started'
-        : 'Continue to next step';
+      ctaEl.textContent = 'Continue to next step';
     }
 
     const questionnaireMode = getQuestionnaireMode();
@@ -1171,7 +1167,6 @@
       });
     }
 
-    setOpen(true);
   };
 
   const initLimitsPanel = () => {
