@@ -697,6 +697,18 @@
   text-align: center;
 }
 
+.setup-checklist__edd-continue-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3F78FF;
+  text-decoration: none;
+}
+
+.setup-checklist__edd-continue-link.is-hidden {
+  display: none;
+}
 
 .setup-checklist__section-title {
   font-size: 16px;

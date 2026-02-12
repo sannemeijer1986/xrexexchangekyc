@@ -853,6 +853,7 @@
     }
 
     const isMvpReviewing = mvpOverride && states.bank === 2;
+    const isEddAwaiting = mvpOverride && states.questionnaire === 3;
     if (stepsEl) {
       if (states.questionnaire === 3) {
         stepsEl.textContent = 'Awaiting your action';
@@ -869,8 +870,11 @@
       }
     }
     if (stepsSubEl) {
-      stepsSubEl.hidden = !isMvpReviewing;
-      if (isMvpReviewing) {
+      const showSub = isMvpReviewing || isEddAwaiting;
+      stepsSubEl.hidden = !showSub;
+      if (isEddAwaiting) {
+        stepsSubEl.textContent = 'Please follow the instructions sent to your email. When completed, you can proceed with setup.';
+      } else if (isMvpReviewing) {
         stepsSubEl.textContent = 'Typically takes 1-2 business days';
       }
     }
@@ -895,10 +899,16 @@
       titleEl.textContent = isDepositComplete ? 'Trading unlocked' : 'Unlock trading';
     }
     if (ctaEl) {
-      const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2;
+      const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2 || isEddAwaiting;
       ctaEl.hidden = hideCta;
       ctaEl.classList.toggle('is-hidden', hideCta);
       ctaEl.style.display = hideCta ? 'none' : '';
+    }
+    const eddContinueLink = document.querySelector('[data-checklist-edd-continue]');
+    if (eddContinueLink) {
+      eddContinueLink.hidden = !isEddAwaiting;
+      eddContinueLink.classList.toggle('is-hidden', !isEddAwaiting);
+      eddContinueLink.style.display = isEddAwaiting ? '' : 'none';
     }
     if (ctaNoteEl) {
       ctaNoteEl.hidden = isMvpReviewing || ctaNoteEl.hidden;
@@ -1178,6 +1188,10 @@
           openActionSheet();
         }
       });
+    }
+    const eddContinueLink = panel.querySelector('[data-checklist-edd-continue]');
+    if (eddContinueLink) {
+      eddContinueLink.addEventListener('click', (event) => event.preventDefault());
     }
 
   };
