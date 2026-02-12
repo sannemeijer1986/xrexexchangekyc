@@ -11,7 +11,6 @@
     2: 'Enabled & no email sent',
     3: 'Enabled & email sent',
     4: 'Approved',
-    5: 'More info required',
   };
 
   const STATE_CONFIGS = {
@@ -137,10 +136,10 @@
     if (mvpOverride) {
       return {
         labels: QUESTIONNAIRE_LABELS_MVP,
-        max: 5,
+        max: 4,
         approvedState: 4,
-        resubmissionStates: [5],
-        pendingStates: [2, 3, 5],
+        resubmissionStates: [],
+        pendingStates: [2, 3],
       };
     }
     return {
@@ -185,6 +184,18 @@
     if (rejectedOverride) {
       bankGroup.classList.add('is-locked');
       bankGroup.setAttribute('aria-disabled', 'true');
+      if (depositGroup) {
+        depositGroup.classList.add('is-locked');
+        depositGroup.setAttribute('aria-disabled', 'true');
+      }
+      return;
+    }
+    if (mvpOverride && states.questionnaire > 1 && states.questionnaire < 4) {
+      bankGroup.classList.add('is-locked');
+      bankGroup.setAttribute('aria-disabled', 'true');
+      if (states.bank !== 1) {
+        setState('bank', 1, { force: true });
+      }
       if (depositGroup) {
         depositGroup.classList.add('is-locked');
         depositGroup.setAttribute('aria-disabled', 'true');
@@ -731,11 +742,12 @@
     if (ctaEl) {
       const isBankProcessing = states.bank === 2;
       const isDepositComplete = mvpOverride ? states.bank === 3 : states.deposit >= 2;
+      const isEddAwaiting = states.questionnaire === 3;
       ctaEl.disabled = isBankProcessing;
       ctaEl.classList.toggle('is-disabled', isBankProcessing);
-      ctaEl.hidden = isDepositComplete;
-      ctaEl.classList.toggle('is-hidden', isDepositComplete);
-      ctaEl.style.display = isDepositComplete ? 'none' : '';
+      ctaEl.hidden = isDepositComplete || isEddAwaiting;
+      ctaEl.classList.toggle('is-hidden', isDepositComplete || isEddAwaiting);
+      ctaEl.style.display = (isDepositComplete || isEddAwaiting) ? 'none' : '';
       if (ctaNoteEl) ctaNoteEl.hidden = !isBankProcessing || isDepositComplete;
       ctaEl.textContent = 'Continue to next step';
     }
@@ -755,13 +767,13 @@
       if (action) {
         const isApproved = states.questionnaire === questionnaireMode.approvedState;
         const isMvpNoEmail = mvpOverride && states.questionnaire === 2;
-        const isMvpEmailSent = mvpOverride && (states.questionnaire === 3 || states.questionnaire === 5);
+        const isMvpEmailSent = mvpOverride && states.questionnaire === 3;
         action.disabled = !isQuestionnaireActive || isApproved || isMvpEmailSent;
         action.classList.toggle('is-disabled', !isQuestionnaireActive || isApproved || isMvpEmailSent);
         action.classList.toggle('is-hidden', isMvpEmailSent);
       }
       if (secondaryBtn) {
-        const showResend = mvpOverride && (states.questionnaire === 3 || states.questionnaire === 5);
+        const showResend = mvpOverride && states.questionnaire === 3;
         secondaryBtn.hidden = !showResend;
       }
       const iconWrap = questionnaireItem.querySelector('.setup-checklist__item-icon');
@@ -769,10 +781,8 @@
         if (mvpOverride) {
           if (states.questionnaire === 2) {
             meta.textContent = 'As part of our standard process, we need a bit more information to complete your application';
-          } else if (states.questionnaire === 3 || states.questionnaire === 5) {
+          } else if (states.questionnaire === 3) {
             meta.textContent = 'Check your email inbox for further instructions and complete by';
-          } else if (questionnaireMode.resubmissionStates.includes(states.questionnaire)) {
-            meta.textContent = 'Our team needs a bit more information. Please complete a short form by';
           } else {
             meta.textContent = '';
           }
@@ -788,7 +798,7 @@
           if (states.questionnaire === 2) {
             status.textContent = '';
             status.classList.remove('setup-checklist__item-status-label--warning', 'setup-checklist__item-status-label--success');
-          } else if (states.questionnaire === 3 || states.questionnaire === 5) {
+          } else if (states.questionnaire === 3) {
             status.textContent = '02/29/2077';
             status.classList.remove('setup-checklist__item-status-label--success');
             status.classList.add('setup-checklist__item-status-label--warning');
@@ -844,7 +854,10 @@
 
     const isMvpReviewing = mvpOverride && states.bank === 2;
     if (stepsEl) {
-      if (isMvpReviewing) {
+      if (states.questionnaire === 3) {
+        stepsEl.textContent = 'Awaiting your action';
+        stepsEl.classList.remove('is-timestamp');
+      } else if (isMvpReviewing) {
         stepsEl.textContent = 'We\u2019re reviewing your application';
         stepsEl.classList.remove('is-timestamp');
       } else if (isDepositComplete) {
@@ -1161,7 +1174,7 @@
     if (questionnaireSecondary) {
       questionnaireSecondary.addEventListener('click', (event) => {
         event.stopPropagation();
-        if (mvpOverride && (states.questionnaire === 3 || states.questionnaire === 5)) {
+        if (mvpOverride && states.questionnaire === 3) {
           openActionSheet();
         }
       });
