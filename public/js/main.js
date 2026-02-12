@@ -437,9 +437,12 @@
       cardSubtitleEl.textContent = cardSubtitle;
       cardSubtitleEl.hidden = !cardSubtitle;
     }
-    if (cardCtaEl && cardCta) cardCtaEl.textContent = cardCta;
+    if (cardCtaEl && cardCta) cardCtaEl.textContent = (!mvpOverride && cardCta === 'Resume application') ? 'Continue' : cardCta;
     if (finalStepEl) finalStepEl.textContent = finalStepLabel;
-    if (btnSecondaryEl) btnSecondaryEl.hidden = hideSecondaryBtn;
+    if (btnSecondaryEl) {
+      const hideSecondaryNonMvp = stepState === 'resubmission' || stepState === 'reviewing';
+      btnSecondaryEl.hidden = mvpOverride ? hideSecondaryBtn : hideSecondaryNonMvp;
+    }
     if (btnPrimaryEl) btnPrimaryEl.hidden = hidePrimaryBtn;
     if (heroEl) {
       let illustration = '';
@@ -855,7 +858,7 @@
     const isMvpReviewing = mvpOverride && states.bank === 2;
     const isEddAwaiting = mvpOverride && states.questionnaire === 3;
     if (stepsEl) {
-      if (states.questionnaire === 3) {
+      if (isEddAwaiting) {
         stepsEl.textContent = 'Awaiting your action';
         stepsEl.classList.remove('is-timestamp');
       } else if (isMvpReviewing) {
@@ -1146,6 +1149,7 @@
 
     openButtons.forEach((button) => {
       button.addEventListener('click', () => {
+        if (!mvpOverride && button.hasAttribute('data-setup-btn-primary')) return;
         if (container && container.classList.contains('is-menu-open')) {
           container.classList.remove('is-menu-open');
           setTimeout(() => setOpen(true), 220);
