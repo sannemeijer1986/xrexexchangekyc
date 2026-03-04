@@ -334,7 +334,7 @@
       label = specialLabel;
       statusText = specialLabel;
       statusState = specialStatusOverride;
-      showCard = true;
+      showCard = specialStatusOverride === 'rejected';
       cardTitle = specialStatusOverride === 'rejected'
         ? 'We are unable to verify your application as it did not satisfy our regulatory requirements'
         : specialStatusOverride === 'suspended'
@@ -918,19 +918,25 @@
       if (isRejected) {
         const specialLabel = specialStatusOverride.charAt(0).toUpperCase() + specialStatusOverride.slice(1);
         titleEl.textContent = specialLabel;
-        titleEl.classList.add('setup-checklist__card-title--rejected');
         titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--completed');
+        if (specialStatusOverride === 'rejected') {
+          titleEl.classList.add('setup-checklist__card-title--rejected');
+          titleEl.classList.remove('setup-checklist__card-title--warning');
+        } else {
+          titleEl.classList.add('setup-checklist__card-title--warning');
+          titleEl.classList.remove('setup-checklist__card-title--rejected');
+        }
       } else if (isMvpReviewing) {
         titleEl.textContent = 'Under review';
         titleEl.classList.add('setup-checklist__card-title--under-review');
-        titleEl.classList.remove('setup-checklist__card-title--completed', 'setup-checklist__card-title--rejected');
+        titleEl.classList.remove('setup-checklist__card-title--completed', 'setup-checklist__card-title--rejected', 'setup-checklist__card-title--warning');
       } else if (isDepositComplete) {
         titleEl.textContent = 'Completed';
         titleEl.classList.add('setup-checklist__card-title--completed');
-        titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--rejected');
+        titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--rejected', 'setup-checklist__card-title--warning');
       } else {
         titleEl.textContent = 'Unlock trading';
-        titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--completed', 'setup-checklist__card-title--rejected');
+        titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--completed', 'setup-checklist__card-title--rejected', 'setup-checklist__card-title--warning');
       }
     }
     if (reviewAlertEl) {
@@ -949,11 +955,28 @@
         rejectedAlertEl.textContent = specialStatusOverride === 'rejected'
           ? 'We are unable to verify your application as it did not satisfy our regulatory requirements.'
           : specialStatusOverride === 'suspended'
-            ? 'Your account has been suspended.'
-            : 'Your account is currently restricted.';
+            ? 'Due to security purposes, some features on your account have been halted.'
+            : 'Please follow the instructions provided and withdraw your assets accordingly.';
+        rejectedAlertEl.classList.remove('Alert_negative', 'Alert_warning');
+        rejectedAlertEl.classList.add(specialStatusOverride === 'rejected' ? 'Alert_negative' : 'Alert_warning');
       }
       const rejectedAlertWrap = rejectedAlertEl.closest('.setup-checklist__alert-wrap');
       if (rejectedAlertWrap) rejectedAlertWrap.hidden = !isRejected;
+    }
+
+    // If any special status is active, hide other alerts so only the special-status alert is shown
+    const hasSpecialStatus = specialStatusOverride && specialStatusOverride !== 'none';
+    if (hasSpecialStatus && rejectedAlertEl) {
+      if (reviewAlertEl) {
+        reviewAlertEl.hidden = true;
+        const wrap = reviewAlertEl.closest('.setup-checklist__alert-wrap');
+        if (wrap) wrap.hidden = true;
+      }
+      if (successAlertEl) {
+        successAlertEl.hidden = true;
+        const wrap = successAlertEl.closest('.setup-checklist__alert-wrap');
+        if (wrap) wrap.hidden = true;
+      }
     }
     if (ctaEl) {
       const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2 || isEddAwaiting || isRejected;
@@ -976,14 +999,24 @@
       checklistCard.classList.remove('is-dimmed');
     }
     if (checklistContent) checklistContent.hidden = false;
+    const hideSectionAndList = isRejected && specialStatusOverride !== 'suspended';
     if (sectionTitleEl) {
-      sectionTitleEl.hidden = isRejected;
-      sectionTitleEl.classList.toggle('is-hidden', isRejected);
+      sectionTitleEl.hidden = hideSectionAndList;
+      sectionTitleEl.classList.toggle('is-hidden', hideSectionAndList);
+      // Update wording based on current status
+      const titleText = titleEl ? titleEl.textContent : '';
+      const shouldShowFinished =
+        titleText === 'Under review' ||
+        titleText === 'Completed' ||
+        titleText === 'Suspended';
+      if (!hideSectionAndList) {
+        sectionTitleEl.textContent = shouldShowFinished ? 'Finished steps' : 'Next steps';
+      }
     }
     if (checklistListEl) {
-      checklistListEl.hidden = isRejected;
-      checklistListEl.classList.toggle('is-hidden', isRejected);
-      checklistListEl.style.display = isRejected ? 'none' : '';
+      checklistListEl.hidden = hideSectionAndList;
+      checklistListEl.classList.toggle('is-hidden', hideSectionAndList);
+      checklistListEl.style.display = hideSectionAndList ? 'none' : '';
     }
   };
 
@@ -1106,6 +1139,23 @@
     };
     select.addEventListener('change', () => {
       specialStatusOverride = select.value;
+
+      if (specialStatusOverride === 'suspended') {
+        if (mvpOverride) {
+          setState('basic', STATE_CONFIGS.basic.max, { force: true });
+          setState('identity', STATE_CONFIGS.identity.max, { force: true });
+          setState('bank', 3, { force: true });
+          setState('questionnaire', STATE_CONFIGS.questionnaire.min, { force: true });
+          setState('deposit', STATE_CONFIGS.deposit.min, { force: true });
+        } else {
+          setState('basic', 3, { force: true });
+          setState('identity', 3, { force: true });
+          setState('bank', 3, { force: true });
+          setState('deposit', 2, { force: true });
+          setState('questionnaire', STATE_CONFIGS.questionnaire.min, { force: true });
+        }
+      }
+
       rejectedOverride = specialStatusOverride !== 'none';
       applyLock(rejectedOverride);
       refreshLockedUI();
