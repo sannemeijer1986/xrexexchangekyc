@@ -1142,8 +1142,8 @@
 
       if (specialStatusOverride === 'suspended') {
         if (mvpOverride) {
-          setState('basic', STATE_CONFIGS.basic.max, { force: true });
-          setState('identity', STATE_CONFIGS.identity.max, { force: true });
+          setState('basic', 3, { force: true });
+          setState('identity', 3, { force: true });
           setState('bank', 3, { force: true });
           setState('questionnaire', STATE_CONFIGS.questionnaire.min, { force: true });
           setState('deposit', STATE_CONFIGS.deposit.min, { force: true });
