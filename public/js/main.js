@@ -373,7 +373,7 @@
     } else if (basic >= 2 && identity >= 2 && bank === 2 && (!isQuestionnaireActive || isQuestionnaireSubmitted)) {
       title = 'Submitted, please wait content';
       label = 'Submitted BI and PI, awaiting';
-      statusText = 'Reviewing';
+      statusText = 'Under review';
       statusState = 'reviewing';
       showCard = true;
       cardTitle = 'We\u2019re reviewing your application, we will notify you of further updates.';
@@ -523,6 +523,7 @@
     const checklistCard = document.querySelector('.setup-checklist__card');
     const checklistContent = document.querySelector('.setup-checklist__content');
     const rejectedEl = document.querySelector('[data-checklist-rejected]');
+    const reviewAlertEl = document.querySelector('[data-checklist-review-alert]');
 
     const resetItemState = (item, defaultIcon) => {
       if (!item) return;
@@ -555,7 +556,7 @@
       if (icon) icon.src = 'assets/icon_processing.svg';
       if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
       if (status) {
-        status.textContent = 'Reviewing';
+        status.textContent = 'Submitted';
         status.classList.remove('setup-checklist__item-status-label--success', 'setup-checklist__item-status-label--warning');
       }
       if (meta) meta.hidden = true;
@@ -583,7 +584,7 @@
         if (icon) icon.src = 'assets/icon_timeline_completed.svg';
         if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
         if (status) {
-          status.textContent = 'Verified';
+          status.textContent = 'Completed';
           status.classList.remove('setup-checklist__item-status-label--warning');
           status.classList.add('setup-checklist__item-status-label--success');
         }
@@ -613,7 +614,7 @@
         if (icon) icon.src = 'assets/icon_timeline_completed.svg';
         if (iconWrap) iconWrap.classList.add('setup-checklist__item-icon--transparent');
         if (status) {
-          status.textContent = 'Verified';
+          status.textContent = 'Completed';
           status.classList.remove('setup-checklist__item-status-label--warning');
           status.classList.add('setup-checklist__item-status-label--success');
         }
@@ -682,7 +683,7 @@
       }
       if (status) {
         if (isBankProcessing) {
-          status.textContent = 'Reviewing';
+          status.textContent = 'Submitted';
           status.classList.remove('setup-checklist__item-status-label--success', 'setup-checklist__item-status-label--warning');
         } else if (isBankApproved) {
           status.textContent = 'Completed';
@@ -806,7 +807,7 @@
             status.classList.remove('setup-checklist__item-status-label--success');
             status.classList.add('setup-checklist__item-status-label--warning');
           } else if (states.questionnaire === questionnaireMode.approvedState) {
-            status.textContent = 'Verified';
+            status.textContent = 'Completed';
             status.classList.remove('setup-checklist__item-status-label--warning');
             status.classList.add('setup-checklist__item-status-label--success');
           } else {
@@ -819,7 +820,7 @@
             status.classList.remove('setup-checklist__item-status-label--success');
             status.classList.add('setup-checklist__item-status-label--warning');
           } else if (states.questionnaire === questionnaireMode.approvedState) {
-            status.textContent = 'Verified';
+            status.textContent = 'Completed';
             status.classList.remove('setup-checklist__item-status-label--warning');
             status.classList.add('setup-checklist__item-status-label--success');
           } else {
@@ -871,10 +872,10 @@
         stepsEl.textContent = `${stepsRemaining} step${stepsRemaining === 1 ? '' : 's'} to go`;
         stepsEl.classList.remove('is-timestamp');
       }
+      stepsEl.hidden = isMvpReviewing;
     }
     if (stepsSubEl) {
-      const showSub = isMvpReviewing || isEddAwaiting;
-      stepsSubEl.hidden = !showSub;
+      stepsSubEl.hidden = isMvpReviewing ? true : !isEddAwaiting;
       if (isEddAwaiting) {
         stepsSubEl.textContent = 'Please follow the instructions sent to your email. When completed, you can proceed with setup.';
       } else if (isMvpReviewing) {
@@ -899,7 +900,18 @@
     }
 
     if (titleEl) {
-      titleEl.textContent = isDepositComplete ? 'Trading unlocked' : 'Unlock trading';
+      if (isMvpReviewing) {
+        titleEl.textContent = 'Under review';
+        titleEl.classList.add('setup-checklist__card-title--under-review');
+      } else {
+        titleEl.textContent = isDepositComplete ? 'Trading unlocked' : 'Unlock trading';
+        titleEl.classList.remove('setup-checklist__card-title--under-review');
+      }
+    }
+    if (reviewAlertEl) {
+      reviewAlertEl.hidden = !isMvpReviewing;
+      const alertWrap = reviewAlertEl.closest('.setup-checklist__alert-wrap');
+      if (alertWrap) alertWrap.hidden = !isMvpReviewing;
     }
     if (ctaEl) {
       const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2 || isEddAwaiting;

@@ -636,6 +636,10 @@
   color: #ffffff;
 }
 
+.setup-checklist__card-title.setup-checklist__card-title--under-review {
+  color: $color-accent-blue;
+}
+
 .setup-checklist__card-subtitle {
   font-size: 14px;
   font-weight: 600;
@@ -708,6 +712,23 @@
 
 .setup-checklist__edd-continue-link.is-hidden {
   display: none;
+}
+
+.setup-checklist__alert-wrap {
+  margin: 0px 16px 32px 16px;
+}
+
+.setup-checklist__alert {
+  font-size: 14px;
+}
+
+.alert_info {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(1, 132, 255, 0.15);
+  color: #81C1FE;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .setup-checklist__section-title {
