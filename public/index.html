@@ -617,10 +617,12 @@
             <div class="build-badge__section-row">
                 <div class="build-badge__section-title">KYC</div>
                 <div class="build-badge__checkbox-group">
-                    <label class="build-badge__checkbox">
-                        <span>Rejected</span>
-                        <input type="checkbox" data-rejected-toggle />
-                    </label>
+                    <select class="build-badge__select" id="special-status" data-special-status aria-label="Special status">
+                        <option value="none">No special status</option>
+                        <option value="suspended">Suspended</option>
+                        <option value="restricted">Restricted</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
                 </div>
             </div>
             <div class="build-badge__group" data-state-group="basic">

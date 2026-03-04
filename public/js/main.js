@@ -80,6 +80,7 @@
   };
 
   const states = {};
+  let specialStatusOverride = 'none';
   let rejectedOverride = false;
   let mvpOverride = true;
 
@@ -328,12 +329,17 @@
     }) && (mvpOverride ? true : states.deposit === 2) && (!isQuestionnaireActive || isQuestionnaireApproved);
 
     if (rejectedOverride) {
-      title = 'Rejected';
-      label = 'Rejected';
-      statusText = 'Rejected';
-      statusState = 'rejected';
+      const specialLabel = specialStatusOverride.charAt(0).toUpperCase() + specialStatusOverride.slice(1);
+      title = specialLabel;
+      label = specialLabel;
+      statusText = specialLabel;
+      statusState = specialStatusOverride;
       showCard = true;
-      cardTitle = 'We are unable to verify your application as it did not satisfy our regulatory requirements';
+      cardTitle = specialStatusOverride === 'rejected'
+        ? 'We are unable to verify your application as it did not satisfy our regulatory requirements'
+        : specialStatusOverride === 'suspended'
+          ? 'Your account has been suspended.'
+          : 'Your account is currently restricted.';
       cardCta = '';
       hideSecondaryBtn = true;
       hidePrimaryBtn = true;
@@ -910,7 +916,8 @@
 
     if (titleEl) {
       if (isRejected) {
-        titleEl.textContent = 'Rejected';
+        const specialLabel = specialStatusOverride.charAt(0).toUpperCase() + specialStatusOverride.slice(1);
+        titleEl.textContent = specialLabel;
         titleEl.classList.add('setup-checklist__card-title--rejected');
         titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--completed');
       } else if (isMvpReviewing) {
@@ -938,6 +945,13 @@
     }
     if (rejectedAlertEl) {
       rejectedAlertEl.hidden = !isRejected;
+      if (isRejected) {
+        rejectedAlertEl.textContent = specialStatusOverride === 'rejected'
+          ? 'We are unable to verify your application as it did not satisfy our regulatory requirements.'
+          : specialStatusOverride === 'suspended'
+            ? 'Your account has been suspended.'
+            : 'Your account is currently restricted.';
+      }
       const rejectedAlertWrap = rejectedAlertEl.closest('.setup-checklist__alert-wrap');
       if (rejectedAlertWrap) rejectedAlertWrap.hidden = !isRejected;
     }
@@ -1070,17 +1084,19 @@
     updateChecklistItems();
   };
 
-  const initRejectedToggle = () => {
-    const checkbox = document.querySelector('[data-rejected-toggle]');
+  const initSpecialStatusDropdown = () => {
+    const select = document.querySelector('[data-special-status]');
     const badge = document.querySelector('.build-badge');
     const groups = document.querySelectorAll('.build-badge__group');
-    if (!checkbox) return;
-    checkbox.checked = false;
+    if (!select) return;
+    select.value = 'none';
+    specialStatusOverride = 'none';
+    rejectedOverride = false;
     const applyLock = (isLocked) => {
       if (badge) badge.classList.toggle('is-rejected', isLocked);
       groups.forEach((group) => group.classList.toggle('is-locked', isLocked));
     };
-    applyLock(checkbox.checked);
+    applyLock(false);
     updateChecklistItems();
     const refreshLockedUI = () => {
       updateBankAvailability();
@@ -1088,8 +1104,9 @@
       updateSetupState();
       updateChecklistItems();
     };
-    checkbox.addEventListener('change', () => {
-      rejectedOverride = checkbox.checked;
+    select.addEventListener('change', () => {
+      specialStatusOverride = select.value;
+      rejectedOverride = specialStatusOverride !== 'none';
       applyLock(rejectedOverride);
       refreshLockedUI();
       requestAnimationFrame(refreshLockedUI);
@@ -1130,11 +1147,16 @@
 
   const initPrototypeReset = () => {
     const resetBtn = document.querySelector('[data-prototype-reset]');
-    const checkbox = document.querySelector('[data-rejected-toggle]');
+    const specialStatusSelect = document.querySelector('[data-special-status]');
+    const badge = document.querySelector('.build-badge');
+    const groups = document.querySelectorAll('.build-badge__group');
     if (!resetBtn) return;
     resetBtn.addEventListener('click', () => {
+      specialStatusOverride = 'none';
       rejectedOverride = false;
-      if (checkbox) checkbox.checked = false;
+      if (specialStatusSelect) specialStatusSelect.value = 'none';
+      if (badge) badge.classList.remove('is-rejected');
+      groups.forEach((g) => g.classList.remove('is-locked'));
       Object.keys(STATE_CONFIGS).forEach((group) => {
         setState(group, STATE_CONFIGS[group].min, { force: true });
       });
@@ -1381,7 +1403,7 @@
   initChecklistPanel();
   initLimitsPanel();
   initActionSheet();
-  initRejectedToggle();
+  initSpecialStatusDropdown();
   initMvpToggle();
   initPrototypeReset();
 
