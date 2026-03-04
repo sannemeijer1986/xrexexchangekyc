@@ -330,8 +330,8 @@
     if (rejectedOverride) {
       title = 'Rejected';
       label = 'Rejected';
-      statusText = '';
-      statusState = '';
+      statusText = 'Rejected';
+      statusState = 'rejected';
       showCard = true;
       cardTitle = 'We are unable to verify your application as it did not satisfy our regulatory requirements';
       cardCta = '';
@@ -416,7 +416,7 @@
     if (statusEl) {
       statusEl.textContent = statusText;
       statusEl.dataset.setupStatus = statusState;
-      statusEl.hidden = rejectedOverride;
+      statusEl.hidden = false;
     }
     if (setupStateEl) setupStateEl.dataset.setupLabel = label;
     const toggleHidden = (el, shouldHide) => {
@@ -522,8 +522,11 @@
     const stepsSubEl = document.querySelector('[data-checklist-steps-sub]');
     const checklistCard = document.querySelector('.setup-checklist__card');
     const checklistContent = document.querySelector('.setup-checklist__content');
-    const rejectedEl = document.querySelector('[data-checklist-rejected]');
+    const sectionTitleEl = document.querySelector('.setup-checklist__section-title');
+    const checklistListEl = document.querySelector('.setup-checklist__list');
     const reviewAlertEl = document.querySelector('[data-checklist-review-alert]');
+    const successAlertEl = document.querySelector('[data-checklist-success-alert]');
+    const rejectedAlertEl = document.querySelector('[data-checklist-rejected-alert]');
 
     const resetItemState = (item, defaultIcon) => {
       if (!item) return;
@@ -858,6 +861,7 @@
 
     const isMvpReviewing = mvpOverride && states.bank === 2;
     const isEddAwaiting = mvpOverride && states.questionnaire === 3;
+    const isRejected = rejectedOverride;
     if (stepsEl) {
       if (isEddAwaiting) {
         stepsEl.textContent = 'Awaiting your action';
@@ -872,10 +876,10 @@
         stepsEl.textContent = `${stepsRemaining} step${stepsRemaining === 1 ? '' : 's'} to go`;
         stepsEl.classList.remove('is-timestamp');
       }
-      stepsEl.hidden = isMvpReviewing;
+      stepsEl.hidden = isMvpReviewing || isDepositComplete || isRejected;
     }
     if (stepsSubEl) {
-      stepsSubEl.hidden = isMvpReviewing ? true : !isEddAwaiting;
+      stepsSubEl.hidden = isMvpReviewing || isDepositComplete || isRejected ? true : !isEddAwaiting;
       if (isEddAwaiting) {
         stepsSubEl.textContent = 'Please follow the instructions sent to your email. When completed, you can proceed with setup.';
       } else if (isMvpReviewing) {
@@ -884,37 +888,61 @@
     }
 
     if (ringEl) {
-      const totalSteps = mvpOverride ? (isQuestionnaireActive ? 5 : 4) : (isQuestionnaireActive ? 6 : 5);
-      if (isMvpReviewing) {
-        ringEl.style.setProperty('--progress', '100%');
+      if (isRejected) {
+        ringEl.style.setProperty('--progress', '0%');
         ringEl.classList.remove('is-complete');
-      } else if (isDepositComplete) {
-        ringEl.style.setProperty('--progress', '100%');
-        ringEl.classList.add('is-complete');
       } else {
-        const completedSteps = Math.max(0, totalSteps - stepsRemaining);
-        const progressPercent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
-        ringEl.style.setProperty('--progress', `${progressPercent}%`);
-        ringEl.classList.remove('is-complete');
+        const totalSteps = mvpOverride ? (isQuestionnaireActive ? 5 : 4) : (isQuestionnaireActive ? 6 : 5);
+        if (isMvpReviewing) {
+          ringEl.style.setProperty('--progress', '100%');
+          ringEl.classList.remove('is-complete');
+        } else if (isDepositComplete) {
+          ringEl.style.setProperty('--progress', '100%');
+          ringEl.classList.add('is-complete');
+        } else {
+          const completedSteps = Math.max(0, totalSteps - stepsRemaining);
+          const progressPercent = totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0;
+          ringEl.style.setProperty('--progress', `${progressPercent}%`);
+          ringEl.classList.remove('is-complete');
+        }
       }
     }
 
     if (titleEl) {
-      if (isMvpReviewing) {
+      if (isRejected) {
+        titleEl.textContent = 'Rejected';
+        titleEl.classList.add('setup-checklist__card-title--rejected');
+        titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--completed');
+      } else if (isMvpReviewing) {
         titleEl.textContent = 'Under review';
         titleEl.classList.add('setup-checklist__card-title--under-review');
+        titleEl.classList.remove('setup-checklist__card-title--completed', 'setup-checklist__card-title--rejected');
+      } else if (isDepositComplete) {
+        titleEl.textContent = 'Completed';
+        titleEl.classList.add('setup-checklist__card-title--completed');
+        titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--rejected');
       } else {
-        titleEl.textContent = isDepositComplete ? 'Trading unlocked' : 'Unlock trading';
-        titleEl.classList.remove('setup-checklist__card-title--under-review');
+        titleEl.textContent = 'Unlock trading';
+        titleEl.classList.remove('setup-checklist__card-title--under-review', 'setup-checklist__card-title--completed', 'setup-checklist__card-title--rejected');
       }
     }
     if (reviewAlertEl) {
       reviewAlertEl.hidden = !isMvpReviewing;
-      const alertWrap = reviewAlertEl.closest('.setup-checklist__alert-wrap');
-      if (alertWrap) alertWrap.hidden = !isMvpReviewing;
+      const reviewAlertWrap = reviewAlertEl.closest('.setup-checklist__alert-wrap');
+      if (reviewAlertWrap) reviewAlertWrap.hidden = !isMvpReviewing;
+    }
+    if (successAlertEl) {
+      successAlertEl.hidden = !isDepositComplete;
+      const successAlertWrap = successAlertEl.closest('.setup-checklist__alert-wrap');
+      if (successAlertWrap) successAlertWrap.hidden = !isDepositComplete;
+    }
+    if (rejectedAlertEl) {
+      rejectedAlertEl.hidden = !isRejected;
+      const rejectedAlertWrap = rejectedAlertEl.closest('.setup-checklist__alert-wrap');
+      if (rejectedAlertWrap) rejectedAlertWrap.hidden = !isRejected;
     }
     if (ctaEl) {
-      const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2 || isEddAwaiting;
+      const hideCta = (mvpOverride ? states.bank === 3 : states.deposit === 2) || states.bank === 2 || isEddAwaiting || isRejected;
       ctaEl.hidden = hideCta;
       ctaEl.classList.toggle('is-hidden', hideCta);
       ctaEl.style.display = hideCta ? 'none' : '';
@@ -929,13 +957,20 @@
       ctaNoteEl.hidden = isMvpReviewing || ctaNoteEl.hidden;
     }
 
-    const isRejected = rejectedOverride;
-    if (rejectedEl) rejectedEl.hidden = !isRejected;
     if (checklistCard) {
       checklistCard.hidden = false;
-      checklistCard.classList.toggle('is-dimmed', isRejected);
+      checklistCard.classList.remove('is-dimmed');
     }
-    if (checklistContent) checklistContent.hidden = isRejected;
+    if (checklistContent) checklistContent.hidden = false;
+    if (sectionTitleEl) {
+      sectionTitleEl.hidden = isRejected;
+      sectionTitleEl.classList.toggle('is-hidden', isRejected);
+    }
+    if (checklistListEl) {
+      checklistListEl.hidden = isRejected;
+      checklistListEl.classList.toggle('is-hidden', isRejected);
+      checklistListEl.style.display = isRejected ? 'none' : '';
+    }
   };
 
   const updateGroupUI = (group) => {

@@ -604,7 +604,7 @@
 }
 
 .setup-checklist__avatar-ring.is-complete::before {
-  background: conic-gradient(#6DCF8E 0% 100%, rgba(255, 255, 255, 0.12) 100% 100%);
+  background: conic-gradient(#5AC47D 0% 100%, rgba(255, 255, 255, 0.12) 100% 100%);
 }
 
 .setup-checklist__avatar {
@@ -638,6 +638,14 @@
 
 .setup-checklist__card-title.setup-checklist__card-title--under-review {
   color: $color-accent-blue;
+}
+
+.setup-checklist__card-title.setup-checklist__card-title--completed {
+  color: #5AC47D;
+}
+
+.setup-checklist__card-title.setup-checklist__card-title--rejected {
+  color: #EB5347;
 }
 
 .setup-checklist__card-subtitle {
@@ -723,11 +731,29 @@
 }
 
 .alert_info {
-  padding: 12px 16px;
+  padding: 8px 10px;
   border-radius: 12px;
-  background: rgba(1, 132, 255, 0.15);
-  color: #81C1FE;
-  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  color: #8FB8FF;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.Alert_success {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #5AC47D;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.Alert_negative {
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #EB5347;
+  font-weight: 600;
   line-height: 1.4;
 }
 
@@ -743,6 +769,14 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 32px;
+}
+
+.setup-checklist__list.is-hidden {
+  display: none !important;
+}
+
+.setup-checklist__section-title.is-hidden {
+  display: none !important;
 }
 
 .setup-checklist__item {
@@ -817,7 +851,7 @@
 }
 
 .setup-checklist__item-status-label--success {
-  color: #2bd66e;
+  color: #5AC47D;
 }
 
 .setup-checklist__item-status-label--warning {
@@ -829,7 +863,7 @@
 }
 
 .setup-checklist__item.is-complete .setup-checklist__item-meta {
-  color: #2bd66e;
+  color: #5AC47D;
 }
 
 .setup-checklist__item-action {
@@ -1926,6 +1960,10 @@
 
 .side-menu__item-meta[data-setup-status="approved"] {
   color: #5AC47D;
+}
+
+.side-menu__item-meta[data-setup-status="rejected"] {
+  color: #EB5347;
 }
 
 .side-menu__banner {
