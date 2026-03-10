@@ -194,9 +194,6 @@
     if (mvpOverride && states.questionnaire > 1 && states.questionnaire < 4) {
       bankGroup.classList.add('is-locked');
       bankGroup.setAttribute('aria-disabled', 'true');
-      if (states.bank !== 1) {
-        setState('bank', 1, { force: true });
-      }
       if (depositGroup) {
         depositGroup.classList.add('is-locked');
         depositGroup.setAttribute('aria-disabled', 'true');
@@ -257,10 +254,6 @@
     if (!isUnlocked && states.questionnaire !== 1) {
       setState('questionnaire', 1, { force: true });
     }
-    if (states.questionnaire >= 2) {
-      if (states.basic !== 3) setState('basic', 3, { force: true });
-      if (states.identity !== 3) setState('identity', 3, { force: true });
-    }
     const lockBasicIdentity = states.questionnaire >= 2 || bankApproved;
     if (basicGroup) {
       basicGroup.classList.toggle('is-locked', lockBasicIdentity);
@@ -274,6 +267,13 @@
       const lockQuestionnaire = bankApproved || !isUnlocked;
       questionnaireGroup.classList.toggle('is-locked', lockQuestionnaire);
       questionnaireGroup.setAttribute('aria-disabled', String(lockQuestionnaire));
+    }
+
+    // When Additional information (EDD) is fully approved in MVP mode (state 4),
+    // ensure Basic information and Proof of identity are marked as Approved (state 3).
+    if (mvpOverride && states.questionnaire === questionnaireMode.approvedState) {
+      if (states.basic < 3) setState('basic', 3, { force: true });
+      if (states.identity < 3) setState('identity', 3, { force: true });
     }
   };
 
@@ -376,7 +376,7 @@
       cardTitle = 'Just a few steps to\nunlock the best of XREX!';
       cardCta = 'Get started';
       stepState = 'progress';
-    } else if (basic >= 2 && identity >= 2 && bank === 2 && (!isQuestionnaireActive || isQuestionnaireSubmitted)) {
+    } else if (basic >= 2 && identity >= 2 && bank === 2 && (!isQuestionnaireActive || isQuestionnaireApproved)) {
       title = 'Submitted, please wait content';
       label = 'Submitted BI and PI, awaiting';
       statusText = 'Under review';
@@ -865,7 +865,9 @@
       stepsRemaining = Math.max(1, stepsRemaining - 1);
     }
 
-    const isMvpReviewing = mvpOverride && states.bank === 2;
+    const isMvpReviewing = mvpOverride
+      && states.bank === 2
+      && (states.questionnaire <= 1 || states.questionnaire === questionnaireMode.approvedState);
     const isEddAwaiting = mvpOverride && states.questionnaire === 3;
     const isRejected = rejectedOverride;
     if (stepsEl) {
@@ -887,7 +889,9 @@
     if (stepsSubEl) {
       stepsSubEl.hidden = isMvpReviewing || isDepositComplete || isRejected ? true : !isEddAwaiting;
       if (isEddAwaiting) {
-        stepsSubEl.textContent = 'Please follow the instructions sent to your email. When completed, you can proceed with setup.';
+        stepsSubEl.textContent = states.bank === 2
+          ? 'Please follow the instructions sent to your email.'
+          : 'Please follow the instructions sent to your email. When completed, you can proceed with setup.';
       } else if (isMvpReviewing) {
         stepsSubEl.textContent = 'Typically takes 1-2 business days';
       }
@@ -940,9 +944,12 @@
       }
     }
     if (reviewAlertEl) {
-      reviewAlertEl.hidden = !isMvpReviewing;
+      // Treat active EDD (questionnaire >= 2) as a separate flow:
+      // never show the "We're reviewing your application" alert when EDD is enabled.
+      const showReviewAlert = isMvpReviewing && states.questionnaire < 2;
+      reviewAlertEl.hidden = !showReviewAlert;
       const reviewAlertWrap = reviewAlertEl.closest('.setup-checklist__alert-wrap');
-      if (reviewAlertWrap) reviewAlertWrap.hidden = !isMvpReviewing;
+      if (reviewAlertWrap) reviewAlertWrap.hidden = !showReviewAlert;
     }
     if (successAlertEl) {
       successAlertEl.hidden = !isDepositComplete;
@@ -986,12 +993,17 @@
     }
     const eddContinueLink = document.querySelector('[data-checklist-edd-continue]');
     if (eddContinueLink) {
-      eddContinueLink.hidden = !isEddAwaiting;
-      eddContinueLink.classList.toggle('is-hidden', !isEddAwaiting);
-      eddContinueLink.style.display = isEddAwaiting ? '' : 'none';
+      const hideEddContinue = !isEddAwaiting || states.bank === 2;
+      eddContinueLink.hidden = hideEddContinue;
+      eddContinueLink.classList.toggle('is-hidden', hideEddContinue);
+      eddContinueLink.style.display = hideEddContinue ? 'none' : '';
     }
     if (ctaNoteEl) {
-      ctaNoteEl.hidden = isMvpReviewing || ctaNoteEl.hidden;
+      // Hide the "We're reviewing your application" CTA note whenever the status is Under review.
+      const showCtaNote = false;
+      ctaNoteEl.hidden = !showCtaNote;
+      ctaNoteEl.classList.add('is-hidden');
+      ctaNoteEl.style.display = 'none';
     }
 
     if (checklistCard) {
