@@ -325,6 +325,26 @@
       hideSecondaryBtn = true;
       hidePrimaryBtn = true;
       stepState = 'progress';
+    } else if (
+      mvpOverride
+      && bank === 3
+      && basic >= 2
+      && identity >= 2
+      && (basic !== 3 || identity !== 3)
+      && (states.questionnaire === 1 || states.questionnaire === 4)
+    ) {
+      // All documents submitted, bank approved, but not all components marked Approved:
+      // treat as "Under review" with no further user action.
+      title = 'Submitted, please wait content';
+      label = 'Submitted BI and PI, awaiting';
+      statusText = 'Under review';
+      statusState = 'reviewing';
+      showCard = true;
+      cardTitle = 'We’re reviewing your application, we will notify you of further updates.';
+      cardSubtitle = 'Reviewing usually takes 1-2 business days';
+      finalStepLabel = 'Reviewing';
+      hidePrimaryBtn = true;
+      stepState = 'reviewing';
     } else if (isAllApproved) {
       showCard = false;
       statusText = states.deposit === 2 ? 'Completed' : 'Approved';
@@ -848,13 +868,19 @@
     const isMvpReviewing = mvpOverride
       && states.bank === 2
       && (states.questionnaire <= 1 || states.questionnaire === questionnaireMode.approvedState);
+    const isKycReviewOnly = mvpOverride
+      && states.bank === 3
+      && states.basic >= 2
+      && states.identity >= 2
+      && (states.basic !== 3 || states.identity !== 3)
+      && (states.questionnaire === 1 || states.questionnaire === 4);
     const isEddAwaiting = mvpOverride && states.questionnaire === 3;
     const isRejected = rejectedOverride;
     if (stepsEl) {
       if (isEddAwaiting) {
         stepsEl.textContent = 'Awaiting your action';
         stepsEl.classList.remove('is-timestamp');
-      } else if (isMvpReviewing) {
+      } else if (isMvpReviewing || isKycReviewOnly) {
         stepsEl.textContent = 'We\u2019re reviewing your application';
         stepsEl.classList.remove('is-timestamp');
       } else if (isDepositComplete) {
@@ -864,10 +890,10 @@
         stepsEl.textContent = `${stepsRemaining} step${stepsRemaining === 1 ? '' : 's'} to go`;
         stepsEl.classList.remove('is-timestamp');
       }
-      stepsEl.hidden = isMvpReviewing || isDepositComplete || isRejected;
+      stepsEl.hidden = isMvpReviewing || isKycReviewOnly || isDepositComplete || isRejected;
     }
     if (stepsSubEl) {
-      stepsSubEl.hidden = isMvpReviewing || isDepositComplete || isRejected ? true : !isEddAwaiting;
+      stepsSubEl.hidden = (isMvpReviewing || isKycReviewOnly || isDepositComplete || isRejected) ? true : !isEddAwaiting;
       if (isEddAwaiting) {
         stepsSubEl.textContent = states.bank === 2
           ? 'Please follow the instructions sent to your email.'
@@ -910,7 +936,7 @@
           titleEl.classList.add('setup-checklist__card-title--warning');
           titleEl.classList.remove('setup-checklist__card-title--rejected');
         }
-      } else if (isMvpReviewing) {
+      } else if (isMvpReviewing || isKycReviewOnly) {
         titleEl.textContent = 'Under review';
         titleEl.classList.add('setup-checklist__card-title--under-review');
         titleEl.classList.remove('setup-checklist__card-title--completed', 'setup-checklist__card-title--rejected', 'setup-checklist__card-title--warning');
