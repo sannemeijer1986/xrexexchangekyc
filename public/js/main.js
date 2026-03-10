@@ -191,15 +191,6 @@
       }
       return;
     }
-    if (mvpOverride && states.questionnaire > 1 && states.questionnaire < 4) {
-      bankGroup.classList.add('is-locked');
-      bankGroup.setAttribute('aria-disabled', 'true');
-      if (depositGroup) {
-        depositGroup.classList.add('is-locked');
-        depositGroup.setAttribute('aria-disabled', 'true');
-      }
-      return;
-    }
     const isUnlocked = states.basic >= 2 && states.identity >= 2;
     bankGroup.classList.toggle('is-locked', !isUnlocked);
     bankGroup.setAttribute('aria-disabled', String(!isUnlocked));
@@ -207,13 +198,6 @@
       setState('bank', 1, { force: true });
     }
     const questionnaireMode = getQuestionnaireMode();
-    if (states.bank >= 3) {
-      if (states.basic !== 3) setState('basic', 3, { force: true });
-      if (states.identity !== 3) setState('identity', 3, { force: true });
-      if (states.questionnaire >= 2 && states.questionnaire !== questionnaireMode.approvedState) {
-        setState('questionnaire', questionnaireMode.approvedState, { force: true });
-      }
-    }
     if (!mvpOverride && states.bank === 4 && states.deposit !== 1) {
       setState('deposit', 1, { force: true });
     }
@@ -254,7 +238,8 @@
     if (!isUnlocked && states.questionnaire !== 1) {
       setState('questionnaire', 1, { force: true });
     }
-    const lockBasicIdentity = states.questionnaire >= 2 || bankApproved;
+    // Do not lock Basic / Identity / EDD based on bank or EDD anymore; prototype controls stay editable.
+    const lockBasicIdentity = false;
     if (basicGroup) {
       basicGroup.classList.toggle('is-locked', lockBasicIdentity);
       basicGroup.setAttribute('aria-disabled', String(lockBasicIdentity));
@@ -264,16 +249,9 @@
       identityGroup.setAttribute('aria-disabled', String(lockBasicIdentity));
     }
     if (questionnaireGroup) {
-      const lockQuestionnaire = bankApproved || !isUnlocked;
+      const lockQuestionnaire = !isUnlocked;
       questionnaireGroup.classList.toggle('is-locked', lockQuestionnaire);
       questionnaireGroup.setAttribute('aria-disabled', String(lockQuestionnaire));
-    }
-
-    // When Additional information (EDD) is fully approved in MVP mode (state 4),
-    // ensure Basic information and Proof of identity are marked as Approved (state 3).
-    if (mvpOverride && states.questionnaire === questionnaireMode.approvedState) {
-      if (states.basic < 3) setState('basic', 3, { force: true });
-      if (states.identity < 3) setState('identity', 3, { force: true });
     }
   };
 
@@ -324,9 +302,12 @@
       ? states.questionnaire >= 3 && !questionnaireMode.resubmissionStates.includes(states.questionnaire)
       : states.questionnaire === questionnaireMode.approvedState;
     const isQuestionnaireApproved = states.questionnaire === questionnaireMode.approvedState;
-    const isAllApproved = ['basic', 'identity', 'bank'].every((group) => {
-      return getLabel(group, states[group]) === 'Approved';
-    }) && (mvpOverride ? true : states.deposit === 2) && (!isQuestionnaireActive || isQuestionnaireApproved);
+    const isAllApproved = (
+      states.basic === 3
+      && states.identity === 3
+      && states.bank === 3
+      && (states.questionnaire === 1 || states.questionnaire === 4)
+    ) && (mvpOverride ? true : states.deposit === 2);
 
     if (rejectedOverride) {
       const specialLabel = specialStatusOverride.charAt(0).toUpperCase() + specialStatusOverride.slice(1);
@@ -344,14 +325,6 @@
       hideSecondaryBtn = true;
       hidePrimaryBtn = true;
       stepState = 'progress';
-    } else if (mvpOverride && bank === 3) {
-      showCard = false;
-      statusText = 'Completed';
-      statusState = 'approved';
-    } else if (mvpOverride && bank === 3) {
-      showCard = false;
-      statusText = 'Completed';
-      statusState = 'approved';
     } else if (isAllApproved) {
       showCard = false;
       statusText = states.deposit === 2 ? 'Completed' : 'Approved';
@@ -860,7 +833,14 @@
     if (questionnaireMode.pendingStates.includes(states.questionnaire)) stepsRemaining += 1;
     if (states.bank === 2 || states.bank === 3) stepsRemaining = Math.max(1, stepsRemaining - 1);
     if (states.identity === 4) stepsRemaining += 1;
-    const isDepositComplete = mvpOverride ? states.bank === 3 : states.deposit === 2;
+    const isDepositComplete = mvpOverride
+      ? (
+        states.basic === 3
+        && states.identity === 3
+        && states.bank === 3
+        && (states.questionnaire === 1 || states.questionnaire === 4)
+      )
+      : states.deposit === 2;
     if (mvpOverride && !isDepositComplete) {
       stepsRemaining = Math.max(1, stepsRemaining - 1);
     }
