@@ -347,7 +347,7 @@
       stepState = 'reviewing';
     } else if (isAllApproved) {
       showCard = false;
-      statusText = states.deposit === 2 ? 'Completed' : 'Approved';
+      statusText = 'Completed';
       statusState = 'approved';
     } else if (hasResubmission) {
       title = 'Resubmission content';
